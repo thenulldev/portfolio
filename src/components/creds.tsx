@@ -176,8 +176,8 @@ export default async function Credential(): Promise<JSX.Element> {
           className="w-64 h-64 flex flex-col items-center justify-center bg-slate-100 rounded-xl p-4 m-4"
         >
           <img
-            className="w-32 h-32"
-            src={item.image_url}
+            className="w-32 h-32 rounded-lg"
+            src={item.image.url}
             alt={item.badge_template.name}
           />
           <div className="mt-2 text-center">

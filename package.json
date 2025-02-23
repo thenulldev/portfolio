@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "preview": "npm run pages:build && wrangler pages dev",
+    "deploy": "npm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -21,6 +24,7 @@
     "react-fontawesome": "^1.7.1"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.8",
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
