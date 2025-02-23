@@ -39,6 +39,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.0
+      '@opennextjs/aws':
+        specifier: ^3.4.2
+        version: 3.4.2
       '@opennextjs/cloudflare':
         specifier: ^0.5.3
         version: 0.5.3(wrangler@3.109.2)
@@ -1051,6 +1054,10 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@opennextjs/aws@3.4.2':
+    resolution: {integrity: sha512-f5HWNp3a8zxFT9rJmefh9yw0CrzaXwXjg0gKZjYuQh3pdM9utgZApIrcpWUYyQNH2rSfKyXafHQFm8NkRukptw==}
+    hasBin: true
 
   '@opennextjs/aws@https://pkg.pr.new/@opennextjs/aws@733':
     resolution: {tarball: https://pkg.pr.new/@opennextjs/aws@733}
@@ -4881,6 +4888,28 @@ snapshots:
       fastq: 1.19.0
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@opennextjs/aws@3.4.2':
+    dependencies:
+      '@aws-sdk/client-cloudfront': 3.398.0
+      '@aws-sdk/client-dynamodb': 3.751.0
+      '@aws-sdk/client-lambda': 3.750.0
+      '@aws-sdk/client-s3': 3.750.0
+      '@aws-sdk/client-sqs': 3.750.0
+      '@esbuild-plugins/node-resolve': 0.2.2(esbuild@0.19.2)
+      '@node-minify/core': 8.0.6
+      '@node-minify/terser': 8.0.6
+      '@tsconfig/node18': 1.0.3
+      aws4fetch: 1.0.20
+      chalk: 5.4.1
+      esbuild: 0.19.2
+      express: 5.0.1
+      path-to-regexp: 6.3.0
+      promise.series: 0.2.0
+      urlpattern-polyfill: 10.0.0
+    transitivePeerDependencies:
+      - aws-crt
+      - supports-color
 
   '@opennextjs/aws@https://pkg.pr.new/@opennextjs/aws@733':
     dependencies:

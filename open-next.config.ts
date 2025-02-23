@@ -1,13 +1,13 @@
-// default open-next.config.ts file created by @opennextjs/cloudflare
-
+import type { OpenNextConfig } from "@opennextjs/aws/types/open-next.js";
 import cache from "@opennextjs/cloudflare/kv-cache";
 
-const config = {
+const config: OpenNextConfig = {
   default: {
     override: {
       wrapper: "cloudflare-node",
       converter: "edge",
-      incrementalCache: async () => "dummy",
+      // set `incrementalCache` to "dummy" to disable KV cache
+      incrementalCache: async () => cache,
       tagCache: "dummy",
       queue: "dummy",
     },

@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@opennextjs/aws": "^3.4.2",
     "@opennextjs/cloudflare": "^0.5.3",
     "@types/node": "^20",
     "@types/react": "^19",
