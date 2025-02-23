@@ -24,8 +24,8 @@ export interface Root {
   badge_template: BadgeTemplate;
   image: Image3;
   image_url: string;
-  evidence: any[];
-  recommendations: any[];
+  //   evidence: any[];
+  //   recommendations: any[];
 }
 
 export interface Issuer {
@@ -55,7 +55,7 @@ export interface BadgeTemplate {
   id: string;
   description: string;
   global_activity_url: string;
-  earn_this_badge_url: any;
+  //   earn_this_badge_url: any;
   enable_earn_this_badge: boolean;
   enable_detail_attribute_visibility: boolean;
   name: string;
@@ -66,10 +66,10 @@ export interface BadgeTemplate {
   show_skill_tag_links: boolean;
   settings_enable_related_badges: boolean;
   translatable: boolean;
-  level: any;
-  time_to_earn: any;
-  cost: any;
-  type_category: any;
+  //   level: any;
+  //   time_to_earn: any;
+  //   cost: any;
+  //   type_category: any;
   image: Image;
   image_url: string;
   url: string;
@@ -78,9 +78,9 @@ export interface BadgeTemplate {
   recommendable: boolean;
   issuer: Issuer2;
   related_badge_templates: RelatedBadgeTemplate[];
-  alignments: any[];
+  //   alignments: any[];
   badge_template_activities: BadgeTemplateActivity[];
-  endorsements: any[];
+  //   endorsements: any[];
   skills: Skill[];
 }
 

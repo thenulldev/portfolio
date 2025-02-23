@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 const Socials: React.FC = () => {
-  let socials = [
+  const socials = [
     {
       link: "https://github.com/snipey",
       icon: faGithub,
