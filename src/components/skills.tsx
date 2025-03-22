@@ -1,5 +1,6 @@
 import React from "react";
 import { JSX } from "react";
+import SkillList from "./SkillList";
 
 export interface Root {
   id: string;
@@ -144,7 +145,7 @@ export interface Image3 {
   url: string;
 }
 
-export default async function Credential(): Promise<JSX.Element> {
+export default async function Skills(): Promise<JSX.Element> {
   const response = await fetch(
     "https://credly-scraper.nulldev.workers.dev/stephen-freerking",
     {
@@ -168,23 +169,26 @@ export default async function Credential(): Promise<JSX.Element> {
     (item: Root) => new Date(item.expires_at_date) >= new Date()
   );
 
+  const allSkills = validData.reduce((acc: { name: string }[], item: Root) => {
+    const skills = item.badge_template.skills.slice(0, 5);
+    return acc.concat(skills);
+  }, []);
+
+  // Count skill occurrences
+  const skillCounts: { [name: string]: number } = allSkills.reduce(
+    (counts: { [name: string]: number }, skill: { name: string }) => {
+      counts[skill.name] = (counts[skill.name] || 0) + 1;
+      return counts;
+    },
+    {}
+  );
+
   return (
-    <div className="text-black flex flex-wrap justify-center items-center">
-      {validData.map((item: Root) => (
-        <figure
-          key={item.id}
-          className="w-full sm:w-64 h-64 flex flex-col items-center justify-center bg-slate-100 rounded-xl p-4 m-4"
-        >
-          <img
-            className="w-32 h-32 rounded-lg"
-            src={item.image.url}
-            alt={item.badge_template.name}
-          />
-          <div className="mt-2 text-center">
-            <h1 className="text-xl font-bold">{item.badge_template.name}</h1>
-          </div>
-        </figure>
-      ))}
-    </div>
+    <figure className="mx-auto bg-slate-100 rounded-xl p-4 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-xl">
+      <div className="text-center">
+        <h2 className="text-xl font-bold mb-4">Skills</h2>
+        <SkillList skills={allSkills} skillCounts={skillCounts} />
+      </div>
+    </figure>
   );
 }

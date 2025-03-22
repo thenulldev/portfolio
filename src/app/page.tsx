@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Social from "@components/socials";
 import Credential from "@components/creds"; // Ensure Credential is imported correctly
-import XPProgressBar from "@components/progress";
+import MsLearnProgress from "@components/progress";
+import Skills from "@components/skills";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-2 pb-20 sm:p-5 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-8 row-start-2 items-center m-2">
         <figure className="mx-auto mt-8 md:flex bg-slate-100 rounded-xl md:p-0 font-[family-name:var(--font-poppins-sans)] 5xl:w-1/2 6xl:1/4 md:h-2/3">
           <Image
             className="object-cover w-full h-56 mx-auto rounded-xl md:h-auto md:w-56"
@@ -37,10 +38,12 @@ export default function Home() {
           </div>
         </figure>
         <Credential />
-        <XPProgressBar />
+        <Skills />
+        <MsLearnProgress />
       </main>
       <footer className="row-start-3 flex gap-1 flex-wrap items-center justify-center">
-        Made with <span className="text-red-600">♥️</span> by Stephen F 2025
+        Made with <span className="text-red-600">♥️</span> by Stephen F{" "}
+        {new Date().getFullYear()}
       </footer>
     </div>
   );
