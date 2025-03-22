@@ -135,7 +135,7 @@ export default function MsLearnProgress() {
         <h3 className="text-sm font-medium">Achievement Breakdown</h3>
         <div className="grid grid-cols-2 gap-2">
           {Object.entries(profile.achievementCategories)
-            .filter(([_, count]) => count > 0)
+            .filter((entry) => entry[1] > 0)
             .map(([category, count]) => (
               <div key={category} className="flex justify-between text-sm">
                 <span className="text-gray-600">{category}</span>
