@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Social from "@components/socials";
 import Credential from "@components/creds"; // Ensure Credential is imported correctly
+import XPProgressBar from "@components/progress";
 
 export default function Home() {
   return (
@@ -36,6 +37,7 @@ export default function Home() {
           </div>
         </figure>
         <Credential />
+        <XPProgressBar />
       </main>
       <footer className="row-start-3 flex gap-1 flex-wrap items-center justify-center">
         Made with <span className="text-red-600">♥️</span> by Stephen F 2025
