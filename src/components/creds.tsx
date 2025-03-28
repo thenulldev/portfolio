@@ -24,8 +24,6 @@ export interface Root {
   badge_template: BadgeTemplate;
   image: Image3;
   image_url: string;
-  //   evidence: any[];
-  //   recommendations: any[];
 }
 
 export interface Issuer {
