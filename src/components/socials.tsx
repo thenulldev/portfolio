@@ -4,6 +4,7 @@ import {
   faLinkedin,
   faMastodon,
   faTwitter,
+  faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { faCertificate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +22,7 @@ const Socials: React.FC = () => {
     },
     {
       link: "https://twitter.com/snipeydev",
-      icon: faTwitter,
+      icon: faXTwitter,
     },
     {
       link: "https://fosstodon.org/@StephenDev",

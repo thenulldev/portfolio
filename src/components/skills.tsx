@@ -174,20 +174,22 @@ export default async function Skills(): Promise<JSX.Element> {
     return acc.concat(skills);
   }, []);
 
-  // Count skill occurrences
-  const skillCounts: { [name: string]: number } = allSkills.reduce(
-    (counts: { [name: string]: number }, skill: { name: string }) => {
-      counts[skill.name] = (counts[skill.name] || 0) + 1;
-      return counts;
-    },
-    {}
-  );
+  // Create unique skills list and count occurrences
+  const uniqueSkills: { name: string }[] = [];
+  const skillCounts: { [name: string]: number } = {};
+  
+  allSkills.forEach((skill: { name: string }) => {
+    if (!uniqueSkills.find(s => s.name === skill.name)) {
+      uniqueSkills.push(skill);
+    }
+    skillCounts[skill.name] = (skillCounts[skill.name] || 0) + 1;
+  });
 
   return (
     <figure className="mx-auto bg-slate-100 rounded-xl p-4 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-xl">
       <div className="text-center">
         <h2 className="text-xl font-bold mb-4">Skills</h2>
-        <SkillList skills={allSkills} skillCounts={skillCounts} />
+        <SkillList skills={uniqueSkills} skillCounts={skillCounts} />
       </div>
     </figure>
   );

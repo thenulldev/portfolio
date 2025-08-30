@@ -171,15 +171,17 @@ export default async function Credential(): Promise<JSX.Element> {
       {validData.map((item: Root) => (
         <figure
           key={item.id}
-          className="w-full sm:w-64 h-64 flex flex-col items-center justify-center bg-slate-100 rounded-xl p-4 m-4"
+          className="w-full sm:w-64 h-80 flex flex-col items-center justify-start bg-slate-100 rounded-xl p-4 m-4 shadow-md hover:shadow-lg transition-shadow duration-200"
         >
           <img
-            className="w-32 h-32 rounded-lg"
+            className="w-32 h-32 rounded-lg object-contain"
             src={item.image.url}
             alt={item.badge_template.name}
           />
-          <div className="mt-2 text-center">
-            <h1 className="text-xl font-bold">{item.badge_template.name}</h1>
+          <div className="mt-4 text-center flex-1 flex flex-col justify-center">
+            <h1 className="text-lg font-bold leading-tight overflow-hidden text-ellipsis">
+              {item.badge_template.name}
+            </h1>
           </div>
         </figure>
       ))}

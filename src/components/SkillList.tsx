@@ -7,7 +7,7 @@ interface SkillListProps {
 
 const SkillList: React.FC<SkillListProps> = ({ skills, skillCounts }) => {
   return (
-    <div className="flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center gap-2">
       {skills.map((skill, index) => {
         const count = skillCounts[skill.name] || 1;
         const fontSizeClass = count > 1 ? "text-lg" : "text-sm";
@@ -16,8 +16,9 @@ const SkillList: React.FC<SkillListProps> = ({ skills, skillCounts }) => {
 
         return (
           <span
-            key={index}
-            className={`bg-gray-200 rounded-full px-3 py-1 ${fontSizeClass} font-semibold text-gray-700 mr-2 mb-2 ${hoverColorClass} transition duration-200 flex items-center`}
+            key={`${skill.name}-${index}`}
+            className={`bg-gray-200 rounded-full px-3 py-1 ${fontSizeClass} font-semibold text-gray-700 ${hoverColorClass} transition duration-200 flex items-center cursor-pointer`}
+            title={`${skill.name} (appears in ${count} certification${count > 1 ? 's' : ''})`}
           >
             {skill.name}
           </span>
