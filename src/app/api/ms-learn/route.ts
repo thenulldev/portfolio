@@ -1,32 +1,25 @@
 import { NextResponse } from "next/server";
+import { getApiData } from '../../../lib/api';
 
 export async function GET() {
   try {
-    const response = await fetch(
-      "https://microsoft-learn.nulldev.workers.dev/",
-      {
-        method: "GET",
-        headers: {
-          "user-agent": "NullDev-Frontend",
-          "content-type": "application/json",
-          "Accept": "application/json",
-        },
-        // Add timeout
-        signal: AbortSignal.timeout(15000), // 15 second timeout
-      }
+    const response = await getApiData(
+      "https://microsoft-learn.nulldev.workers.dev/"
     );
 
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+    if (response.error) {
+      console.error('Error fetching Microsoft Learn profile:', response.error);
+      return NextResponse.json(
+        { error: 'Failed to fetch Microsoft Learn profile' },
+        { status: 500 }
+      );
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.error("Error fetching Microsoft Learn profile:", error);
-    
+    console.error('Unexpected error in Microsoft Learn API:', error);
     return NextResponse.json(
-      { error: "Failed to fetch Microsoft Learn profile" },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

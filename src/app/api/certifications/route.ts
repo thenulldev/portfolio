@@ -1,29 +1,25 @@
 import { NextResponse } from 'next/server';
+import { getApiData } from '../../../lib/api';
 
 export async function GET() {
   try {
-    const response = await fetch(
-      "https://credly-scraper.nulldev.workers.dev/stephen-freerking",
-      {
-        method: "GET",
-        headers: {
-          "user-agent": "NullDev-Frontend",
-          "content-type": "application/json",
-        },
-      }
+    const response = await getApiData(
+      "https://credly-scraper.nulldev.workers.dev/stephen-freerking"
     );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (response.error) {
+      console.error('Error fetching certifications:', response.error);
+      return NextResponse.json(
+        { error: 'Failed to fetch certifications' },
+        { status: 500 }
+      );
     }
 
-    const data = await response.json();
-    
-    return NextResponse.json(data);
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.error('Error fetching certifications:', error);
+    console.error('Unexpected error in certifications API:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch certifications' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
