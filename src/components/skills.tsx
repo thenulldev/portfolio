@@ -5,51 +5,49 @@ import SkillList from "./SkillList";
 import { useCertifications } from "./useCertifications";
 
 export default function Skills(): React.JSX.Element {
-  const { skills, skillCounts, loading, error, lastUpdated } = useCertifications();
+  const { skills, skillCounts, loading, error } = useCertifications();
 
   if (loading) {
     return (
-      <figure className="mx-auto bg-slate-100 rounded-xl p-4 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-xl">
+      <div className="mx-auto bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-8 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-4xl border border-slate-200 shadow-lg">
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-4">Skills</h2>
+          <h2 className="text-2xl font-bold mb-6 text-slate-800">Skills & Expertise</h2>
           <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-4 border-sky-500 border-t-transparent"></div>
           </div>
-          <p className="mt-2 text-sm text-gray-600">Loading skills...</p>
+          <p className="mt-4 text-sm text-slate-600 font-medium">Loading skills...</p>
         </div>
-      </figure>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <figure className="mx-auto bg-slate-100 rounded-xl p-4 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-xl">
+      <div className="mx-auto bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-4xl border border-red-200 shadow-lg">
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-4">Skills</h2>
-          <p className="text-red-600 text-sm">Error loading skills</p>
-          <p className="text-xs text-gray-500 mt-1">{error}</p>
+          <h2 className="text-2xl font-bold mb-6 text-slate-800">Skills & Expertise</h2>
+          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <p className="text-red-700 text-sm font-medium">Error loading skills</p>
+          <p className="text-xs text-red-500 mt-2">{error}</p>
         </div>
-      </figure>
+      </div>
     );
   }
 
   return (
-    <figure className="mx-auto bg-slate-100 rounded-xl p-4 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-xl">
+    <div className="mx-auto bg-gradient-to-br from-white to-slate-50 rounded-2xl p-8 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-4xl border border-slate-200 shadow-lg">
       <div className="text-center">
-        <h2 className="text-xl font-bold mb-4">Skills</h2>
+        <h2 className="text-2xl font-bold mb-6 text-slate-800">Skills & Expertise</h2>
         {skills.length === 0 ? (
-          <p className="text-gray-600">No skills found</p>
+          <p className="text-slate-600 font-medium">No skills found</p>
         ) : (
-          <>
-            <SkillList skills={skills} skillCounts={skillCounts} />
-            {lastUpdated && (
-              <p className="text-xs text-gray-500 mt-4">
-                Last updated: {lastUpdated.toLocaleTimeString()}
-              </p>
-            )}
-          </>
+          <SkillList skills={skills} skillCounts={skillCounts} />
         )}
       </div>
-    </figure>
+    </div>
   );
 }
