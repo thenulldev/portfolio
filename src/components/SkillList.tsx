@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { Badge } from "./ui/badge";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 
 interface SkillListProps {
   skills: { name: string }[];
@@ -12,25 +14,37 @@ const SkillList: React.FC<SkillListProps> = ({ skills, skillCounts }) => {
     <div className="flex flex-wrap justify-center gap-3">
       {skills.map((skill, index) => {
         const count = skillCounts[skill.name] || 1;
-        const fontSizeClass = count > 1 ? "text-base" : "text-sm";
-        const bgGradient = count > 1 
-          ? "bg-gradient-to-r from-emerald-100 to-green-100 hover:from-emerald-200 hover:to-green-200 border-emerald-200" 
-          : "bg-gradient-to-r from-sky-100 to-blue-100 hover:from-sky-200 hover:to-blue-200 border-sky-200";
-        const textColor = count > 1 ? "text-emerald-800" : "text-sky-800";
+        const variant = count > 1 ? "success" : "info";
 
         return (
-          <span
-            key={`${skill.name}-${index}`}
-            className={`${bgGradient} ${textColor} ${fontSizeClass} font-semibold rounded-full px-4 py-2 border transition-all duration-200 flex items-center cursor-pointer shadow-sm hover:shadow-md transform hover:scale-105`}
-            title={`${skill.name} (appears in ${count} certification${count > 1 ? 's' : ''})`}
-          >
-            {skill.name}
-            {count > 1 && (
-              <span className="ml-2 bg-white bg-opacity-50 rounded-full px-2 py-0.5 text-xs font-bold">
-                {count}
-              </span>
-            )}
-          </span>
+          <HoverCard key={`${skill.name}-${index}`}>
+            <HoverCardTrigger asChild>
+              <Badge 
+                variant={variant}
+                className="text-sm font-semibold px-4 py-2 cursor-pointer transition-all duration-200 hover:scale-105 shadow-sm hover:shadow-md"
+              >
+                {skill.name}
+                {count > 1 && (
+                  <span className="ml-2 bg-white dark:bg-slate-800 bg-opacity-50 dark:bg-opacity-50 rounded-full px-2 py-0.5 text-xs font-bold">
+                    {count}
+                  </span>
+                )}
+              </Badge>
+            </HoverCardTrigger>
+            <HoverCardContent className="w-64 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600">
+              <div className="space-y-2">
+                <h4 className="font-semibold text-slate-800 dark:text-slate-200">{skill.name}</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  This skill appears in {count} certification{count > 1 ? 's' : ''}.
+                </p>
+                {count > 1 && (
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    This skill is highly valued across multiple certifications.
+                  </p>
+                )}
+              </div>
+            </HoverCardContent>
+          </HoverCard>
         );
       })}
     </div>
