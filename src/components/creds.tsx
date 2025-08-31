@@ -38,7 +38,8 @@ export default function Credential(): React.JSX.Element {
       {certifications.length === 0 ? (
         <EmptyState title="No certifications found" />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="flex justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 place-items-center">
           {certifications.map((item) => (
             <Card key={item.id} className="h-80 flex flex-col items-center justify-start bg-gradient-to-br from-white to-slate-50 dark:from-slate-700 dark:to-slate-800 border-slate-200 dark:border-slate-600 hover:border-sky-200 dark:hover:border-sky-500 group cursor-pointer transition-all duration-300 hover:shadow-xl">
               <CardHeader className="pb-4">
@@ -69,6 +70,7 @@ export default function Credential(): React.JSX.Element {
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
       )}
     </SectionContainer>

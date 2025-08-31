@@ -24,7 +24,7 @@ export function SectionContainer({
 
   return (
     <div className={cn(
-      "mx-auto bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-8 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto border border-slate-200 dark:border-slate-700 shadow-lg",
+      "mx-auto bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-8 font-[family-name:var(--font-poppins-sans)] w-full border border-slate-200 dark:border-slate-700 shadow-lg",
       maxWidthClasses[maxWidth],
       className
     )}>

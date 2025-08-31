@@ -1,15 +1,17 @@
 # 🚀 Stephen Freerking - Portfolio
 
-A modern, responsive portfolio website built with Next.js and deployed on Cloudflare Workers using OpenNext.
+A modern, responsive portfolio website built with Next.js and deployed on Cloudflare Workers using OpenNext. Features real-time data integration with Credly, Microsoft Learn, and TryHackMe APIs.
 
 ## ✨ Features
 
 - **🎨 Modern Design**: Clean, professional portfolio with dark mode support
 - **📊 Live Data**: Real-time certifications and skills from Credly API
 - **📚 Microsoft Learn Integration**: Live progress tracking from Microsoft Learn
-- **📱 Responsive**: Optimized for all devices and screen sizes
+- **🔓 TryHackMe Integration**: Real-time cybersecurity learning stats and achievements
+- **📱 Responsive**: Optimized for all devices and screen sizes (mobile-first design)
 - **♿ Accessible**: Built with accessibility in mind using Radix UI components
 - **⚡ Fast**: Deployed on Cloudflare Workers for global performance
+- **🌙 Dark Mode**: Automatic dark/light mode detection with smooth transitions
 
 ## 🛠️ Tech Stack
 
@@ -17,8 +19,12 @@ A modern, responsive portfolio website built with Next.js and deployed on Cloudf
 - **🎨 Styling**: Tailwind CSS with custom dark mode support
 - **🧩 UI Components**: Radix UI for accessible, unstyled components
 - **☁️ Deployment**: Cloudflare Workers via OpenNext
-- **🔗 APIs**: Credly API for certifications, Microsoft Learn API for progress
+- **🔗 APIs**: 
+  - Credly API for certifications and skills
+  - Microsoft Learn API for progress tracking
+  - TryHackMe API for cybersecurity achievements
 - **🎯 Icons**: FontAwesome for social media and UI icons
+- **📦 Package Manager**: pnpm for faster, more efficient dependency management
 
 ## 🚀 Getting Started
 
@@ -89,6 +95,7 @@ This command will:
 The application uses the following external APIs:
 - **🏆 Credly API**: For fetching certifications and skills
 - **📚 Microsoft Learn API**: For fetching learning progress
+- **🔓 TryHackMe API**: For fetching cybersecurity achievements and stats
 
 No API keys are required as these are public endpoints.
 
@@ -99,19 +106,37 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API routes
 │   │   ├── certifications/ # Credly API proxy
-│   │   └── ms-learn/      # Microsoft Learn API proxy
+│   │   ├── ms-learn/      # Microsoft Learn API proxy
+│   │   └── tryhackme/     # TryHackMe API proxy
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout
 │   └── page.tsx           # Home page
 ├── components/            # React components
 │   ├── ui/               # Radix UI components
+│   │   ├── badge.tsx     # Badge component
+│   │   ├── card.tsx      # Card component
+│   │   ├── checkmark-badge.tsx # Checkmark badge
+│   │   ├── empty-state.tsx # Empty state component
+│   │   ├── error-state.tsx # Error state component
+│   │   ├── hover-card.tsx # Hover card component
+│   │   ├── loading-state.tsx # Loading state component
+│   │   ├── section-container.tsx # Section container
+│   │   └── section-header.tsx # Section header
 │   ├── creds.tsx         # Certifications component
 │   ├── skills.tsx        # Skills component
 │   ├── progress.tsx      # Microsoft Learn progress
+│   ├── tryhackme.tsx     # TryHackMe stats component
 │   ├── socials.tsx       # Social media links
 │   └── useCertifications.ts # Custom hook for data fetching
-└── lib/                  # Utility functions
-    └── utils.ts          # Tailwind CSS utilities
+├── hooks/                # Custom React hooks
+│   └── useApiData.ts     # Generic API data fetching hook
+├── lib/                  # Utility functions
+│   ├── api.ts           # API utility functions
+│   └── utils.ts         # Tailwind CSS utilities
+├── styles/              # Additional styles
+│   └── responsive.css   # Responsive design utilities
+└── types/               # TypeScript type definitions
+    └── index.ts         # Shared type definitions
 ```
 
 ## 🔌 API Endpoints
@@ -121,6 +146,9 @@ Proxies requests to the Credly API to fetch certifications and skills data.
 
 ### `/api/ms-learn` 📚
 Proxies requests to the Microsoft Learn API to fetch learning progress and achievements.
+
+### `/api/tryhackme` 🔓
+Proxies requests to the TryHackMe API to fetch cybersecurity achievements and statistics.
 
 ## 🎨 Customization
 
@@ -133,12 +161,26 @@ Skills are extracted from your certifications and automatically deduplicated.
 ### 🎨 Styling
 The application uses Tailwind CSS with custom dark mode support. Modify `src/app/globals.css` and component styles as needed.
 
+### 📱 Responsive Design
+The portfolio is built with a mobile-first approach and includes:
+- Responsive grid layouts for certifications (1-5 columns based on screen size)
+- Adaptive typography and spacing
+- Touch-friendly interactive elements
+
 ## ⚡ Performance
 
 - **🌍 Global CDN**: Deployed on Cloudflare's global network
 - **⚡ Edge Computing**: Server-side rendering at the edge
 - **📦 Optimized Assets**: Images and fonts are optimized automatically
 - **💾 Caching**: Intelligent caching for API responses
+- **🚀 Fast Loading**: Optimized bundle sizes and lazy loading
+
+## 🔧 Recent Improvements
+
+- **📱 Enhanced Responsiveness**: Improved centering and layout on all screen sizes
+- **🎯 Better Grid Layout**: Optimized certification grid with proper centering
+- **⚡ Performance Optimizations**: Reduced bundle size and improved loading times
+- **🎨 UI Polish**: Enhanced visual design and user experience
 
 ## 🤝 Contributing
 
