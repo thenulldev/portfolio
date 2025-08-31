@@ -1,34 +1,34 @@
-# Stephen Freerking - Portfolio
+# 🚀 Stephen Freerking - Portfolio
 
 A modern, responsive portfolio website built with Next.js and deployed on Cloudflare Workers using OpenNext.
 
-## Features
+## ✨ Features
 
-- **Modern Design**: Clean, professional portfolio with dark mode support
-- **Live Data**: Real-time certifications and skills from Credly API
-- **Microsoft Learn Integration**: Live progress tracking from Microsoft Learn
-- **Responsive**: Optimized for all devices and screen sizes
-- **Accessible**: Built with accessibility in mind using Radix UI components
-- **Fast**: Deployed on Cloudflare Workers for global performance
+- **🎨 Modern Design**: Clean, professional portfolio with dark mode support
+- **📊 Live Data**: Real-time certifications and skills from Credly API
+- **📚 Microsoft Learn Integration**: Live progress tracking from Microsoft Learn
+- **📱 Responsive**: Optimized for all devices and screen sizes
+- **♿ Accessible**: Built with accessibility in mind using Radix UI components
+- **⚡ Fast**: Deployed on Cloudflare Workers for global performance
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15 with App Router
-- **Styling**: Tailwind CSS with custom dark mode support
-- **UI Components**: Radix UI for accessible, unstyled components
-- **Deployment**: Cloudflare Workers via OpenNext
-- **APIs**: Credly API for certifications, Microsoft Learn API for progress
-- **Icons**: FontAwesome for social media and UI icons
+- **⚛️ Framework**: Next.js 15 with App Router
+- **🎨 Styling**: Tailwind CSS with custom dark mode support
+- **🧩 UI Components**: Radix UI for accessible, unstyled components
+- **☁️ Deployment**: Cloudflare Workers via OpenNext
+- **🔗 APIs**: Credly API for certifications, Microsoft Learn API for progress
+- **🎯 Icons**: FontAwesome for social media and UI icons
 
-## Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
 - Node.js 18+ 
 - pnpm (recommended) or npm
 - Cloudflare account (for deployment)
 
-### Development
+### 💻 Development
 
 1. Clone the repository:
 ```bash
@@ -48,13 +48,13 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Building for Production
+### 🔨 Building for Production
 
 ```bash
 pnpm build
 ```
 
-### Local Cloudflare Workers Preview
+### 🌐 Local Cloudflare Workers Preview
 
 To test the Cloudflare Workers deployment locally:
 
@@ -64,9 +64,9 @@ pnpm preview
 
 This will start the OpenNext build process and run the app using Wrangler dev server.
 
-## Deployment
+## 🚀 Deployment
 
-### Deploy to Cloudflare Workers
+### ☁️ Deploy to Cloudflare Workers
 
 1. Make sure you have Wrangler CLI installed and authenticated:
 ```bash
@@ -80,19 +80,19 @@ pnpm deploy
 ```
 
 This command will:
-- Build the Next.js application using OpenNext
-- Deploy it to Cloudflare Workers
-- Make it available at your configured domain
+- 🏗️ Build the Next.js application using OpenNext
+- ☁️ Deploy it to Cloudflare Workers
+- 🌍 Make it available at your configured domain
 
-### Environment Variables
+### 🔧 Environment Variables
 
 The application uses the following external APIs:
-- **Credly API**: For fetching certifications and skills
-- **Microsoft Learn API**: For fetching learning progress
+- **🏆 Credly API**: For fetching certifications and skills
+- **📚 Microsoft Learn API**: For fetching learning progress
 
 No API keys are required as these are public endpoints.
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
@@ -114,48 +114,48 @@ src/
     └── utils.ts          # Tailwind CSS utilities
 ```
 
-## API Endpoints
+## 🔌 API Endpoints
 
-### `/api/certifications`
+### `/api/certifications` 🏆
 Proxies requests to the Credly API to fetch certifications and skills data.
 
-### `/api/ms-learn`
+### `/api/ms-learn` 📚
 Proxies requests to the Microsoft Learn API to fetch learning progress and achievements.
 
-## Customization
+## 🎨 Customization
 
-### Adding New Certifications
+### ➕ Adding New Certifications
 Certifications are automatically fetched from your Credly profile. No manual updates required.
 
-### Updating Skills
+### 🔧 Updating Skills
 Skills are extracted from your certifications and automatically deduplicated.
 
-### Styling
+### 🎨 Styling
 The application uses Tailwind CSS with custom dark mode support. Modify `src/app/globals.css` and component styles as needed.
 
-## Performance
+## ⚡ Performance
 
-- **Global CDN**: Deployed on Cloudflare's global network
-- **Edge Computing**: Server-side rendering at the edge
-- **Optimized Assets**: Images and fonts are optimized automatically
-- **Caching**: Intelligent caching for API responses
+- **🌍 Global CDN**: Deployed on Cloudflare's global network
+- **⚡ Edge Computing**: Server-side rendering at the edge
+- **📦 Optimized Assets**: Images and fonts are optimized automatically
+- **💾 Caching**: Intelligent caching for API responses
 
-## Contributing
+## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+1. 🍴 Fork the repository
+2. 🌿 Create a feature branch
+3. ✏️ Make your changes
+4. 🧪 Test thoroughly
+5. 📤 Submit a pull request
 
-## License
+## 📄 License
 
 This project is private and proprietary.
 
-## Support
+## 💬 Support
 
 For questions or issues, please contact Stephen Freerking.
 
 ---
 
-Built with ❤️ using Next.js and Cloudflare Workers
+Built with ❤️ using Next.js and Cloudflare Workers 🚀
