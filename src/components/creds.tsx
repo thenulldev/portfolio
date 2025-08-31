@@ -49,6 +49,7 @@ export default function Credential(): React.JSX.Element {
                     alt={item.badge_template.name}
                     width={80}
                     height={80}
+                    unoptimized
                   />
                   <CheckmarkBadge size="sm" className="absolute -top-2 -right-2" />
                 </div>
