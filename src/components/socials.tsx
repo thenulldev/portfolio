@@ -3,7 +3,7 @@ import {
   faGithub,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
-import { faCertificate } from "@fortawesome/free-solid-svg-icons";
+import { faCertificate, faShieldHalved } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
@@ -26,6 +26,12 @@ const Socials: React.FC = () => {
       icon: faCertificate,
       name: "Credly",
       color: "hover:text-orange-600 dark:hover:text-orange-400",
+    },
+    {
+      link: "https://tryhackme.com/p/ThatNullDev",
+      icon: faShieldHalved,
+      name: "TryHackMe",
+      color: "hover:text-red-600 dark:hover:text-red-400",
     },
   ];
 

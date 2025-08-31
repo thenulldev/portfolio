@@ -146,6 +146,50 @@ export interface MsLearnProfile {
   achievementCategories: Record<string, number>;
 }
 
+// TryHackMe types
+export interface TryHackMeBadge {
+  name: string;
+  earnedAt?: string;
+  _id: string;
+}
+
+export interface TryHackMeRoom {
+  type: string;
+  tags: Array<{
+    id: string;
+    weight: number;
+    _id?: string;
+  }>;
+  difficulty: string;
+  code: string;
+  title: string;
+  description: string;
+  image: string;
+  banner: string;
+}
+
+export interface TryHackMeActivityEvent {
+  _id: {
+    year: string;
+    month: string;
+    day: string;
+    action: string;
+  };
+  events: number;
+}
+
+export interface TryHackMeProfile {
+  badges: TryHackMeBadge[];
+  userRank: number;
+  points: number;
+  avatar: string;
+  subscribed: number;
+  completedRooms: number;
+  allCompletedRooms: TryHackMeRoom[];
+  activityEvents: TryHackMeActivityEvent[];
+  lastActivityDate: string;
+}
+
 // Hook return types
 export interface UseCertificationsReturn {
   certifications: Root[];
