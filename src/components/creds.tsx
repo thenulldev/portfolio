@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useCertifications } from "./useCertifications";
 import { 
   Card, 
@@ -42,10 +43,12 @@ export default function Credential(): React.JSX.Element {
             <Card key={item.id} className="h-80 flex flex-col items-center justify-start bg-gradient-to-br from-white to-slate-50 dark:from-slate-700 dark:to-slate-800 border-slate-200 dark:border-slate-600 hover:border-sky-200 dark:hover:border-sky-500 group cursor-pointer transition-all duration-300 hover:shadow-xl">
               <CardHeader className="pb-4">
                 <div className="relative">
-                  <img
+                  <Image
                     className="w-20 h-20 rounded-xl object-contain shadow-md group-hover:scale-105 transition-transform duration-300"
                     src={item.image.url}
                     alt={item.badge_template.name}
+                    width={80}
+                    height={80}
                   />
                   <CheckmarkBadge size="sm" className="absolute -top-2 -right-2" />
                 </div>

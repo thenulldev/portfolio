@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface UseApiDataOptions {
   refreshInterval?: number;
@@ -24,7 +24,7 @@ export function useApiData<T>(
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -56,7 +56,7 @@ export function useApiData<T>(
     } finally {
       setLoading(false);
     }
-  };
+  }, [endpoint, timeout]);
 
   useEffect(() => {
     fetchData();
@@ -65,7 +65,7 @@ export function useApiData<T>(
       const interval = setInterval(fetchData, refreshInterval);
       return () => clearInterval(interval);
     }
-  }, [endpoint, refreshInterval, timeout]);
+  }, [fetchData, refreshInterval]);
 
   return {
     data,
