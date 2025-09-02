@@ -4,7 +4,7 @@ import { getApiData } from '../../../lib/api';
 export async function GET() {
   try {
     const response = await getApiData(
-      "https://thm-stats.nulldev.workers.dev/?username=ThatNullDev"
+      "https://thm-stats.thenull.dev/ThatNullDev"
     );
 
     if (response.error) {
