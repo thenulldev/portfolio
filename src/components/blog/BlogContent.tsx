@@ -5,17 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import Link from "next/link";
 import { Badge } from "@/components/ui";
-
-interface BlogPost {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  tags: string[];
-  author: string;
-  readTime: string;
-  content: string;
-}
+import { BlogPost } from "@/lib/blog";
 
 interface BlogContentProps {
   posts: BlogPost[];
@@ -122,30 +112,30 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
                   </div>
 
                   {/* Title with Enhanced Typography */}
-                                           <Link href={`/blog/${post.id}`}>
-                           <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-800 dark:text-slate-200 mb-6 leading-tight group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors duration-300 cursor-pointer">
-                             {post.title}
-                           </h2>
-                         </Link>
+                  <Link href={`/blog/${post.id}`}>
+                    <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-800 dark:text-slate-200 mb-6 leading-tight group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors duration-300 cursor-pointer">
+                      {post.title}
+                    </h2>
+                  </Link>
 
                   {/* Description with Better Styling */}
                   <p className="text-xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-4xl">
                     {post.description}
                   </p>
 
-                                     {/* Enhanced Tags */}
-                   <div className="flex flex-wrap gap-3">
-                     {post.tags.map((tag) => (
-                       <Link key={tag} href={`/blog?tag=${tag}`}>
-                         <Badge 
-                           variant="secondary" 
-                           className="px-4 py-2 text-sm cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-800 transition-all duration-300 hover:scale-105 hover:shadow-md"
-                         >
-                           {tag}
-                         </Badge>
-                       </Link>
-                     ))}
-                   </div>
+                  {/* Enhanced Tags */}
+                  <div className="flex flex-wrap gap-3">
+                    {post.tags.map((tag) => (
+                      <Link key={tag} href={`/blog?tag=${tag}`}>
+                        <Badge 
+                          variant="secondary" 
+                          className="px-4 py-2 text-sm cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-800 transition-all duration-300 hover:scale-105 hover:shadow-md"
+                        >
+                          {tag}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
                 </header>
 
                 {/* Enhanced Post Content */}
@@ -169,8 +159,6 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
                     prose-p:leading-relaxed prose-p:text-base"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
-
-                
               </div>
             </div>
           </article>

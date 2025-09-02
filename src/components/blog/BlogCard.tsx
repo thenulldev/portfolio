@@ -4,20 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui";
-
-interface BlogPostMeta {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  tags: string[];
-  author: string;
-  readTime: string;
-  excerpt: string;
-}
+import { BlogPost } from "@/lib/blog";
 
 interface BlogCardProps {
-  post: BlogPostMeta;
+  post: BlogPost;
 }
 
 export default function BlogCard({ post }: BlogCardProps): React.JSX.Element {

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import BlogCard from "./BlogCard";
 import NewsletterSignup from "./NewsletterSignup";
@@ -9,44 +9,70 @@ import {
   SectionHeader,
   Badge
 } from "@/components/ui";
-
-// Static blog data for now
-const samplePosts = [
-  {
-    id: "getting-started-with-cybersecurity",
-    title: "Getting Started with Cybersecurity: A Beginner's Guide",
-    description: "Essential steps and resources for anyone looking to start their cybersecurity journey",
-    date: "2024-12-02",
-    tags: ["cybersecurity", "beginner", "learning"],
-    author: "Stephen Freerking",
-    readTime: "5 min read",
-    excerpt: "Cybersecurity is one of the most exciting and rapidly evolving fields in technology today..."
-  },
-  {
-    id: "microsoft-learn-journey",
-    title: "My Microsoft Learn Journey: From Beginner to Level 30+",
-    description: "How I used Microsoft Learn to advance my IT career and earn valuable certifications",
-    date: "2024-12-01",
-    tags: ["microsoft", "learning", "certifications", "career"],
-    author: "Stephen Freerking",
-    readTime: "7 min read",
-    excerpt: "Microsoft Learn has been an incredible platform for my professional development..."
-  },
-  {
-    id: "tryhackme-learning-path",
-    title: "Mastering TryHackMe: My Complete Learning Path Guide",
-    description: "A comprehensive guide to navigating TryHackMe's learning paths and maximizing your cybersecurity skills",
-    date: "2024-11-30",
-    tags: ["tryhackme", "cybersecurity", "hands-on", "learning"],
-    author: "Stephen Freerking",
-    readTime: "8 min read",
-    excerpt: "TryHackMe has become my go-to platform for practical cybersecurity learning..."
-  }
-];
+import { BlogPost } from "@/lib/blog";
 
 export default function BlogSection(): React.JSX.Element {
-  const posts = samplePosts;
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/blog');
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog posts');
+        }
+        const data = await response.json();
+        setPosts(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch blog posts');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   const allTags = [...new Set(posts.flatMap(post => post.tags))].slice(0, 5);
+
+  if (loading) {
+    return (
+      <SectionContainer maxWidth="4xl">
+        <SectionHeader 
+          title="Blog & Articles" 
+          description="Thoughts, tutorials, and insights from my journey"
+        />
+        <div className="text-center py-12">
+          <div className="w-8 h-8 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400">Loading blog posts...</p>
+        </div>
+      </SectionContainer>
+    );
+  }
+
+  if (error) {
+    return (
+      <SectionContainer maxWidth="4xl">
+        <SectionHeader 
+          title="Blog & Articles" 
+          description="Thoughts, tutorials, and insights from my journey"
+        />
+        <div className="text-center py-12">
+          <p className="text-red-600 dark:text-red-400 mb-4">
+            Error loading blog posts: {error}
+          </p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </SectionContainer>
+    );
+  }
 
   if (posts.length === 0) {
     return (
@@ -76,7 +102,7 @@ export default function BlogSection(): React.JSX.Element {
       
       {/* Featured Posts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {posts.map((post) => (
+        {posts.slice(0, 3).map((post) => (
           <BlogCard key={post.id} post={post} />
         ))}
       </div>
