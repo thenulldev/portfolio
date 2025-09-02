@@ -4,6 +4,7 @@ import Credential from "@components/creds";
 import MsLearnProgress from "@components/progress";
 import TryHackMeStats from "@components/tryhackme";
 import Skills from "@components/skills";
+import BlogSection from "@components/blog/BlogSection";
 import { CheckmarkBadge } from "@components/ui";
 
 export default function Home() {
@@ -62,6 +63,11 @@ export default function Home() {
         {/* TryHackMe Stats */}
         <div className="w-full max-w-7xl">
           <TryHackMeStats />
+        </div>
+
+        {/* Blog Section */}
+        <div className="w-full max-w-7xl">
+          <BlogSection />
         </div>
       </main>
       <footer className="row-start-3 flex gap-1 flex-wrap items-center justify-center text-slate-600 dark:text-slate-400">
