@@ -4,7 +4,7 @@ import { getApiData } from '../../../lib/api';
 export async function GET() {
   try {
     const response = await getApiData(
-      "https://credly-scraper.nulldev.workers.dev/stephen-freerking"
+      "https://credly.thenull.dev/stephen-freerking"
     );
 
     if (response.error) {

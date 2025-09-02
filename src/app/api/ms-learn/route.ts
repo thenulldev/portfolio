@@ -4,7 +4,7 @@ import { getApiData } from '../../../lib/api';
 export async function GET() {
   try {
     const response = await getApiData(
-      "https://microsoft-learn.nulldev.workers.dev/"
+      "https://mslearn.thenull.dev/"
     );
 
     if (response.error) {
