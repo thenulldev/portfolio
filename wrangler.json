@@ -8,5 +8,10 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  "kv_namespaces": []
+  "kv_namespaces": [],
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
+  }
 }
