@@ -1,32 +1,38 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { useMemo } from "react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { Badge } from "@/components/ui";
-import { BlogPost } from "@/lib/blog";
+import { BlogPost, getAllTags } from "@/lib/blog";
 
 interface BlogContentProps {
   posts: BlogPost[];
+  title?: string;
+  subtitle?: string;
 }
 
-export default function BlogContent({ posts }: BlogContentProps): React.JSX.Element {
-  const allTags = useMemo(() => [...new Set(posts.flatMap(post => post.tags))], [posts]);
-  const searchParams = useSearchParams();
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+// Function to extract preview content (first few paragraphs without the title)
+function getContentPreview(htmlContent: string): string {
+  // Remove the first h1 tag (title) and get the first few paragraphs
+  const contentWithoutTitle = htmlContent.replace(/<h1>.*?<\/h1>\s*/, '');
   
-  // Handle URL parameters for tags
-  useEffect(() => {
-    const tagParam = searchParams.get('tag');
-    if (tagParam && allTags.includes(tagParam)) {
-      setSelectedTag(tagParam);
-    }
-  }, [searchParams, allTags]);
+  // Extract first 2-3 paragraphs for preview
+  const paragraphs = contentWithoutTitle.match(/<p>.*?<\/p>/g) || [];
+  const previewParagraphs = paragraphs.slice(0, 2);
   
-  const filteredPosts = selectedTag 
-    ? posts.filter(post => post.tags.includes(selectedTag))
-    : posts;
+  // If we have paragraphs, join them and add ellipsis
+  if (previewParagraphs.length > 0) {
+    return previewParagraphs.join('') + '<p class="text-slate-500 dark:text-slate-400 italic">...</p>';
+  }
+  
+  // Fallback: return first 300 characters of text content
+  const textContent = contentWithoutTitle.replace(/<[^>]*>/g, '');
+  return `<p>${textContent.substring(0, 300)}...</p>`;
+}
+
+export default function BlogContent({ posts, title = "All Articles", subtitle }: BlogContentProps): React.JSX.Element {
+  const allTags = getAllTags();
 
   return (
     <>
@@ -34,37 +40,38 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
       <div className="mb-12">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-2">
-            {selectedTag ? `Articles about "${selectedTag}"` : "All Articles"}
+            {title}
           </h2>
           <p className="text-slate-600 dark:text-slate-400">
-            {filteredPosts.length} of {posts.length} articles
+            {subtitle || `${posts.length} articles`}
           </p>
         </div>
         
         <div className="flex flex-wrap justify-center gap-3">
-          <Badge 
-            variant={selectedTag === null ? "default" : "outline"}
-            className="px-6 py-3 text-base cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-all duration-300 hover:scale-105"
-            onClick={() => setSelectedTag(null)}
-          >
-            All Posts ({posts.length})
-          </Badge>
-          {allTags.map((tag) => (
+          <Link href="/blog">
             <Badge 
-              key={tag} 
-              variant={selectedTag === tag ? "default" : "outline"}
+              variant="default"
               className="px-6 py-3 text-base cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-all duration-300 hover:scale-105"
-              onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
             >
-              {tag} ({posts.filter(post => post.tags.includes(tag)).length})
+              All Posts ({posts.length})
             </Badge>
+          </Link>
+          {allTags.map((tag) => (
+            <Link key={tag} href={`/blog/tag/${tag}`}>
+              <Badge 
+                variant="outline"
+                className="px-6 py-3 text-base cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-all duration-300 hover:scale-105"
+              >
+                {tag} ({posts.filter(post => post.tags.includes(tag)).length})
+              </Badge>
+            </Link>
           ))}
         </div>
       </div>
 
       {/* Blog Posts with Enhanced Layout */}
       <div className="space-y-20">
-        {filteredPosts.map((post) => (
+        {posts.map((post) => (
           <article key={post.id} className="group">
             {/* Article Container */}
             <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
@@ -126,7 +133,7 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
                   {/* Enhanced Tags */}
                   <div className="flex flex-wrap gap-3">
                     {post.tags.map((tag) => (
-                      <Link key={tag} href={`/blog?tag=${tag}`}>
+                      <Link key={tag} href={`/blog/tag/${tag}`}>
                         <Badge 
                           variant="secondary" 
                           className="px-4 py-2 text-sm cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-800 transition-all duration-300 hover:scale-105 hover:shadow-md"
@@ -138,10 +145,9 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
                   </div>
                 </header>
 
-                {/* Enhanced Post Content */}
+                {/* Post Preview Content */}
                 <div 
                   className="prose prose-lg prose-slate dark:prose-invert max-w-none 
-                    prose-headings:text-slate-800 dark:prose-headings:text-slate-200 
                     prose-p:text-slate-600 dark:prose-p:text-slate-400 
                     prose-a:text-sky-600 dark:prose-a:text-sky-400 
                     prose-strong:text-slate-800 dark:prose-strong:text-slate-200 
@@ -154,11 +160,22 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
                     prose-blockquote:rounded-xl prose-blockquote:p-6
                     prose-li:text-slate-600 dark:prose-li:text-slate-400
                     prose-ul:space-y-2 prose-ol:space-y-2
-                    prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6
-                    prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4
                     prose-p:leading-relaxed prose-p:text-base"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: getContentPreview(post.content) }}
                 />
+
+                {/* Read More Button */}
+                <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+                  <Link 
+                    href={`/blog/${post.id}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                  >
+                    Read Full Article
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
               </div>
             </div>
           </article>
@@ -166,7 +183,7 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
       </div>
 
       {/* No Posts Message */}
-      {filteredPosts.length === 0 && (
+      {posts.length === 0 && (
         <div className="text-center py-20">
           <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,19 +194,8 @@ export default function BlogContent({ posts }: BlogContentProps): React.JSX.Elem
             No articles found
           </h3>
           <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-            {selectedTag 
-              ? `No articles found for "${selectedTag}". Try selecting a different tag or view all articles.`
-              : "No articles available at the moment. Check back soon for new content!"
-            }
+            No articles available at the moment. Check back soon for new content!
           </p>
-          {selectedTag && (
-            <button 
-              onClick={() => setSelectedTag(null)}
-              className="mt-6 px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white font-medium rounded-xl transition-colors"
-            >
-              View All Articles
-            </button>
-          )}
         </div>
       )}
     </>

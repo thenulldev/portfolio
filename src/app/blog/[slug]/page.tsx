@@ -107,19 +107,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {post.description}
               </p>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-3">
-                {post.tags.map((tag) => (
-                  <Link key={tag} href={`/blog?tag=${tag}`}>
-                    <Badge 
-                      variant="secondary" 
-                      className="px-4 py-2 text-sm hover:bg-sky-100 dark:hover:bg-sky-800 transition-all duration-300 hover:scale-105 hover:shadow-md"
-                    >
-                      {tag}
-                    </Badge>
-                  </Link>
-                ))}
-              </div>
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-3">
+                    {post.tags.map((tag) => (
+                      <Link key={tag} href={`/blog/tag/${tag}`}>
+                        <Badge 
+                          variant="secondary" 
+                          className="px-4 py-2 text-sm hover:bg-sky-100 dark:hover:bg-sky-800 transition-all duration-300 hover:scale-105 hover:shadow-md"
+                        >
+                          {tag}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
             </header>
 
             {/* Post Content */}
@@ -141,7 +141,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6
                 prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4
                 prose-p:leading-relaxed prose-p:text-base"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: post.content.replace(/<h1>.*?<\/h1>\s*/, '') }}
             />
           </div>
         </article>
