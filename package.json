@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "node scripts/generate-blog-data.js && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preview": "opennextjs-cloudflare && wrangler dev",
-    "deploy": "opennextjs-cloudflare && wrangler deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "preview": "node scripts/preview-cloudflare.js",
+    "deploy": "node scripts/deploy-cloudflare.js",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "generate-blog": "node scripts/generate-blog-data.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -32,7 +33,9 @@
     "react-fontawesome": "^1.7.1",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-    "tailwind-merge": "^3.3.1"
+    "remark-parse": "^11.0.0",
+    "tailwind-merge": "^3.3.1",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
