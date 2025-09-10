@@ -8,10 +8,12 @@ A modern, responsive portfolio website built with Next.js and deployed on Cloudf
 - **📊 Live Data**: Real-time certifications and skills from Credly API
 - **📚 Microsoft Learn Integration**: Live progress tracking from Microsoft Learn
 - **🔓 TryHackMe Integration**: Real-time cybersecurity learning stats and achievements
+- **📝 Blog System**: Complete blog functionality with markdown support and dynamic content generation
 - **📱 Responsive**: Optimized for all devices and screen sizes (mobile-first design)
 - **♿ Accessible**: Built with accessibility in mind using Radix UI components
 - **⚡ Fast**: Deployed on Cloudflare Workers for global performance
 - **🌙 Dark Mode**: Automatic dark/light mode detection with smooth transitions
+- **🔄 Automated Content**: Blog posts automatically generated from markdown files
 
 ## 🛠️ Tech Stack
 
@@ -23,6 +25,10 @@ A modern, responsive portfolio website built with Next.js and deployed on Cloudf
   - Credly API for certifications and skills
   - Microsoft Learn API for progress tracking
   - TryHackMe API for cybersecurity achievements
+- **📝 Content Management**: 
+  - Markdown-based blog posts with frontmatter
+  - Gray-matter for metadata parsing
+  - Custom markdown-to-HTML conversion
 - **🎯 Icons**: FontAwesome for social media and UI icons
 - **📦 Package Manager**: pnpm for faster, more efficient dependency management
 
@@ -47,7 +53,12 @@ cd portfolio
 pnpm install
 ```
 
-3. Run the development server:
+3. Generate blog data (if you have blog posts):
+```bash
+pnpm generate-blog
+```
+
+4. Run the development server:
 ```bash
 pnpm dev
 ```
@@ -56,9 +67,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### 🔨 Building for Production
 
+The build process automatically generates blog data:
 ```bash
 pnpm build
 ```
+
+This command will:
+- Generate blog data from markdown files
+- Build the Next.js application
+- Prepare for deployment
 
 ### 🌐 Local Cloudflare Workers Preview
 
@@ -108,6 +125,10 @@ src/
 │   │   ├── certifications/ # Credly API proxy
 │   │   ├── ms-learn/      # Microsoft Learn API proxy
 │   │   └── tryhackme/     # TryHackMe API proxy
+│   ├── blog/              # Blog pages and routing
+│   │   ├── [id]/          # Dynamic blog post pages
+│   │   ├── [slug]/        # Alternative slug-based routing
+│   │   └── page.tsx       # Blog listing page
 │   ├── globals.css        # Global styles
 │   ├── layout.tsx         # Root layout
 │   └── page.tsx           # Home page
@@ -128,11 +149,22 @@ src/
 │   ├── tryhackme.tsx     # TryHackMe stats component
 │   ├── socials.tsx       # Social media links
 │   └── useCertifications.ts # Custom hook for data fetching
+├── content/              # Content management
+│   └── blog/             # Blog post markdown files
+│       ├── getting-started-with-cybersecurity.md
+│       ├── microsoft-learn-journey.md
+│       └── tryhackme-learning-path.md
+├── data/                 # Generated data files
+│   └── blog-posts.json   # Processed blog posts data
 ├── hooks/                # Custom React hooks
 │   └── useApiData.ts     # Generic API data fetching hook
 ├── lib/                  # Utility functions
 │   ├── api.ts           # API utility functions
 │   └── utils.ts         # Tailwind CSS utilities
+├── scripts/              # Build and deployment scripts
+│   ├── generate-blog-data.js # Blog data generation
+│   ├── deploy-cloudflare.js  # Cloudflare deployment
+│   └── preview-cloudflare.js # Local Cloudflare preview
 ├── styles/              # Additional styles
 │   └── responsive.css   # Responsive design utilities
 └── types/               # TypeScript type definitions
@@ -149,6 +181,52 @@ Proxies requests to the Microsoft Learn API to fetch learning progress and achie
 
 ### `/api/tryhackme` 🔓
 Proxies requests to the TryHackMe API to fetch cybersecurity achievements and statistics.
+
+## 📝 Blog System
+
+The portfolio includes a complete blog system with the following features:
+
+### 📄 Blog Posts
+- **Markdown Support**: Write posts in markdown with frontmatter metadata
+- **Automatic Generation**: Blog data is generated from markdown files during build
+- **Dynamic Routing**: Posts are accessible via `/blog/[slug]` URLs
+- **Metadata Support**: Title, description, date, tags, author, and read time
+
+### 🛠️ Blog Management
+
+#### Adding New Posts
+1. Create a new `.md` file in `src/content/blog/`
+2. Add frontmatter metadata:
+```yaml
+---
+title: "Your Post Title"
+description: "Brief description"
+date: "2024-12-01"
+tags: ["tag1", "tag2"]
+author: "Stephen Freerking"
+readTime: "5 min read"
+---
+
+Your markdown content here...
+```
+
+3. Run `pnpm generate-blog` to process the new post
+4. The post will be available at `/blog/your-post-slug`
+
+#### Blog Data Generation
+The `generate-blog-data.js` script:
+- Processes all markdown files in `src/content/blog/`
+- Converts markdown to HTML with syntax highlighting
+- Extracts frontmatter metadata
+- Generates `src/data/blog-posts.json` with all post data
+- Sorts posts by date (newest first)
+
+### 🎨 Blog Styling
+- Responsive design with mobile-first approach
+- Syntax highlighting for code blocks
+- Consistent typography and spacing
+- Dark mode support
+- Accessible navigation and reading experience
 
 ## 🎨 Customization
 
@@ -177,10 +255,24 @@ The portfolio is built with a mobile-first approach and includes:
 
 ## 🔧 Recent Improvements
 
+### 🏗️ Major Codebase Refactor
+- **🔄 Eliminated Code Duplication**: Removed duplicate loading and error states across components
+- **🧩 Reusable UI Components**: Created standardized UI components for consistent design
+- **📦 Centralized Type Definitions**: Improved type safety with shared interfaces
+- **🎯 Standardized Data Fetching**: Generic `useApiData` hook for consistent API handling
+- **📁 Better Organization**: Cleaner file structure and import patterns
+
+### 📝 Blog System Implementation
+- **📄 Complete Blog Functionality**: Full markdown-based blog system
+- **🔄 Automated Content Generation**: Scripts for processing blog posts
+- **🎨 Blog Styling**: Responsive design with syntax highlighting
+- **📊 Dynamic Routing**: SEO-friendly blog post URLs
+
+### 🎨 UI/UX Enhancements
 - **📱 Enhanced Responsiveness**: Improved centering and layout on all screen sizes
 - **🎯 Better Grid Layout**: Optimized certification grid with proper centering
 - **⚡ Performance Optimizations**: Reduced bundle size and improved loading times
-- **🎨 UI Polish**: Enhanced visual design and user experience
+- **🌙 Dark Mode Polish**: Enhanced visual design and user experience
 
 ## 🤝 Contributing
 
