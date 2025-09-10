@@ -108,12 +108,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </p>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
                       <Link key={tag} href={`/blog/tag/${tag}`}>
                         <Badge 
                           variant="secondary" 
-                          className="px-4 py-2 text-sm hover:bg-sky-100 dark:hover:bg-sky-800 transition-all duration-300 hover:scale-105 hover:shadow-md"
+                          className="px-2 py-1 text-xs hover:bg-sky-100 dark:hover:bg-sky-800 transition-colors duration-200"
                         >
                           {tag}
                         </Badge>

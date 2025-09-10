@@ -47,11 +47,11 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
           </p>
         </div>
         
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex flex-wrap justify-center gap-2">
           <Link href="/blog">
             <Badge 
               variant="default"
-              className="px-6 py-3 text-base cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-all duration-300 hover:scale-105"
+              className="px-3 py-1.5 text-sm cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-colors duration-200"
             >
               All Posts ({posts.length})
             </Badge>
@@ -60,7 +60,7 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
             <Link key={tag} href={`/blog/tag/${tag}`}>
               <Badge 
                 variant="outline"
-                className="px-6 py-3 text-base cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-all duration-300 hover:scale-105"
+                className="px-3 py-1.5 text-sm cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-colors duration-200"
               >
                 {tag} ({posts.filter(post => post.tags.includes(tag)).length})
               </Badge>
@@ -131,12 +131,12 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
                   </p>
 
                   {/* Enhanced Tags */}
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
                       <Link key={tag} href={`/blog/tag/${tag}`}>
                         <Badge 
                           variant="secondary" 
-                          className="px-4 py-2 text-sm cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-800 transition-all duration-300 hover:scale-105 hover:shadow-md"
+                          className="px-2 py-1 text-xs cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-800 transition-colors duration-200"
                         >
                           {tag}
                         </Badge>

@@ -136,12 +136,12 @@ export default function BlogSection(): React.JSX.Element {
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
             Explore by topic:
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2">
             {allTags.map((tag) => (
               <Link key={tag} href={`/blog?tag=${tag}`}>
                 <Badge 
                   variant="outline" 
-                  className="px-4 py-2 text-sm hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-all duration-300 hover:scale-105 cursor-pointer"
+                  className="px-2 py-1 text-xs hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-colors duration-200 cursor-pointer"
                 >
                   {tag}
                 </Badge>
