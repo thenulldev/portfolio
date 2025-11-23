@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import BlogContent from "@/components/blog/BlogContent";
-import NewsletterSignup from "@/components/blog/NewsletterSignup";
+import BlogContent from "@/components/features/blog/BlogContent";
+import NewsletterSignup from "@/components/features/blog/NewsletterSignup";
 import { getAllPosts, getAllTags } from "@/lib/blog";
 
 interface BlogTagPageProps {

@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import Social from "@components/socials";
-import BlogSection from "@components/blog/BlogSection";
+import Social from "@components/shared/Socials";
+import BlogSection from "@components/features/blog/BlogSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faGraduationCap, faNewspaper } from "@fortawesome/free-solid-svg-icons";
-import SkillsAndCertifications from "@components/SkillsAndCertifications";
-import LearningDashboard from "@components/LearningDashboard";
+import SkillsAndCertifications from "@components/features/skills/SkillsAndCertifications";
+import LearningDashboard from "@components/features/learning/LearningDashboard";
 
 type Tab = "skills" | "certifications" | "learning" | "blog";
 
