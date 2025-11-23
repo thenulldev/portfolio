@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { Badge } from "@/components/ui";
@@ -16,16 +16,16 @@ interface BlogContentProps {
 function getContentPreview(htmlContent: string): string {
   // Remove the first h1 tag (title) and get the first few paragraphs
   const contentWithoutTitle = htmlContent.replace(/<h1>.*?<\/h1>\s*/, '');
-  
+
   // Extract first 2-3 paragraphs for preview
   const paragraphs = contentWithoutTitle.match(/<p>.*?<\/p>/g) || [];
   const previewParagraphs = paragraphs.slice(0, 2);
-  
+
   // If we have paragraphs, join them and add ellipsis
   if (previewParagraphs.length > 0) {
     return previewParagraphs.join('') + '<p class="text-slate-500 dark:text-slate-400 italic">...</p>';
   }
-  
+
   // Fallback: return first 300 characters of text content
   const textContent = contentWithoutTitle.replace(/<[^>]*>/g, '');
   return `<p>${textContent.substring(0, 300)}...</p>`;
@@ -46,10 +46,10 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
             {subtitle || `${posts.length} articles`}
           </p>
         </div>
-        
+
         <div className="flex flex-wrap justify-center gap-2">
           <Link href="/blog">
-            <Badge 
+            <Badge
               variant="default"
               className="px-3 py-1.5 text-sm cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-colors duration-200"
             >
@@ -58,7 +58,7 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
           </Link>
           {allTags.map((tag) => (
             <Link key={tag} href={`/blog/tag/${tag}`}>
-              <Badge 
+              <Badge
                 variant="outline"
                 className="px-3 py-1.5 text-sm cursor-pointer hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-colors duration-200"
               >
@@ -134,8 +134,8 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
                       <Link key={tag} href={`/blog/tag/${tag}`}>
-                        <Badge 
-                          variant="secondary" 
+                        <Badge
+                          variant="secondary"
                           className="px-2 py-1 text-xs cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-800 transition-colors duration-200"
                         >
                           {tag}
@@ -146,7 +146,7 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
                 </header>
 
                 {/* Post Preview Content */}
-                <div 
+                <div
                   className="prose prose-lg prose-slate dark:prose-invert max-w-none 
                     prose-p:text-slate-600 dark:prose-p:text-slate-400 
                     prose-a:text-sky-600 dark:prose-a:text-sky-400 
@@ -166,7 +166,7 @@ export default function BlogContent({ posts, title = "All Articles", subtitle }:
 
                 {/* Read More Button */}
                 <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
-                  <Link 
+                  <Link
                     href={`/blog/${post.id}`}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
                   >

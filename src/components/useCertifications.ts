@@ -13,25 +13,25 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log('Fetching certifications from API...');
-      
+
       const response = await fetch("/api/certifications", {
         method: "GET",
         headers: {
           "content-type": "application/json",
         },
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('API response error:', response.status, errorText);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const jsonResponse = await response.json();
       console.log('API response received:', jsonResponse);
-      
+
       const dataArray = Array.isArray(jsonResponse)
         ? jsonResponse
         : jsonResponse.data;
@@ -43,7 +43,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
       // Only keep items that haven't expired
       const validData = dataArray.filter(
         (item: Root) => new Date(item.expires_at_date) >= new Date()
-      );
+      ).sort((a: Root, b: Root) => new Date(b.issued_at_date).getTime() - new Date(a.issued_at_date).getTime());
 
       console.log(`Found ${validData.length} valid certifications out of ${dataArray.length} total`);
 
@@ -59,7 +59,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
       // Create unique skills list and count occurrences
       const uniqueSkills: { name: string }[] = [];
       const counts: { [name: string]: number } = {};
-      
+
       allSkills.forEach((skill: { name: string }) => {
         if (!uniqueSkills.find(s => s.name === skill.name)) {
           uniqueSkills.push(skill);
@@ -71,7 +71,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
 
       setSkills(uniqueSkills);
       setSkillCounts(counts);
-      
+
     } catch (err) {
       console.error('Error in fetchCertifications:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');

@@ -15,12 +15,12 @@ export default async function BlogTagPage({ params }: BlogTagPageProps) {
   const { tag } = await params;
   const posts = getAllPosts();
   const allTags = getAllTags();
-  
+
   // Check if the tag exists
   if (!allTags.includes(tag)) {
     notFound();
   }
-  
+
   // Filter posts by tag
   const filteredPosts = posts.filter(post => post.tags.includes(tag));
 
@@ -29,10 +29,10 @@ export default async function BlogTagPage({ params }: BlogTagPageProps) {
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-700 dark:from-sky-700 dark:via-blue-700 dark:to-indigo-800">
         <div className="absolute inset-0 bg-black/10"></div>
-        
+
         {/* Navigation */}
         <div className="absolute top-4 left-4 z-20">
-          <Link 
+          <Link
             href="/blog"
             className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 rounded-lg transition-all duration-300 hover:scale-105"
           >
@@ -42,11 +42,11 @@ export default async function BlogTagPage({ params }: BlogTagPageProps) {
             Back to Blog
           </Link>
         </div>
-        
+
         <div className="relative max-w-6xl mx-auto px-4 py-20 sm:py-28">
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Articles about "{tag}"
+              Articles about &quot;{tag}&quot;
             </h1>
             <p className="text-xl sm:text-2xl text-sky-100 max-w-4xl mx-auto leading-relaxed">
               Discover insights and tutorials related to {tag}
@@ -61,7 +61,7 @@ export default async function BlogTagPage({ params }: BlogTagPageProps) {
             </div>
           </div>
         </div>
-        
+
         {/* Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
@@ -79,8 +79,8 @@ export default async function BlogTagPage({ params }: BlogTagPageProps) {
             <p className="text-slate-500 dark:text-slate-400">Please wait while we prepare your reading experience...</p>
           </div>
         }>
-          <BlogContent 
-            posts={filteredPosts} 
+          <BlogContent
+            posts={filteredPosts}
             title={`Articles about "${tag}"`}
             subtitle={`${filteredPosts.length} articles tagged with ${tag}`}
           />

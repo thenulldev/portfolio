@@ -30,6 +30,7 @@ export async function apiRequest<T>(
       method,
       headers: {
         'content-type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         ...headers,
       },
       signal: controller.signal,
@@ -47,14 +48,14 @@ export async function apiRequest<T>(
     }
 
     const data = await response.json();
-    
+
     return {
       data,
       status: response.status,
     };
   } catch (error) {
     console.error(`API request failed for ${endpoint}:`, error);
-    
+
     return {
       data: null as T,
       error: error instanceof Error ? error.message : 'An error occurred',

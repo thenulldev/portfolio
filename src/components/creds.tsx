@@ -3,10 +3,10 @@
 import React from "react";
 import Image from "next/image";
 import { useCertifications } from "./useCertifications";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
+import {
+  Card,
+  CardContent,
+  CardHeader,
   CardTitle,
   Badge,
   SectionContainer,
@@ -30,19 +30,19 @@ export default function Credential(): React.JSX.Element {
 
   return (
     <SectionContainer>
-      <SectionHeader 
-        title="Certifications" 
-        description="Professional credentials and achievements" 
+      <SectionHeader
+        title="Certifications"
+        description="Professional credentials and achievements"
       />
-      
+
       {certifications.length === 0 ? (
         <EmptyState title="No certifications found" />
       ) : (
         <div className="w-full flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 w-full max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto">
             {certifications.map((item) => (
-              <Card 
-                key={item.id} 
+              <Card
+                key={item.id}
                 className="w-full h-72 sm:h-80 flex flex-col items-center justify-start bg-gradient-to-br from-white to-slate-50 dark:from-slate-700 dark:to-slate-800 border-slate-200 dark:border-slate-600 hover:border-sky-200 dark:hover:border-sky-500 group cursor-pointer transition-all duration-300 hover:shadow-xl mx-auto"
               >
                 <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
