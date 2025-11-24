@@ -113,7 +113,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
           const allSkills = validData.reduce((acc: { name: string }[], item: Root) => {
             const skills = item.badge_template.skills.slice(0, 5);
             return acc.concat(skills);
-          }, []);
+          }, []).filter((skill: { name: string }) => !skill.name.toLowerCase().includes('comptia'));
 
           // Create unique skills list and count occurrences
           const uniqueSkills: { name: string }[] = [];
