@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Root, UseCertificationsReturn } from '../types';
+import { Root, UseCertificationsReturn } from "@/types";
 
 const cache: {
   data: {

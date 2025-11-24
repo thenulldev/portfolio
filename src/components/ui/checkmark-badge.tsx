@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 
 interface CheckmarkBadgeProps {
   size?: "sm" | "md" | "lg";
@@ -9,7 +9,7 @@ interface CheckmarkBadgeProps {
 export function CheckmarkBadge({ size = "md", className = "" }: CheckmarkBadgeProps) {
   const sizeClasses = {
     sm: "w-5 h-5",
-    md: "w-8 h-8", 
+    md: "w-8 h-8",
     lg: "w-12 h-12"
   };
 

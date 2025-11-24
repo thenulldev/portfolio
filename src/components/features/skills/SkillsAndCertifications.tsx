@@ -4,7 +4,7 @@
 import React from "react";
 import Image from "next/image";
 import SkillList from "./SkillList";
-import { useCertifications } from "../../../hooks/useCertifications";
+import { useCertifications } from "@/hooks/useCertifications";
 import {
     Card,
     CardContent,
@@ -16,7 +16,7 @@ import {
     ErrorState,
     EmptyState,
     CheckmarkBadge
-} from "../../ui";
+} from "@/components/ui";
 
 export default function SkillsAndCertifications(): React.JSX.Element {
     const { skills, skillCounts, certifications, loading, error } = useCertifications();

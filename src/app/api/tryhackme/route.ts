@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getApiData } from '../../../lib/api';
+import { getApiData } from "@/lib/api";
 
 export async function GET() {
   try {

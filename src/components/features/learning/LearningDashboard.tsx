@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { useApiData } from "../../../hooks/useApiData";
-import { MsLearnProfile, TryHackMeProfile } from "../../../types";
+import { useApiData } from "@/hooks/useApiData";
+import { MsLearnProfile, TryHackMeProfile } from "@/types";
 import {
     SectionContainer,
     LoadingState,
@@ -11,7 +11,7 @@ import {
     CardContent,
     CardHeader,
     CardTitle
-} from "../../ui";
+} from "@/components/ui";
 
 export default function LearningDashboard() {
     const { data: msLearn, loading: msLoading, error: msError } = useApiData<MsLearnProfile>("/api/ms-learn");

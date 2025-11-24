@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Badge } from "../../ui/badge";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "../../ui/hover-card";
+import { Badge } from "@/components/ui/badge";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface SkillListProps {
   skills: { name: string }[];

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui";
 import { BlogPost } from "@/lib/blog";
 
-import { useApiData } from "../../../hooks/useApiData";
+import { useApiData } from "@/hooks/useApiData";
 
 export default function BlogSection(): React.JSX.Element {
   const { data: postsData, loading, error } = useApiData<BlogPost[]>('/api/blog');
