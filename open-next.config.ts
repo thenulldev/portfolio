@@ -5,12 +5,15 @@ const config: OpenNextConfig = {
     override: {
       wrapper: "cloudflare-node",
       converter: "edge",
+      proxyExternalRequest: "fetch",
       // Disable KV cache for now to simplify deployment
       incrementalCache: "dummy",
       tagCache: "dummy",
       queue: "dummy",
     },
   },
+
+  edgeExternals: ["node:crypto"],
 
   middleware: {
     external: true,
