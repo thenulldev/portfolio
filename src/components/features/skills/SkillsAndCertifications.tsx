@@ -102,7 +102,7 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                         </div>
 
                         <Dialog open={!!selectedCert} onOpenChange={(open) => !open && setSelectedCert(null)}>
-                            <DialogContent className="sm:max-w-2xl bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+                            <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
                                 {selectedCert && (
                                     <>
                                         <DialogHeader className="flex flex-col items-center sm:items-start gap-4 mb-4">
@@ -140,7 +140,7 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                         </DialogHeader>
 
                                         <div className="space-y-6">
-                                            <DialogDescription className="text-base leading-relaxed text-slate-600 dark:text-slate-300 max-h-[40vh] sm:max-h-[50vh] overflow-y-auto pr-2">
+                                            <DialogDescription className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
                                                 {selectedCert.badge_template.description}
                                             </DialogDescription>
 
