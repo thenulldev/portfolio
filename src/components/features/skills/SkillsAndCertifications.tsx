@@ -140,7 +140,7 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                         </DialogHeader>
 
                                         <div className="space-y-6">
-                                            <DialogDescription className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                                            <DialogDescription className="text-base leading-relaxed text-slate-600 dark:text-slate-300 max-h-[40vh] sm:max-h-[50vh] overflow-y-auto pr-2">
                                                 {selectedCert.badge_template.description}
                                             </DialogDescription>
 
