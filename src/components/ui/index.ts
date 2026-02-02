@@ -10,3 +10,4 @@ export { SectionContainer } from './section-container';
 export { SectionHeader } from './section-header';
 export { CheckmarkBadge } from './checkmark-badge';
 export { EmptyState } from './empty-state';
+export * from './dialog';

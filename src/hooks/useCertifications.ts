@@ -104,7 +104,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
 
           // Only keep items that haven't expired
           const validData = dataArray.filter(
-            (item: Root) => new Date(item.expires_at_date) >= new Date()
+            (item: Root) => !item.expires_at_date || new Date(item.expires_at_date) >= new Date()
           ).sort((a: Root, b: Root) => new Date(b.issued_at_date).getTime() - new Date(a.issued_at_date).getTime());
 
           console.log(`Found ${validData.length} valid certifications out of ${dataArray.length} total`);
