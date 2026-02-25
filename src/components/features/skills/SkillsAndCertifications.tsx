@@ -1,8 +1,7 @@
 "use client";
 "use client";
 
-import React from "react";
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import SkillList from "./SkillList";
 import { useCertifications } from "@/hooks/useCertifications";
@@ -28,6 +27,23 @@ import {
 export default function SkillsAndCertifications(): React.JSX.Element {
     const { skills, skillCounts, certifications, loading, error } = useCertifications();
     const [selectedCert, setSelectedCert] = useState<Root | null>(null);
+    const [selectedIssuer, setSelectedIssuer] = useState<string | null>(null);
+
+    const issuers = useMemo(() => {
+        const uniqueIssuers = new Set<string>();
+        certifications.forEach(cert => {
+            const issuerName = cert.issuer.entities[0]?.entity.name;
+            if (issuerName) {
+                uniqueIssuers.add(issuerName);
+            }
+        });
+        return Array.from(uniqueIssuers).sort();
+    }, [certifications]);
+
+    const filteredCertifications = useMemo(() => {
+        if (!selectedIssuer) return certifications;
+        return certifications.filter(cert => cert.issuer.entities[0]?.entity.name === selectedIssuer);
+    }, [certifications, selectedIssuer]);
 
     if (loading) {
         return <LoadingState title="Skills & Certifications" message="Loading your professional profile..." />;
@@ -63,43 +79,73 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                     <EmptyState title="No certifications found" />
                 ) : (
                     <>
-                        <div className="flex flex-wrap justify-center gap-6 w-full">
-                            {certifications.map((item) => (
-                                <Card
-                                    key={item.id}
-                                    onClick={() => setSelectedCert(item)}
-                                    className="w-full md:w-[calc(50%-1.5rem)] lg:w-[calc(33.33%-1.5rem)] h-72 sm:h-80 flex flex-col items-center justify-start bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-500 group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                        {issuers.length > 1 && (
+                            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8 w-full">
+                                <button
+                                    onClick={() => setSelectedIssuer(null)}
+                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedIssuer === null
+                                            ? "bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 shadow-sm ring-1 ring-sky-200/50 dark:ring-sky-700/50"
+                                            : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-700 hover:text-sky-600 dark:hover:text-sky-400 shadow-sm"
+                                        }`}
                                 >
-                                    <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6 pt-8">
-                                        <div className="relative">
-                                            <div className="absolute inset-0 bg-sky-100 dark:bg-sky-900/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                            <Image
-                                                className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-contain shadow-sm group-hover:scale-105 transition-transform duration-300"
-                                                src={item.image.url}
-                                                alt={item.badge_template.name}
-                                                width={96}
-                                                height={96}
-                                                unoptimized
-                                            />
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="text-center flex-1 flex flex-col justify-center pt-0 px-6 pb-6 w-full">
-                                        <CardTitle className="text-base font-bold leading-tight text-slate-800 dark:text-slate-200 mb-3 line-clamp-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
-                                            {item.badge_template.name}
-                                        </CardTitle>
+                                    All Issuers
+                                </button>
+                                {issuers.map(issuer => (
+                                    <button
+                                        key={issuer}
+                                        onClick={() => setSelectedIssuer(issuer)}
+                                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedIssuer === issuer
+                                                ? "bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 shadow-sm ring-1 ring-sky-200/50 dark:ring-sky-700/50"
+                                                : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-700 hover:text-sky-600 dark:hover:text-sky-400 shadow-sm"
+                                            }`}
+                                    >
+                                        {issuer}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
-                                        <div className="mt-auto w-full pt-4 border-t border-slate-100 dark:border-slate-700/50 flex flex-col items-center gap-2">
-                                            <Badge variant="secondary" className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
-                                                {item.issuer.entities[0]?.entity.name || 'Certified'}
-                                            </Badge>
-                                            <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">
-                                                {new Date(item.issued_at_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                                            </span>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
+                        {filteredCertifications.length === 0 ? (
+                            <EmptyState title="No certifications found for this issuer" />
+                        ) : (
+                            <div className="flex flex-wrap justify-center gap-6 w-full">
+                                {filteredCertifications.map((item) => (
+                                    <Card
+                                        key={item.id}
+                                        onClick={() => setSelectedCert(item)}
+                                        className="w-full md:w-[calc(50%-1.5rem)] lg:w-[calc(33.33%-1.5rem)] h-72 sm:h-80 flex flex-col items-center justify-start bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-500 group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                                    >
+                                        <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6 pt-8">
+                                            <div className="relative">
+                                                <div className="absolute inset-0 bg-sky-100 dark:bg-sky-900/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                <Image
+                                                    className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-contain shadow-sm group-hover:scale-105 transition-transform duration-300"
+                                                    src={item.image.url}
+                                                    alt={item.badge_template.name}
+                                                    width={96}
+                                                    height={96}
+                                                    unoptimized
+                                                />
+                                            </div>
+                                        </CardHeader>
+                                        <CardContent className="text-center flex-1 flex flex-col justify-center pt-0 px-6 pb-6 w-full">
+                                            <CardTitle className="text-base font-bold leading-tight text-slate-800 dark:text-slate-200 mb-3 line-clamp-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                                                {item.badge_template.name}
+                                            </CardTitle>
+
+                                            <div className="mt-auto w-full pt-4 border-t border-slate-100 dark:border-slate-700/50 flex flex-col items-center gap-2">
+                                                <Badge variant="secondary" className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+                                                    {item.issuer.entities[0]?.entity.name || 'Certified'}
+                                                </Badge>
+                                                <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">
+                                                    {new Date(item.issued_at_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                                </span>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                        )}
 
                         <Dialog open={!!selectedCert} onOpenChange={(open) => !open && setSelectedCert(null)}>
                             <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
