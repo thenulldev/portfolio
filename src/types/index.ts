@@ -22,6 +22,7 @@ export interface Root {
   badge_template: BadgeTemplate;
   image: Image3;
   image_url: string;
+  verification_url?: string;
 }
 
 export interface Issuer {
