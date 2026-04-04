@@ -74,7 +74,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
         return;
       }
 
-      console.log('Fetching certifications from API...');
+      // Fetching certifications from API
 
       const fetchPromise = (async () => {
         try {
@@ -86,13 +86,11 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
           });
 
           if (!response.ok) {
-            const errorText = await response.text();
-            console.error('API response error:', response.status, errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
           }
 
           const jsonResponse = await response.json();
-          console.log('API response received:', jsonResponse);
+          // API response received
 
           const dataArray = Array.isArray(jsonResponse)
             ? jsonResponse
@@ -107,7 +105,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
             (item: Root) => !item.expires_at_date || new Date(item.expires_at_date) >= new Date()
           ).sort((a: Root, b: Root) => new Date(b.issued_at_date).getTime() - new Date(a.issued_at_date).getTime());
 
-          console.log(`Found ${validData.length} valid certifications out of ${dataArray.length} total`);
+          // Processed valid certifications
 
           // Process skills
           const allSkills = validData.reduce((acc: { name: string }[], item: Root) => {
@@ -126,7 +124,7 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
             counts[skill.name] = (counts[skill.name] || 0) + 1;
           });
 
-          console.log(`Found ${uniqueSkills.length} unique skills`);
+          // Processed unique skills
 
           return {
             certifications: validData,
@@ -151,7 +149,6 @@ export function useCertifications(refreshInterval: number = 300000): UseCertific
       setLastUpdated(new Date());
 
     } catch (err) {
-      console.error('Error in fetchCertifications:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

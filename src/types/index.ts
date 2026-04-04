@@ -147,48 +147,70 @@ export interface MsLearnProfile {
   achievementCategories: Record<string, number>;
 }
 
-// TryHackMe types
+// TryHackMe types (v2 API)
 export interface TryHackMeBadge {
   name: string;
   earnedAt?: string;
-  _id: string;
+  id: string;
+  image?: string | null;
 }
 
-export interface TryHackMeRoom {
-  type: string;
-  tags: Array<{
-    id: string;
-    weight: number;
-    _id?: string;
-  }>;
-  difficulty: string;
-  code: string;
-  title: string;
-  description: string;
-  image: string;
-  banner: string;
-}
-
-export interface TryHackMeActivityEvent {
-  _id: {
-    year: string;
-    month: string;
-    day: string;
-    action: string;
+export interface TryHackMeCapabilityScore {
+  rawScore: number;
+  pov: string;
+  components: {
+    baseline: number;
+    foundation: number;
+    activity: number;
+    specialism: number;
+    versatility: number;
+    relevancy: number;
   };
-  events: number;
+  value: number;
+}
+
+export interface TryHackMeSocial {
+  linkedIn?: string | null;
+  github?: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
+  personalWebsite?: string | null;
+  reddit?: string | null;
+  discord?: string | null;
+  calendly?: string | null;
 }
 
 export interface TryHackMeProfile {
-  badges: TryHackMeBadge[];
-  userRank: number;
+  username: string;
+  found: boolean;
+  rank: number;
   points: number;
   avatar: string;
-  subscribed: number;
-  completedRooms: number;
-  allCompletedRooms: TryHackMeRoom[];
-  activityEvents: TryHackMeActivityEvent[];
-  lastActivityDate: string;
+  subscribed: boolean;
+  level: number;
+  country: string;
+  about: string;
+  streak: number;
+  badgesNumber: number;
+  completedRoomsNumber: number;
+  topPercentage: number;
+  isInTopTenPercent: boolean;
+  userRole: string;
+  leagueTier: string;
+  dateSignUp: string;
+  social: TryHackMeSocial;
+  certificates: string[];
+  capabilityScore: TryHackMeCapabilityScore;
+  badgeImageURL: string;
+  badges: TryHackMeBadge[];
+}
+
+// TryHackMe API Response wrapper
+export interface TryHackMeApiResponse {
+  success: boolean;
+  username: string;
+  data: TryHackMeProfile;
+  fetchedAt: string;
 }
 
 // Hook return types

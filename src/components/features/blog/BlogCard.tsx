@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui";
@@ -10,7 +10,7 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
-export default function BlogCard({ post }: BlogCardProps): React.JSX.Element {
+function BlogCard({ post }: BlogCardProps): React.JSX.Element {
   return (
     <Link href={`/blog/${post.id}`}>
       <article className="group bg-gradient-to-br from-white to-slate-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-600 hover:border-sky-200 dark:hover:border-sky-500 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -64,3 +64,8 @@ export default function BlogCard({ post }: BlogCardProps): React.JSX.Element {
     </Link>
   );
 }
+
+const MemoizedBlogCard = memo(BlogCard);
+MemoizedBlogCard.displayName = 'BlogCard';
+
+export default MemoizedBlogCard;

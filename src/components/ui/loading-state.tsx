@@ -8,7 +8,7 @@ interface LoadingStateProps {
 
 export function LoadingState({ title, message = "Loading...", className = "" }: LoadingStateProps) {
   return (
-    <div className={`mx-auto bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-8 font-[family-name:var(--font-poppins-sans)] w-full sm:w-auto max-w-7xl border border-slate-200 dark:border-slate-700 shadow-lg ${className}`}>
+    <div className={`mx-auto bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-8 w-full sm:w-auto max-w-7xl border border-slate-200 dark:border-slate-700 shadow-lg ${className}`}>
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-6 text-slate-800 dark:text-slate-200">{title}</h2>
         <div className="flex justify-center">

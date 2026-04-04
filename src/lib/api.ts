@@ -1,3 +1,5 @@
+import { NextResponse } from 'next/server';
+
 interface ApiRequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   headers?: Record<string, string>;
@@ -9,6 +11,12 @@ interface ApiResponse<T> {
   data: T;
   error?: string;
   status: number;
+}
+
+interface ApiRouteHandlerOptions {
+  endpoint: string;
+  errorMessage: string;
+  timeout?: number;
 }
 
 export async function apiRequest<T>(
@@ -66,4 +74,46 @@ export async function apiRequest<T>(
 
 export async function getApiData<T>(endpoint: string, timeout?: number): Promise<ApiResponse<T>> {
   return apiRequest<T>(endpoint, { timeout });
+}
+
+/**
+ * Creates a standardized Next.js API route handler for proxying external APIs.
+ * Eliminates duplicate boilerplate code across API routes.
+ * 
+ * @param options - Configuration options for the API route
+ * @returns A Next.js route handler function
+ * 
+ * @example
+ * // In your route.ts file:
+ * import { createApiRouteHandler } from '@/lib/api';
+ * 
+ * export const GET = createApiRouteHandler({
+ *   endpoint: 'https://api.example.com/data',
+ *   errorMessage: 'Failed to fetch data from example API'
+ * });
+ */
+export function createApiRouteHandler<T>(options: ApiRouteHandlerOptions) {
+  const { endpoint, errorMessage, timeout = 15000 } = options;
+
+  return async function GET(): Promise<NextResponse> {
+    try {
+      const response = await getApiData<T>(endpoint, timeout);
+
+      if (response.error) {
+        console.error(`Error in API route: ${errorMessage}`, response.error);
+        return NextResponse.json(
+          { error: errorMessage },
+          { status: response.status || 500 }
+        );
+      }
+
+      return NextResponse.json(response.data);
+    } catch (error) {
+      console.error(`Unexpected error in API route:`, error);
+      return NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+    }
+  };
 }

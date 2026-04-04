@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
@@ -9,7 +9,7 @@ interface SkillListProps {
   skillCounts: { [name: string]: number };
 }
 
-const SkillList: React.FC<SkillListProps> = ({ skills, skillCounts }) => {
+const SkillList: React.FC<SkillListProps> = memo(({ skills, skillCounts }) => {
   return (
     <div className="flex flex-wrap justify-center gap-3">
       {skills.map((skill, index) => {
@@ -49,6 +49,8 @@ const SkillList: React.FC<SkillListProps> = ({ skills, skillCounts }) => {
       })}
     </div>
   );
-};
+});
+
+SkillList.displayName = 'SkillList';
 
 export default SkillList;

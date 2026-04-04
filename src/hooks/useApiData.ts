@@ -112,7 +112,6 @@ export function useApiData<T>(
       setLastUpdated(new Date());
 
     } catch (err) {
-      console.error(`Error fetching data from ${endpoint}:`, err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

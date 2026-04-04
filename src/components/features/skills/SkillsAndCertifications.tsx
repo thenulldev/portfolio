@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
@@ -44,6 +43,33 @@ export default function SkillsAndCertifications(): React.JSX.Element {
         if (!selectedIssuer) return certifications;
         return certifications.filter(cert => cert.issuer.entities[0]?.entity.name === selectedIssuer);
     }, [certifications, selectedIssuer]);
+
+    // Compute filtered skills and counts based on visible certifications
+    const { filteredSkills, filteredSkillCounts } = useMemo(() => {
+        const visibleCerts = selectedIssuer ? filteredCertifications : certifications;
+        
+        // Extract all skills from visible certifications
+        const allSkills = visibleCerts.reduce((acc: { name: string }[], cert: Root) => {
+            const certSkills = cert.badge_template.skills.slice(0, 5);
+            return acc.concat(certSkills);
+        }, []).filter((skill: { name: string }) => !skill.name.toLowerCase().includes('comptia'));
+
+        // Create unique skills list and count occurrences
+        const uniqueSkills: { name: string }[] = [];
+        const counts: { [name: string]: number } = {};
+
+        allSkills.forEach((skill: { name: string }) => {
+            if (!uniqueSkills.find(s => s.name === skill.name)) {
+                uniqueSkills.push(skill);
+            }
+            counts[skill.name] = (counts[skill.name] || 0) + 1;
+        });
+
+        return {
+            filteredSkills: uniqueSkills,
+            filteredSkillCounts: counts
+        };
+    }, [certifications, filteredCertifications, selectedIssuer]);
 
     if (loading) {
         return <LoadingState title="Skills & Certifications" message="Loading your professional profile..." />;
@@ -236,15 +262,27 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                     <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
                     <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-sm">
                         Technical Expertise
+                        {selectedIssuer && (
+                            <span className="ml-2 text-xs font-normal text-sky-600 dark:text-sky-400">
+                                (from {selectedIssuer})
+                            </span>
+                        )}
                     </h3>
                     <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
                 </div>
 
                 <div className="max-w-4xl mx-auto">
-                    {skills.length === 0 ? (
-                        <p className="text-slate-600 dark:text-slate-400 font-medium text-center">No skills found</p>
+                    {filteredSkills.length === 0 ? (
+                        <p className="text-slate-600 dark:text-slate-400 font-medium text-center">
+                            {selectedIssuer 
+                                ? `No skills found for ${selectedIssuer} certifications` 
+                                : "No skills found"}
+                        </p>
                     ) : (
-                        <SkillList skills={skills} skillCounts={skillCounts} />
+                        <SkillList 
+                            skills={filteredSkills} 
+                            skillCounts={filteredSkillCounts} 
+                        />
                     )}
                 </div>
             </div>
