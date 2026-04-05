@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import SkillList from "./SkillList";
+import SkillsVisualization from "./SkillsVisualization";
 import { useCertifications } from "@/hooks/useCertifications";
 import { Root } from "@/types";
 import {
@@ -15,7 +16,6 @@ import {
     LoadingState,
     ErrorState,
     EmptyState,
-    CheckmarkBadge,
     Dialog,
     DialogContent,
     DialogHeader,
@@ -254,6 +254,22 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                         </Dialog>
                     </>
                 )}
+            </div>
+
+            {/* Interactive Skills Visualization */}
+            <div className="mb-16">
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent flex-1"></div>
+                    <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-sm">
+                        Skills Proficiency Map
+                    </h3>
+                    <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent flex-1"></div>
+                </div>
+
+                <SkillsVisualization 
+                    skills={filteredSkills} 
+                    skillCounts={filteredSkillCounts} 
+                />
             </div>
 
             {/* Skills Section */}

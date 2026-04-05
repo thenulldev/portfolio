@@ -9,3 +9,6 @@ export * from './tryhackme';
 
 // Hook return types
 export * from './hooks';
+
+// Skills visualization types
+export * from './skills-visualization';
