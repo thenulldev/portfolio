@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
-import SkillList from "./SkillList";
 import SkillsVisualization from "./SkillsVisualization";
 import { useCertifications } from "@/hooks/useCertifications";
 import { Root } from "@/types";
@@ -257,50 +256,24 @@ export default function SkillsAndCertifications(): React.JSX.Element {
             </div>
 
             {/* Interactive Skills Visualization */}
-            <div className="mb-16">
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent flex-1"></div>
-                    <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-sm">
-                        Skills Proficiency Map
-                    </h3>
-                    <div className="h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent flex-1"></div>
-                </div>
-
-                <SkillsVisualization 
-                    skills={filteredSkills} 
-                    skillCounts={filteredSkillCounts} 
-                />
-            </div>
-
-            {/* Skills Section */}
             <div>
                 <div className="flex items-center gap-4 mb-8">
-                    <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
+                    <div className="h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent flex-1"></div>
                     <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-sm">
-                        Technical Expertise
+                        Skills Proficiency Map
                         {selectedIssuer && (
                             <span className="ml-2 text-xs font-normal text-sky-600 dark:text-sky-400">
                                 (from {selectedIssuer})
                             </span>
                         )}
                     </h3>
-                    <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
+                    <div className="h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent flex-1"></div>
                 </div>
 
-                <div className="max-w-4xl mx-auto">
-                    {filteredSkills.length === 0 ? (
-                        <p className="text-slate-600 dark:text-slate-400 font-medium text-center">
-                            {selectedIssuer 
-                                ? `No skills found for ${selectedIssuer} certifications` 
-                                : "No skills found"}
-                        </p>
-                    ) : (
-                        <SkillList 
-                            skills={filteredSkills} 
-                            skillCounts={filteredSkillCounts} 
-                        />
-                    )}
-                </div>
+                <SkillsVisualization 
+                    skills={filteredSkills} 
+                    skillCounts={filteredSkillCounts} 
+                />
             </div>
         </SectionContainer>
     );
