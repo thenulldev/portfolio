@@ -8,9 +8,7 @@ import TryHackMeCard from "./TryHackMeCard";
 import {
     SectionContainer,
     LoadingState,
-    ErrorState,
-    Card,
-    CardContent
+    ErrorState
 } from "@/components/ui";
 
 export default function LearningDashboard(): React.JSX.Element {
@@ -40,42 +38,45 @@ export default function LearningDashboard(): React.JSX.Element {
                 </p>
             </div>
 
-            {/* Key Metrics Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <Card className="bg-gradient-to-br from-sky-50 to-blue-50 dark:from-sky-900/20 dark:to-blue-900/20 border-sky-100 dark:border-sky-800">
-                    <CardContent className="p-6 text-center">
-                        <div className="text-sm text-sky-600 dark:text-sky-400 font-medium mb-1">MS Learn Level</div>
-                        <div className="text-3xl font-bold text-slate-800 dark:text-slate-200">{msLearn.currentLevel}</div>
-                    </CardContent>
-                </Card>
-                <Card className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-red-100 dark:border-red-800">
-                    <CardContent className="p-6 text-center">
-                        <div className="text-sm text-red-600 dark:text-red-400 font-medium mb-1">THM Rank</div>
-                        <div className="text-3xl font-bold text-slate-800 dark:text-slate-200">#{thm.rank.toLocaleString()}</div>
-                    </CardContent>
-                </Card>
-                <Card className="bg-white dark:bg-slate-800">
-                    <CardContent className="p-6 text-center">
-                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Total XP</div>
-                        <div className="text-3xl font-bold text-slate-800 dark:text-slate-200">
-                            {(msLearn.totalXp + thm.points).toLocaleString()}
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="bg-white dark:bg-slate-800">
-                    <CardContent className="p-6 text-center">
-                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Badges Earned</div>
-                        <div className="text-3xl font-bold text-slate-800 dark:text-slate-200">
-                            {thm.badgesNumber + Object.values(msLearn.achievementCategories).reduce((a, b) => a + b, 0)}
-                        </div>
-                    </CardContent>
-                </Card>
+            {/* Microsoft Learn Section */}
+            <div className="mb-16">
+                {/* Section Header */}
+                <div className="flex items-center gap-4 mb-6">
+                    <div className="h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent flex-1"></div>
+                    <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-sky-50 to-blue-50 dark:from-sky-900/30 dark:to-blue-900/30 rounded-full border border-sky-200 dark:border-sky-700">
+                        <span className="text-2xl">🎓</span>
+                        <span className="text-lg font-bold text-sky-700 dark:text-sky-300">Microsoft Learn</span>
+                    </div>
+                    <div className="h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent flex-1"></div>
+                </div>
+
+                {/* MS Learn Content */}
+                <div className="max-w-3xl mx-auto">
+                    <MicrosoftLearnCard profile={msLearn} />
+                </div>
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <MicrosoftLearnCard profile={msLearn} />
-                <TryHackMeCard profile={thm} />
+            {/* Visual Divider */}
+            <div className="flex items-center justify-center mb-16">
+                <div className="w-24 h-1 bg-gradient-to-r from-sky-400 via-purple-400 to-red-400 rounded-full"></div>
+            </div>
+
+            {/* TryHackMe Section */}
+            <div>
+                {/* Section Header */}
+                <div className="flex items-center gap-4 mb-6">
+                    <div className="h-px bg-gradient-to-r from-transparent via-red-400 to-transparent flex-1"></div>
+                    <div className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/30 dark:to-orange-900/30 rounded-full border border-red-200 dark:border-red-700">
+                        <span className="text-2xl">🛡️</span>
+                        <span className="text-lg font-bold text-red-700 dark:text-red-300">TryHackMe</span>
+                    </div>
+                    <div className="h-px bg-gradient-to-r from-transparent via-red-400 to-transparent flex-1"></div>
+                </div>
+
+                {/* TryHackMe Content */}
+                <div className="max-w-3xl mx-auto">
+                    <TryHackMeCard profile={thm} />
+                </div>
             </div>
         </SectionContainer>
     );

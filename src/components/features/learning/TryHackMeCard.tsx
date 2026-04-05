@@ -48,19 +48,27 @@ export default function TryHackMeCard({ profile }: TryHackMeCardProps): React.JS
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{profile.completedRoomsNumber}</div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">Rooms Completed</div>
+                {/* Key Metrics Row */}
+                <div className="grid grid-cols-4 gap-3">
+                    <div className="p-3 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl text-center border border-red-100 dark:border-red-800">
+                        <div className="text-sm text-red-600 dark:text-red-400 font-medium mb-1">Rank</div>
+                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">#{profile.rank.toLocaleString()}</div>
                     </div>
-                    <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
+                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
+                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Points</div>
+                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{profile.points.toLocaleString()}</div>
+                    </div>
+                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
+                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Badges</div>
                         <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{profile.badgesNumber}</div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">Total Badges</div>
+                    </div>
+                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
+                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Rooms</div>
+                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{profile.completedRoomsNumber}</div>
                     </div>
                 </div>
 
-                {/* Key Stats Row */}
+                {/* Secondary Stats Row */}
                 <div className="grid grid-cols-4 gap-2">
                     <div className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-center">
                         <div className="text-lg font-bold text-slate-800 dark:text-slate-200">{profile.level}</div>
