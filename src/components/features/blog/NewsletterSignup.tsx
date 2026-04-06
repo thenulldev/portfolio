@@ -3,9 +3,6 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
-// Ghost blog URL
-const GHOST_URL = "https://srv1062939.hstgr.cloud";
-
 export default function NewsletterSignup(): React.JSX.Element {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -16,30 +13,30 @@ export default function NewsletterSignup(): React.JSX.Element {
     if (!email) return;
 
     setStatus("submitting");
+    setMessage("");
     
-    // Ghost members API endpoint
     try {
-      const response = await fetch(`${GHOST_URL}/members/api/send-magic-link/`, {
+      // Call our API route that interfaces with Ghost Admin API
+      const response = await fetch('/api/newsletter', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          emailType: "subscribe",
-        }),
+        body: JSON.stringify({ email }),
       });
+
+      const data = await response.json();
 
       if (response.ok) {
         setStatus("success");
-        setMessage("Check your email for a confirmation link!");
+        setMessage(data.message || "Successfully subscribed! Check your email for confirmation.");
         setEmail("");
       } else {
-        throw new Error("Failed to subscribe");
+        throw new Error(data.error || "Failed to subscribe");
       }
-    } catch {
+    } catch (err) {
       setStatus("error");
-      setMessage("Something went wrong. Please try again.");
+      setMessage(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   };
 
