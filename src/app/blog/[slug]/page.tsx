@@ -124,11 +124,6 @@ export default function BlogPostPage(): React.JSX.Element {
                 {post.title}
               </h1>
 
-              {/* Description */}
-              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                {post.description}
-              </p>
-
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mt-6">
                 {post.tags.map((tag) => (

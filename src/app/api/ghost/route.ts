@@ -46,20 +46,11 @@ function generateSlug(title: string): string {
 
 export async function GET() {
   try {
-    if (!GHOST_API_KEY) {
-      return NextResponse.json(
-        { 
-          posts: [],
-          count: 0,
-          source: 'ghost',
-          error: 'Ghost API key not configured',
-        },
-        { status: 500 }
-      );
+    // Build API URL - key is optional for public Ghost instances
+    let apiUrl = `${GHOST_URL}/ghost/api/v3/content/posts/?include=tags,authors&limit=20`;
+    if (GHOST_API_KEY) {
+      apiUrl += `&key=${GHOST_API_KEY}`;
     }
-
-    // Fetch posts from Ghost API
-    const apiUrl = `${GHOST_URL}/ghost/api/v3/content/posts/?key=${GHOST_API_KEY}&include=tags,authors&limit=20`;
     
     const response = await fetch(apiUrl, {
       headers: {
