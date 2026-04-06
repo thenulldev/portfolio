@@ -1,48 +1,73 @@
-import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
+"use client";
+
+import React from "react";
+import { useParams } from "next/navigation";
+import AppShell from "@/components/layout/AppShell";
 import BlogContent from "@/components/features/blog/BlogContent";
 import NewsletterSignup from "@/components/features/blog/NewsletterSignup";
-import { getAllPosts, getAllTags } from "@/lib/blog";
-import AppShell from "@/components/layout/AppShell";
+import { LoadingState, ErrorState, EmptyState } from "@/components/ui";
+import { useGhostPosts } from "@/hooks/useGhostPosts";
 
-interface BlogTagPageProps {
-  params: Promise<{
-    tag: string;
-  }>;
-}
-
-export default async function BlogTagPage({ params }: BlogTagPageProps) {
-  const { tag } = await params;
-  const posts = getAllPosts();
-  const allTags = getAllTags();
-
-  // Check if the tag exists
-  if (!allTags.includes(tag)) {
-    notFound();
-  }
+export default function BlogTagPage(): React.JSX.Element {
+  const params = useParams();
+  const tag = params?.tag as string;
+  const { posts, loading, error } = useGhostPosts();
 
   // Filter posts by tag
-  const filteredPosts = posts.filter(post => post.tags.includes(tag));
+  const filteredPosts = posts.filter(post => 
+    post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <AppShell activeTab="blog">
+        <div className="max-w-4xl mx-auto">
+          <LoadingState title="Blog" message="Loading articles..." />
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (error) {
+    return (
+      <AppShell activeTab="blog">
+        <div className="max-w-4xl mx-auto">
+          <ErrorState title="Blog" error={`${error}. Please try again later.`} />
+        </div>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell activeTab="blog">
-      {/* Blog Content with Suspense */}
-      <Suspense fallback={
-        <div className="text-center py-20">
-          <div className="w-20 h-20 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-          <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-2">Loading Blog Content</h3>
-          <p className="text-slate-500 dark:text-slate-400">Please wait while we prepare your reading experience...</p>
-        </div>
-      }>
-        <BlogContent
-          posts={filteredPosts}
-          title={`Articles about "${tag}"`}
-          subtitle={`${filteredPosts.length} articles tagged with ${tag}`}
-        />
-      </Suspense>
-
-      {/* Newsletter Signup */}
-      <NewsletterSignup />
+      <div className="max-w-4xl mx-auto">
+        {filteredPosts.length > 0 ? (
+          <>
+            <BlogContent
+              posts={filteredPosts}
+              title={`Articles about "${tag}"`}
+              subtitle={`${filteredPosts.length} article${filteredPosts.length !== 1 ? 's' : ''} tagged with ${tag}`}
+            />
+            <NewsletterSignup />
+          </>
+        ) : (
+          <>
+            <EmptyState 
+              title={`No articles found for "${tag}"`}
+              description={`No articles are tagged with "${tag}". Check out all articles for more content.`}
+            />
+            <div className="mt-6 text-center">
+              <a
+                href="/blog"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              >
+                View All Articles
+              </a>
+            </div>
+            <NewsletterSignup />
+          </>
+        )}
+      </div>
     </AppShell>
   );
 }

@@ -7,28 +7,37 @@ import NewsletterSignup from "./NewsletterSignup";
 import {
   SectionContainer,
   SectionHeader,
-  Badge
+  SectionDivider,
+  Badge,
+  LoadingState,
+  ErrorState,
+  EmptyState
 } from "@/components/ui";
-import { BlogPost } from "@/lib/blog";
-
-import { useApiData } from "@/hooks/useApiData";
+import { useGhostPosts } from "@/hooks/useGhostPosts";
 
 export default function BlogSection(): React.JSX.Element {
-  const { data: postsData, loading, error } = useApiData<BlogPost[]>('/api/blog');
-  const posts = postsData || [];
+  const { posts, loading, error } = useGhostPosts();
 
-  const allTags = [...new Set(posts.flatMap(post => post.tags))].slice(0, 5);
+  const allTags = React.useMemo(() => {
+    const tags = new Set<string>();
+    posts.forEach(post => {
+      post.tags.forEach(tag => tags.add(tag));
+    });
+    return Array.from(tags).slice(0, 5);
+  }, [posts]);
 
   if (loading) {
     return (
-      <SectionContainer maxWidth="4xl">
+      <SectionContainer maxWidth="7xl" variant="transparent">
         <SectionHeader
           title="Blog & Articles"
           description="Thoughts, tutorials, and insights from my journey"
         />
-        <div className="text-center py-12">
-          <div className="w-8 h-8 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400">Loading blog posts...</p>
+        <div className="py-12">
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-3 border-sky-200 dark:border-sky-800 border-t-sky-500 dark:border-t-sky-400"></div>
+          </div>
+          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">Loading blog posts...</p>
         </div>
       </SectionContainer>
     );
@@ -36,56 +45,40 @@ export default function BlogSection(): React.JSX.Element {
 
   if (error) {
     return (
-      <SectionContainer maxWidth="4xl">
+      <SectionContainer maxWidth="7xl" variant="transparent">
         <SectionHeader
           title="Blog & Articles"
           description="Thoughts, tutorials, and insights from my journey"
         />
-        <div className="text-center py-12">
-          <p className="text-red-600 dark:text-red-400 mb-4">
-            Error loading blog posts: {error}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
+        <ErrorState 
+          title="Blog & Articles" 
+          error={`Error loading blog posts: ${error}`}
+        />
       </SectionContainer>
     );
   }
 
   if (posts.length === 0) {
     return (
-      <SectionContainer maxWidth="4xl">
+      <SectionContainer maxWidth="7xl" variant="transparent">
         <SectionHeader
           title="Blog & Articles"
           description="Thoughts, tutorials, and insights from my journey"
         />
-        <div className="text-center py-12">
-          <p className="text-slate-600 dark:text-slate-400 mb-4">
-            No blog posts yet, but I&apos;m working on some great content!
-          </p>
-          <p className="text-sm text-slate-500 dark:text-slate-500">
-            Check back soon for cybersecurity tips, learning resources, and career insights.
-          </p>
-        </div>
+        <EmptyState 
+          title="No blog posts yet"
+          description="Check back soon for new content!"
+        />
       </SectionContainer>
     );
   }
 
   return (
-    <SectionContainer maxWidth="7xl">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-200 mb-4">
-          Blog & Articles
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          Recent insights and tutorials from my learning journey
-        </p>
-      </div>
+    <SectionContainer maxWidth="7xl" variant="transparent">
+      <SectionHeader 
+        title="Blog & Articles"
+        description="Recent insights and tutorials from my learning journey"
+      />
 
       {/* Featured Posts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -95,14 +88,14 @@ export default function BlogSection(): React.JSX.Element {
       </div>
 
       {/* Call to Action */}
-      <div className="text-center">
+      <div className="text-center mb-10">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 text-lg"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 text-sm"
         >
           Read All Articles
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -119,16 +112,14 @@ export default function BlogSection(): React.JSX.Element {
 
       {/* Quick Topic Navigation */}
       {allTags.length > 0 && (
-        <div className="mt-10 text-center">
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-            Explore by topic:
-          </p>
+        <div className="mb-12">
+          <SectionDivider title="Explore by Topic" />
           <div className="flex flex-wrap justify-center gap-2">
             {allTags.map((tag) => (
-              <Link key={tag} href={`/blog?tag=${tag}`}>
+              <Link key={tag} href={`/blog/tag/${tag}`}>
                 <Badge
                   variant="outline"
-                  className="px-2 py-1 text-xs hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-200 dark:hover:border-sky-700 transition-colors duration-200 cursor-pointer"
+                  className="px-3 py-1.5 text-xs hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-300 dark:hover:border-sky-700 transition-colors duration-200 cursor-pointer"
                 >
                   {tag}
                 </Badge>

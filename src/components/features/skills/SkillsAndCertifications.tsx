@@ -8,10 +8,10 @@ import { Root } from "@/types";
 import {
     Card,
     CardContent,
-    CardHeader,
-    CardTitle,
     Badge,
     SectionContainer,
+    SectionDivider,
+    SectionHeader,
     LoadingState,
     ErrorState,
     EmptyState,
@@ -79,36 +79,25 @@ export default function SkillsAndCertifications(): React.JSX.Element {
     }
 
     return (
-        <SectionContainer maxWidth="7xl">
-            {/* Header */}
-            <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-200 mb-4">
-                    Skills & Certifications
-                </h2>
-                <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                    A comprehensive overview of my technical expertise and professional qualifications.
-                </p>
-            </div>
+        <SectionContainer maxWidth="7xl" variant="transparent">
+            <SectionHeader 
+                title="Skills & Certifications"
+                description="A comprehensive overview of my technical expertise and professional qualifications."
+            />
 
             {/* Certifications Section */}
-            <div className="mb-16">
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
-                    <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-sm">
-                        Professional Certifications
-                    </h3>
-                    <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1"></div>
-                </div>
+            <div className="mb-12">
+                <SectionDivider title="Professional Certifications" />
 
                 {certifications.length === 0 ? (
                     <EmptyState title="No certifications found" />
                 ) : (
                     <>
                         {issuers.length > 1 && (
-                            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8 w-full">
+                            <div className="flex flex-wrap items-center justify-center gap-2 mb-6 sm:mb-8 w-full">
                                 <button
                                     onClick={() => setSelectedIssuer(null)}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedIssuer === null
+                                    className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${selectedIssuer === null
                                             ? "bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 shadow-sm ring-1 ring-sky-200/50 dark:ring-sky-700/50"
                                             : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-700 hover:text-sky-600 dark:hover:text-sky-400 shadow-sm"
                                         }`}
@@ -119,7 +108,7 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                     <button
                                         key={issuer}
                                         onClick={() => setSelectedIssuer(issuer)}
-                                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedIssuer === issuer
+                                        className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${selectedIssuer === issuer
                                                 ? "bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300 shadow-sm ring-1 ring-sky-200/50 dark:ring-sky-700/50"
                                                 : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-700 hover:text-sky-600 dark:hover:text-sky-400 shadow-sm"
                                             }`}
@@ -133,76 +122,73 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                         {filteredCertifications.length === 0 ? (
                             <EmptyState title="No certifications found for this issuer" />
                         ) : (
-                            <div className="flex flex-wrap justify-center gap-6 w-full">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full">
                                 {filteredCertifications.map((item) => (
                                     <Card
                                         key={item.id}
                                         onClick={() => setSelectedCert(item)}
-                                        className="w-full md:w-[calc(50%-1.5rem)] lg:w-[calc(33.33%-1.5rem)] h-72 sm:h-80 flex flex-col items-center justify-start bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-500 group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                                        className="flex flex-col items-center p-4 sm:p-6 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-500 group cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
                                     >
-                                        <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6 pt-8">
-                                            <div className="relative">
-                                                <div className="absolute inset-0 bg-sky-100 dark:bg-sky-900/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                <Image
-                                                    className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-contain shadow-sm group-hover:scale-105 transition-transform duration-300"
-                                                    src={item.image.url}
-                                                    alt={item.badge_template.name}
-                                                    width={96}
-                                                    height={96}
-                                                    unoptimized
-                                                />
-                                            </div>
-                                        </CardHeader>
-                                        <CardContent className="text-center flex-1 flex flex-col justify-center pt-0 px-6 pb-6 w-full">
-                                            <CardTitle className="text-base font-bold leading-tight text-slate-800 dark:text-slate-200 mb-3 line-clamp-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
-                                                {item.badge_template.name}
-                                            </CardTitle>
+                                        <div className="relative mb-4">
+                                            <div className="absolute inset-0 bg-sky-100 dark:bg-sky-900/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                            <Image
+                                                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-contain shadow-sm group-hover:scale-105 transition-transform duration-300"
+                                                src={item.image.url}
+                                                alt={item.badge_template.name}
+                                                width={80}
+                                                height={80}
+                                                unoptimized
+                                            />
+                                        </div>
+                                        
+                                        <h4 className="text-sm sm:text-base font-bold text-center text-slate-800 dark:text-slate-200 mb-2 line-clamp-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                                            {item.badge_template.name}
+                                        </h4>
 
-                                            <div className="mt-auto w-full pt-4 border-t border-slate-100 dark:border-slate-700/50 flex flex-col items-center gap-2">
-                                                <Badge variant="secondary" className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
-                                                    {item.issuer.entities[0]?.entity.name || 'Certified'}
-                                                </Badge>
-                                                <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">
-                                                    {new Date(item.issued_at_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-                                                </span>
-                                            </div>
-                                        </CardContent>
+                                        <div className="mt-auto w-full pt-3 border-t border-slate-100 dark:border-slate-700/50 flex flex-col items-center gap-1.5">
+                                            <Badge variant="secondary" className="text-[10px] sm:text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+                                                {item.issuer.entities[0]?.entity.name || 'Certified'}
+                                            </Badge>
+                                            <span className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500">
+                                                {new Date(item.issued_at_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                            </span>
+                                        </div>
                                     </Card>
                                 ))}
                             </div>
                         )}
 
                         <Dialog open={!!selectedCert} onOpenChange={(open) => !open && setSelectedCert(null)}>
-                            <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+                            <DialogContent className="w-[95vw] sm:w-full sm:max-w-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 p-4 sm:p-6">
                                 {selectedCert && (
                                     <>
-                                        <DialogHeader className="flex flex-col items-center sm:items-start gap-4 mb-4">
-                                            <div className="flex flex-col sm:flex-row items-center gap-6 w-full">
+                                        <DialogHeader className="flex flex-col items-center sm:items-start gap-3 sm:gap-4 mb-4">
+                                            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full">
                                                 <div className="relative shrink-0">
                                                     <div className="absolute inset-0 bg-sky-100 dark:bg-sky-900/30 rounded-xl blur-lg"></div>
                                                     <Image
                                                         src={selectedCert.image.url}
                                                         alt={selectedCert.badge_template.name}
-                                                        width={120}
-                                                        height={120}
-                                                        className="relative rounded-xl shadow-md bg-white dark:bg-slate-900 p-2"
+                                                        width={100}
+                                                        height={100}
+                                                        className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl shadow-md bg-white dark:bg-slate-900 p-2"
                                                         unoptimized
                                                     />
                                                 </div>
                                                 <div className="text-center sm:text-left space-y-2">
-                                                    <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                                                    <DialogTitle className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
                                                         {selectedCert.badge_template.name}
                                                     </DialogTitle>
                                                     <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                                                        <Badge variant="secondary" className="bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
+                                                        <Badge variant="secondary" className="bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300 text-xs sm:text-sm">
                                                             {selectedCert.issuer.entities[0]?.entity.name || 'Certified'}
                                                         </Badge>
-                                                        <span className="text-sm text-slate-500 dark:text-slate-400">
-                                                            Issued: {new Date(selectedCert.issued_at_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                                        <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                                                            {new Date(selectedCert.issued_at_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                                                         </span>
                                                         {selectedCert.expires_at_date && (
-                                                            <span className="text-sm text-slate-500 dark:text-slate-400">
-                                                                • Expires: {new Date(selectedCert.expires_at_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                                                            <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                                                                Expires: {new Date(selectedCert.expires_at_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                                                             </span>
                                                         )}
                                                     </div>
@@ -210,22 +196,22 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                             </div>
                                         </DialogHeader>
 
-                                        <div className="space-y-6">
-                                            <DialogDescription className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                                        <div className="space-y-4 sm:space-y-6">
+                                            <DialogDescription className="text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300">
                                                 {selectedCert.badge_template.description}
                                             </DialogDescription>
 
                                             {selectedCert.badge_template.skills?.length > 0 && (
-                                                <div className="space-y-3">
-                                                    <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 uppercase tracking-wide">
+                                                <div className="space-y-2 sm:space-y-3">
+                                                    <h4 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 uppercase tracking-wide">
                                                         Skills Validated
                                                     </h4>
-                                                    <div className="flex flex-wrap gap-2">
+                                                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                                                         {selectedCert.badge_template.skills.map((skill) => (
                                                             <Badge
                                                                 key={skill.name}
                                                                 variant="outline"
-                                                                className="border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                                                                className="text-xs border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
                                                             >
                                                                 {skill.name}
                                                             </Badge>
@@ -235,12 +221,12 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                             )}
 
                                             {selectedCert.verification_url && (
-                                                <div className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-700">
+                                                <div className="flex justify-end pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-700">
                                                     <a
                                                         href={selectedCert.verification_url}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 bg-slate-900 text-white dark:bg-white dark:text-slate-900"
+                                                        className="inline-flex items-center justify-center rounded-md text-xs sm:text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-8 sm:h-10 px-3 sm:px-4 py-2 bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100"
                                                     >
                                                         View Credential
                                                     </a>
@@ -257,22 +243,17 @@ export default function SkillsAndCertifications(): React.JSX.Element {
 
             {/* Interactive Skills Visualization */}
             <div>
-                <div className="flex items-center gap-4 mb-8">
-                    <div className="h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent flex-1"></div>
-                    <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-sm">
-                        Skills Proficiency Map
-                        {selectedIssuer && (
-                            <span className="ml-2 text-xs font-normal text-sky-600 dark:text-sky-400">
-                                (from {selectedIssuer})
-                            </span>
-                        )}
-                    </h3>
-                    <div className="h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent flex-1"></div>
-                </div>
+                <SectionDivider 
+                    title="Skills Proficiency Map" 
+                    subtitle={selectedIssuer ? `Filtered by ${selectedIssuer}` : undefined}
+                />
 
                 <SkillsVisualization 
                     skills={filteredSkills} 
-                    skillCounts={filteredSkillCounts} 
+                    skillCounts={filteredSkillCounts}
+                    selectedIssuer={selectedIssuer}
+                    onClearFilter={() => setSelectedIssuer(null)}
+                    certCount={filteredCertifications.length}
                 />
             </div>
         </SectionContainer>

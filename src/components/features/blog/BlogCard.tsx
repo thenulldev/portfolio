@@ -3,8 +3,20 @@
 import React, { memo } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui";
-import { BlogPost } from "@/lib/blog";
+import { Badge, Card, CardContent } from "@/components/ui";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  description: string;
+  content: string;
+  date: string;
+  slug: string;
+  author: string;
+  readTime: string;
+  tags: string[];
+  imageUrl: string | null;
+}
 
 interface BlogCardProps {
   post: BlogPost;
@@ -13,54 +25,66 @@ interface BlogCardProps {
 function BlogCard({ post }: BlogCardProps): React.JSX.Element {
   return (
     <Link href={`/blog/${post.id}`}>
-      <article className="group bg-gradient-to-br from-white to-slate-50 dark:from-slate-700 dark:to-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-600 hover:border-sky-200 dark:hover:border-sky-500 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-        <div className="space-y-4">
-          {/* Header */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-              <span>{format(new Date(post.date), 'MMM dd, yyyy')}</span>
-              <span>•</span>
-              <span>{post.readTime}</span>
+      <Card className="group h-full border-slate-200 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-600 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer overflow-hidden">
+        {/* Header Image */}
+        {post.imageUrl && (
+          <div className="relative w-full h-36 overflow-hidden">
+            <img
+              src={post.imageUrl}
+              alt={post.title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
+        <CardContent className="p-5">
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                <span>{format(new Date(post.date), 'MMM dd, yyyy')}</span>
+                <span>•</span>
+                <span>{post.readTime}</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors line-clamp-2 break-words overflow-wrap-anywhere">
+                {post.title}
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
+                {post.description}
+              </p>
             </div>
-            <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors line-clamp-2">
-              {post.title}
-            </h3>
-            <p className="text-slate-600 dark:text-slate-400 line-clamp-3">
-              {post.description}
-            </p>
-          </div>
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            {post.tags.slice(0, 3).map((tag) => (
-              <Badge 
-                key={tag} 
-                variant="secondary" 
-                className="text-xs px-2 py-1"
-              >
-                {tag}
-              </Badge>
-            ))}
-            {post.tags.length > 3 && (
-              <Badge variant="outline" className="text-xs px-2 py-1">
-                +{post.tags.length - 3} more
-              </Badge>
-            )}
-          </div>
+            {/* Tags */}
+            <div className="flex flex-wrap gap-1.5">
+              {post.tags.slice(0, 3).map((tag) => (
+                <Badge 
+                  key={tag} 
+                  variant="secondary" 
+                  className="text-[10px] px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                >
+                  {tag}
+                </Badge>
+              ))}
+              {post.tags.length > 3 && (
+                <Badge variant="outline" className="text-[10px] px-2 py-0.5">
+                  +{post.tags.length - 3}
+                </Badge>
+              )}
+            </div>
 
-          {/* Author */}
-          <div className="flex items-center gap-2 pt-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-bold">
-                {post.author.split(' ').map(n => n[0]).join('')}
+            {/* Author */}
+            <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-700/50">
+              <div className="w-5 h-5 bg-sky-100 dark:bg-sky-900/30 rounded-full flex items-center justify-center">
+                <span className="text-sky-600 dark:text-sky-400 text-[10px] font-bold">
+                  {post.author.split(' ').map(n => n[0]).join('')}
+                </span>
+              </div>
+              <span className="text-xs text-slate-600 dark:text-slate-400">
+                {post.author}
               </span>
             </div>
-            <span className="text-sm text-slate-600 dark:text-slate-400">
-              {post.author}
-            </span>
           </div>
-        </div>
-      </article>
+        </CardContent>
+      </Card>
     </Link>
   );
 }

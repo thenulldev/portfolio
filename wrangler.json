@@ -13,5 +13,13 @@
     "logs": {
       "enabled": true
     }
+  },
+  "env": {
+    "production": {
+      "vars": {
+        "GHOST_URL": "https://srv1062939.hstgr.cloud",
+        "GHOST_API_KEY": ""
+      }
+    }
   }
 }
