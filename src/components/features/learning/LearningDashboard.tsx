@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useApiData } from "@/hooks/useApiData";
+import { useParallelApiData } from "@/hooks/useApiData";
 import { MsLearnProfile, TryHackMeProfile } from "@/types";
 import MicrosoftLearnCard from "./MicrosoftLearnCard";
 import TryHackMeCard from "./TryHackMeCard";
@@ -13,19 +13,30 @@ import {
     ErrorState
 } from "@/components/ui";
 
-export default function LearningDashboard(): React.JSX.Element {
-    const { data: msLearn, loading: msLoading, error: msError } = useApiData<MsLearnProfile>("/api/ms-learn");
-    const { data: thm, loading: thmLoading, error: thmError } = useApiData<TryHackMeProfile>("/api/tryhackme");
+type LearningData = {
+  msLearn: MsLearnProfile;
+  thm: TryHackMeProfile;
+  [key: string]: unknown;
+};
 
-    const loading = msLoading || thmLoading;
-    const error = msError || thmError;
+export default function LearningDashboard(): React.JSX.Element {
+    const { data, loading, error, refetch } = useParallelApiData<LearningData>({
+        msLearn: "/api/ms-learn",
+        thm: "/api/tryhackme",
+    });
 
     if (loading) {
         return <LoadingState title="Learning Dashboard" message="Gathering your learning stats..." />;
     }
 
-    if (error || !msLearn || !thm) {
-        return <ErrorState title="Learning Dashboard" error={error || "Failed to load data"} />;
+    if (error || !data.msLearn || !data.thm) {
+        return (
+            <ErrorState 
+                title="Learning Dashboard" 
+                error={error || "Failed to load data"}
+                onRetry={refetch}
+            />
+        );
     }
 
     return (
@@ -43,7 +54,7 @@ export default function LearningDashboard(): React.JSX.Element {
                 />
 
                 <div className="max-w-3xl mx-auto">
-                    <MicrosoftLearnCard profile={msLearn} />
+                    <MicrosoftLearnCard profile={data.msLearn} />
                 </div>
             </div>
 
@@ -55,7 +66,7 @@ export default function LearningDashboard(): React.JSX.Element {
                 />
 
                 <div className="max-w-3xl mx-auto">
-                    <TryHackMeCard profile={thm} />
+                    <TryHackMeCard profile={data.thm} />
                 </div>
             </div>
         </SectionContainer>

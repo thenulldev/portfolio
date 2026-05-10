@@ -6,4 +6,6 @@ export interface UseCertificationsReturn {
   loading: boolean;
   error: string | null;
   lastUpdated: Date | null;
+  isStale: boolean;
+  refetch: () => Promise<void>;
 }
