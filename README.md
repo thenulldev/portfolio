@@ -1,295 +1,148 @@
 # 🚀 Stephen Freerking - Portfolio
 
-A modern, responsive portfolio website built with Next.js and deployed on Cloudflare Workers using OpenNext. Features real-time data integration with Credly, Microsoft Learn, and TryHackMe APIs.
+A modern cybersecurity portfolio built with Next.js 16, featuring real-time certification data visualization, an interactive skills radar chart, a blog system, and learning progress tracking. Deployed on Cloudflare Workers.
 
 ## ✨ Features
 
-- **🎨 Modern Design**: Clean, professional portfolio with dark mode support
-- **📊 Live Data**: Real-time certifications and skills from Credly API
-- **📚 Microsoft Learn Integration**: Live progress tracking from Microsoft Learn
-- **🔓 TryHackMe Integration**: Real-time cybersecurity learning stats and achievements
-- **📝 Blog System**: Complete blog functionality with markdown support and dynamic content generation
-- **📱 Responsive**: Optimized for all devices and screen sizes (mobile-first design)
-- **♿ Accessible**: Built with accessibility in mind using Radix UI components
-- **⚡ Fast**: Deployed on Cloudflare Workers for global performance
-- **🌙 Dark Mode**: Automatic dark/light mode detection with smooth transitions
-- **🔄 Automated Content**: Blog posts automatically generated from markdown files
+- **📊 Interactive Skills Radar**: Weighted skill visualization with category-based scoring (Security, Cloud, Networking, Programming, Infrastructure, Data & Analytics, Tools)
+- **🏆 Live Certifications**: Real-time data from Credly API with issuer filtering (ISC2, CompTIA, TryHackMe, LPI)
+- **📚 Learning Dashboard**: Microsoft Learn progress tracking and TryHackMe cybersecurity stats
+- **📝 Blog System**: Markdown-based blog with tag filtering, newsletter signup, and syntax highlighting
+- **🎨 Modern UI**: Sky-themed design with dark mode, responsive layout, and smooth animations
+- **⚡ Fast**: Deployed on Cloudflare Workers for global edge performance
+- **🔄 Automated**: Build-time data generation for blog content
 
 ## 🛠️ Tech Stack
 
-- **⚛️ Framework**: Next.js 15 with App Router
-- **🎨 Styling**: Tailwind CSS with custom dark mode support
-- **🧩 UI Components**: Radix UI for accessible, unstyled components
+- **⚛️ Framework**: Next.js 16 with App Router
+- **🎨 Styling**: Tailwind CSS with custom sky color theme
+- **🧩 UI Components**: Radix UI (primitive) + custom styled components
 - **☁️ Deployment**: Cloudflare Workers via OpenNext
-- **🔗 APIs**: 
-  - Credly API for certifications and skills
-  - Microsoft Learn API for progress tracking
-  - TryHackMe API for cybersecurity achievements
-- **📝 Content Management**: 
-  - Markdown-based blog posts with frontmatter
-  - Gray-matter for metadata parsing
-  - Custom markdown-to-HTML conversion
-- **🎯 Icons**: FontAwesome for social media and UI icons
-- **📦 Package Manager**: pnpm for faster, more efficient dependency management
+- **📝 Content**: Markdown with gray-matter frontmatter parsing
+- **📦 Package Manager**: pnpm
+
+## 🔌 API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `/api/certifications` | Proxies Credly API — fetches certifications and skills for a user |
+| `/api/ms-learn` | Fetches Microsoft Learn learning progress and achievements |
+| `/api/tryhackme` | Fetches TryHackMe room completions and cybersecurity stats |
+| `/api/ghost` | Proxies Ghost CMS API for blog posts |
+| `/api/newsletter` | Newsletter subscription endpoint |
 
 ## 🚀 Getting Started
 
-### 📋 Prerequisites
+### Prerequisites
 
-- Node.js 18+ 
-- pnpm (recommended) or npm
-- Cloudflare account (for deployment)
+- Node.js 18+
+- pnpm
 
-### 💻 Development
+### Development
 
-1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/thenulldev/portfolio.git
 cd portfolio
-```
-
-2. Install dependencies:
-```bash
 pnpm install
-```
-
-3. Generate blog data (if you have blog posts):
-```bash
-pnpm generate-blog
-```
-
-4. Run the development server:
-```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-### 🔨 Building for Production
-
-The build process automatically generates blog data:
-```bash
-pnpm build
-```
-
-This command will:
-- Generate blog data from markdown files
-- Build the Next.js application
-- Prepare for deployment
-
-### 🌐 Local Cloudflare Workers Preview
-
-To test the Cloudflare Workers deployment locally:
+### Building
 
 ```bash
-pnpm preview
+pnpm build        # Build for production
+pnpm preview      # Test Cloudflare Workers deployment locally
+pnpm deploy       # Deploy to Cloudflare Workers
 ```
-
-This will start the OpenNext build process and run the app using Wrangler dev server.
-
-## 🚀 Deployment
-
-### ☁️ Deploy to Cloudflare Workers
-
-1. Make sure you have Wrangler CLI installed and authenticated:
-```bash
-npm install -g wrangler
-wrangler login
-```
-
-2. Deploy the application:
-```bash
-pnpm deploy
-```
-
-This command will:
-- 🏗️ Build the Next.js application using OpenNext
-- ☁️ Deploy it to Cloudflare Workers
-- 🌍 Make it available at your configured domain
-
-### 🔧 Environment Variables
-
-The application uses the following external APIs:
-- **🏆 Credly API**: For fetching certifications and skills
-- **📚 Microsoft Learn API**: For fetching learning progress
-- **🔓 TryHackMe API**: For fetching cybersecurity achievements and stats
-
-No API keys are required as these are public endpoints.
 
 ## 📁 Project Structure
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── api/               # API routes
-│   │   ├── certifications/ # Credly API proxy
-│   │   ├── ms-learn/      # Microsoft Learn API proxy
-│   │   └── tryhackme/     # TryHackMe API proxy
-│   ├── blog/              # Blog pages and routing
-│   │   ├── [id]/          # Dynamic blog post pages
-│   │   ├── [slug]/        # Alternative slug-based routing
-│   │   └── page.tsx       # Blog listing page
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── ui/               # Radix UI components
-│   │   ├── badge.tsx     # Badge component
-│   │   ├── card.tsx      # Card component
-│   │   ├── checkmark-badge.tsx # Checkmark badge
-│   │   ├── empty-state.tsx # Empty state component
-│   │   ├── error-state.tsx # Error state component
-│   │   ├── hover-card.tsx # Hover card component
-│   │   ├── loading-state.tsx # Loading state component
-│   │   ├── section-container.tsx # Section container
-│   │   └── section-header.tsx # Section header
-│   ├── creds.tsx         # Certifications component
-│   ├── skills.tsx        # Skills component
-│   ├── progress.tsx      # Microsoft Learn progress
-│   ├── tryhackme.tsx     # TryHackMe stats component
-│   ├── socials.tsx       # Social media links
-│   └── useCertifications.ts # Custom hook for data fetching
-├── content/              # Content management
-│   └── blog/             # Blog post markdown files
-│       ├── getting-started-with-cybersecurity.md
-│       ├── microsoft-learn-journey.md
-│       └── tryhackme-learning-path.md
-├── data/                 # Generated data files
-│   └── blog-posts.json   # Processed blog posts data
-├── hooks/                # Custom React hooks
-│   └── useApiData.ts     # Generic API data fetching hook
-├── lib/                  # Utility functions
-│   ├── api.ts           # API utility functions
-│   └── utils.ts         # Tailwind CSS utilities
-├── scripts/              # Build and deployment scripts
-│   ├── generate-blog-data.js # Blog data generation
-│   ├── deploy-cloudflare.js  # Cloudflare deployment
-│   └── preview-cloudflare.js # Local Cloudflare preview
-├── styles/              # Additional styles
-│   └── responsive.css   # Responsive design utilities
-└── types/               # TypeScript type definitions
-    └── index.ts         # Shared type definitions
+├── app/
+│   ├── api/                   # API routes (route handlers)
+│   │   ├── certifications/
+│   │   ├── ghost/
+│   │   ├── ms-learn/
+│   │   ├── newsletter/
+│   │   └── tryhackme/
+│   ├── blog/
+│   │   ├── [slug]/           # Blog post pages
+│   │   ├── tag/[tag]/         # Tag-filtered blog listing
+│   │   └── page.tsx          # Blog listing page
+│   ├── page.tsx               # Home page
+│   └── layout.tsx             # Root layout
+├── components/
+│   ├── features/
+│   │   ├── blog/             # Blog components (BlogSection, BlogCard, BlogContent, NewsletterSignup)
+│   │   ├── learning/          # Learning dashboard (LearningDashboard, MicrosoftLearnCard, TryHackMeCard)
+│   │   └── skills/           # Skills visualization (SkillsAndCertifications, SkillsVisualization, SkillList)
+│   ├── layout/               # App shell and portfolio layout
+│   ├── shared/               # Shared components (Socials)
+│   └── ui/                   # Base UI components (Card, Badge, Button, Dialog, etc.)
+├── hooks/                    # Custom hooks (useApiData, useCertifications, useGhostPosts)
+├── lib/
+│   ├── api.ts               # Shared API route handler factory
+│   └── utils.ts             # Tailwind + cn() utility
+├── types/                    # TypeScript type definitions
+│   ├── certifications.ts
+│   ├── skills-visualization.ts
+│   ├── microsoft-learn.ts
+│   └── tryhackme.ts
+└── content/
+    └── blog/                 # Blog post markdown files
 ```
 
-## 🔌 API Endpoints
+## 🎨 Skills Visualization
 
-### `/api/certifications` 🏆
-Proxies requests to the Credly API to fetch certifications and skills data.
+The skills system uses a weighted scoring model:
 
-### `/api/ms-learn` 📚
-Proxies requests to the Microsoft Learn API to fetch learning progress and achievements.
+- **Certification Count**: More certs with the same skill = higher score
+- **Weight (1-5)**: Core security skills (Penetration Testing, CISSP) weight 5; supporting tools (Nmap, Wireshark) weight 1-2
+- **Proficiency Formula**: `40 + min((certCount-1)*8, 40) + (weight-1)*5` capped at 100
+- **Categories**: Security, Cloud, Networking, Programming, Infrastructure, Data & Analytics, Tools
 
-### `/api/tryhackme` 🔓
-Proxies requests to the TryHackMe API to fetch cybersecurity achievements and statistics.
+## 🔧 Configuration
+
+Environment variables (optional — public APIs only):
+
+```env
+# No API keys required for:
+// - /api/certifications (uses credly-scraper.nulldev.workers.dev)
+// - /api/ms-learn
+// - /api/tryhackme
+```
+
+## 🌍 Deployment
+
+Deployed to Cloudflare Workers via OpenNext adapter. Pushes to `main` branch auto-deploy via GitHub Actions or manual `pnpm deploy`.
 
 ## 📝 Blog System
 
-The portfolio includes a complete blog system with the following features:
+Add posts as markdown files in `src/content/blog/` with frontmatter:
 
-### 📄 Blog Posts
-- **Markdown Support**: Write posts in markdown with frontmatter metadata
-- **Automatic Generation**: Blog data is generated from markdown files during build
-- **Dynamic Routing**: Posts are accessible via `/blog/[slug]` URLs
-- **Metadata Support**: Title, description, date, tags, author, and read time
-
-### 🛠️ Blog Management
-
-#### Adding New Posts
-1. Create a new `.md` file in `src/content/blog/`
-2. Add frontmatter metadata:
 ```yaml
 ---
-title: "Your Post Title"
+title: "Post Title"
 description: "Brief description"
 date: "2024-12-01"
 tags: ["tag1", "tag2"]
 author: "Stephen Freerking"
 readTime: "5 min read"
 ---
-
-Your markdown content here...
 ```
 
-3. Run `pnpm generate-blog` to process the new post
-4. The post will be available at `/blog/your-post-slug`
-
-#### Blog Data Generation
-The `generate-blog-data.js` script:
-- Processes all markdown files in `src/content/blog/`
-- Converts markdown to HTML with syntax highlighting
-- Extracts frontmatter metadata
-- Generates `src/data/blog-posts.json` with all post data
-- Sorts posts by date (newest first)
-
-### 🎨 Blog Styling
-- Responsive design with mobile-first approach
-- Syntax highlighting for code blocks
-- Consistent typography and spacing
-- Dark mode support
-- Accessible navigation and reading experience
-
-## 🎨 Customization
-
-### ➕ Adding New Certifications
-Certifications are automatically fetched from your Credly profile. No manual updates required.
-
-### 🔧 Updating Skills
-Skills are extracted from your certifications and automatically deduplicated.
-
-### 🎨 Styling
-The application uses Tailwind CSS with custom dark mode support. Modify `src/app/globals.css` and component styles as needed.
-
-### 📱 Responsive Design
-The portfolio is built with a mobile-first approach and includes:
-- Responsive grid layouts for certifications (1-5 columns based on screen size)
-- Adaptive typography and spacing
-- Touch-friendly interactive elements
+Posts are generated into `src/data/blog-posts.json` at build time.
 
 ## ⚡ Performance
 
-- **🌍 Global CDN**: Deployed on Cloudflare's global network
-- **⚡ Edge Computing**: Server-side rendering at the edge
-- **📦 Optimized Assets**: Images and fonts are optimized automatically
-- **💾 Caching**: Intelligent caching for API responses
-- **🚀 Fast Loading**: Optimized bundle sizes and lazy loading
-
-## 🔧 Recent Improvements
-
-### 🏗️ Major Codebase Refactor
-- **🔄 Eliminated Code Duplication**: Removed duplicate loading and error states across components
-- **🧩 Reusable UI Components**: Created standardized UI components for consistent design
-- **📦 Centralized Type Definitions**: Improved type safety with shared interfaces
-- **🎯 Standardized Data Fetching**: Generic `useApiData` hook for consistent API handling
-- **📁 Better Organization**: Cleaner file structure and import patterns
-
-### 📝 Blog System Implementation
-- **📄 Complete Blog Functionality**: Full markdown-based blog system
-- **🔄 Automated Content Generation**: Scripts for processing blog posts
-- **🎨 Blog Styling**: Responsive design with syntax highlighting
-- **📊 Dynamic Routing**: SEO-friendly blog post URLs
-
-### 🎨 UI/UX Enhancements
-- **📱 Enhanced Responsiveness**: Improved centering and layout on all screen sizes
-- **🎯 Better Grid Layout**: Optimized certification grid with proper centering
-- **⚡ Performance Optimizations**: Reduced bundle size and improved loading times
-- **🌙 Dark Mode Polish**: Enhanced visual design and user experience
-
-## 🤝 Contributing
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch
-3. ✏️ Make your changes
-4. 🧪 Test thoroughly
-5. 📤 Submit a pull request
-
-## 📄 License
-
-This project is private and proprietary.
-
-## 💬 Support
-
-For questions or issues, please contact Stephen Freerking.
+- Edge computing on Cloudflare Workers
+- Static page generation for blog and home
+- API routes for dynamic certification data
+- Optimized bundle sizes with Next.js
 
 ---
 
-Built with ❤️ using Next.js and Cloudflare Workers 🚀
+Built with ❤️ using Next.js 16 and Cloudflare Workers 🚀
