@@ -1,0 +1,16 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/certifications/route": "/api/certifications",
+  "/api/ghost/route": "/api/ghost",
+  "/api/ms-learn/route": "/api/ms-learn",
+  "/api/newsletter/route": "/api/newsletter",
+  "/api/tryhackme/route": "/api/tryhackme",
+  "/blog/[slug]/page": "/blog/[slug]",
+  "/blog/page": "/blog",
+  "/blog/tag/[tag]/page": "/blog/tag/[tag]",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml"
+}
