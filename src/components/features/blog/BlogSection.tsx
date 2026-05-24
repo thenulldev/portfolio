@@ -30,7 +30,7 @@ export default function BlogSection(): React.JSX.Element {
       <SectionContainer maxWidth="7xl" variant="transparent">
         <SectionHeader
           title="Blog & Articles"
-          description="Thoughts, tutorials, and insights from my journey"
+          description="Technical articles and tutorials on cloud architecture, security, and DevOps."
         />
         <div className="py-12">
           <div className="flex justify-center">
@@ -47,7 +47,7 @@ export default function BlogSection(): React.JSX.Element {
       <SectionContainer maxWidth="7xl" variant="transparent">
         <SectionHeader
           title="Blog & Articles"
-          description="Thoughts, tutorials, and insights from my journey"
+          description="Technical articles and tutorials on cloud architecture, security, and DevOps."
         />
         <ErrorState 
           title="Blog & Articles" 
@@ -62,7 +62,7 @@ export default function BlogSection(): React.JSX.Element {
       <SectionContainer maxWidth="7xl" variant="transparent">
         <SectionHeader
           title="Blog & Articles"
-          description="Thoughts, tutorials, and insights from my journey"
+          description="Technical articles and tutorials on cloud architecture, security, and DevOps."
         />
         <EmptyState 
           title="No blog posts yet"

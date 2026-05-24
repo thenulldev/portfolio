@@ -91,10 +91,7 @@ export default function AppShell({ children, activeTab, onTabChange }: AppShellP
                 {/* Footer */}
                 <div className="p-6 text-center border-t border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/30">
                     <p className="text-xs text-slate-400 dark:text-slate-500">
-                        Made with <span className="text-red-400">♥</span> by Stephen F
-                    </p>
-                    <p className="text-[10px] text-slate-400 dark:text-slate-600 mt-1">
-                        © {new Date().getFullYear()} All rights reserved
+                        © {new Date().getFullYear()} Stephen Freerking
                     </p>
                 </div>
             </aside>

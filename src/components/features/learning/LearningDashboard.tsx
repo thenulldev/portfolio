@@ -43,7 +43,7 @@ export default function LearningDashboard(): React.JSX.Element {
         <SectionContainer maxWidth="7xl" variant="transparent">
             <SectionHeader 
                 title="Learning Dashboard"
-                description="Tracking my continuous learning journey across Microsoft Learn and TryHackMe."
+                description="Hands-on learning progress across cloud platforms and cybersecurity domains."
             />
 
             {/* Microsoft Learn Section */}

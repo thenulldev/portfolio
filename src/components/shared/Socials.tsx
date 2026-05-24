@@ -10,13 +10,13 @@ import Link from "next/link";
 const Socials: React.FC = () => {
   const socials = [
     {
-      link: "https://github.com/snipey",
+      link: "https://github.com/Snipey",
       icon: faGithub,
       name: "GitHub",
       color: "hover:text-slate-800 dark:hover:text-slate-200",
     },
     {
-      link: "https://linkedin.com/in/stephenfdev",
+      link: "https://www.linkedin.com/in/thatnulldev/",
       icon: faLinkedin,
       name: "LinkedIn",
       color: "hover:text-blue-600 dark:hover:text-blue-400",
