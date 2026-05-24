@@ -98,7 +98,7 @@ export default function SkillsAndCertifications(): React.JSX.Element {
 
             <SectionHeader
                 title="Skills & Certifications"
-                description="A comprehensive overview of my technical expertise and professional qualifications."
+                description="Professional certifications and technical expertise across cloud, security, and infrastructure domains."
             />
 
             {/* Certifications Section */}

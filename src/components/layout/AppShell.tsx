@@ -53,11 +53,11 @@ export default function AppShell({ children, activeTab, onTabChange }: AppShellP
                         Stephen Freerking
                     </h1>
                     <p className="text-sm font-medium text-sky-600 dark:text-sky-400 mb-5 px-4 py-1.5 bg-sky-50 dark:bg-sky-900/30 rounded-full border border-sky-100 dark:border-sky-800">
-                        IT Professional
+                        Cloud & Cybersecurity Engineer
                     </p>
 
                     <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6 max-w-xs">
-                        I love technology and breaking things to see how they work. Always learning and looking for new ways to apply my skills.
+                        Building secure, scalable infrastructure and automating everything that can be automated. Specializing in cloud architecture and DevSecOps.
                     </p>
 
                     <Social />
@@ -120,7 +120,7 @@ export default function AppShell({ children, activeTab, onTabChange }: AppShellP
                                 Stephen Freerking
                             </h1>
                             <p className="text-xs font-medium text-sky-600 dark:text-sky-400 mb-4 px-3 py-1 bg-sky-50 dark:bg-sky-900/30 rounded-full">
-                                IT Professional
+                                Cloud & Cybersecurity Engineer
                             </p>
                             <Social />
                         </div>
