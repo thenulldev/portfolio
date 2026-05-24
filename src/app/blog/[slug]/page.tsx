@@ -74,8 +74,39 @@ export default function BlogPostPage(): React.JSX.Element {
     .filter(p => p.id !== post.id)
     .slice(0, 2);
 
+  // JSON-LD structured data for SEO
+  const articleJsonLd = post ? {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    image: post.imageUrl || undefined,
+    datePublished: post.date,
+    author: {
+      "@type": "Person",
+      name: post.author || "Stephen Freerking",
+      url: "https://thenull.dev",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Stephen Freerking",
+      url: "https://thenull.dev",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://thenull.dev/blog/${post.slug}`,
+    },
+  } : null;
+
   return (
     <AppShell activeTab="blog">
+      {/* JSON-LD */}
+      {articleJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        />
+      )}
       <div className="max-w-4xl mx-auto">
         {/* Back Link */}
         <Link
