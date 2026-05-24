@@ -5,11 +5,16 @@ const path = require('path');
 console.log('🔍 Starting Cloudflare preview process...');
 
 try {
-  // Step 1: Generate blog data
-  console.log('📝 Step 1: Generating blog data...');
-  execSync('node scripts/generate-blog-data.js', { stdio: 'inherit' });
+  // Step 1: Clean previous builds
+  console.log('🧹 Step 1: Cleaning previous builds...');
+  if (fs.existsSync('.next')) {
+    execSync('rm -rf .next', { stdio: 'inherit' });
+  }
+  if (fs.existsSync('.open-next')) {
+    execSync('rm -rf .open-next', { stdio: 'inherit' });
+  }
 
-  // Step 2: Run OpenNext build (it will handle the Next.js build internally)
+  // Step 2: Run OpenNext build (it handles the Next.js build internally)
   console.log('☁️ Step 2: Building with OpenNext...');
   execSync('npx opennextjs-cloudflare build', { stdio: 'inherit' });
 
