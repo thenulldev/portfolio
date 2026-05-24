@@ -6,7 +6,7 @@ import BlogSection from "@components/features/blog/BlogSection";
 import SkillsAndCertifications from "@components/features/skills/SkillsAndCertifications";
 import LearningDashboard from "@components/features/learning/LearningDashboard";
 
-type Tab = "skills" | "certifications" | "learning" | "blog";
+type Tab = "skills" | "learning" | "blog";
 
 export default function PortfolioLayout() {
   const [activeTab, setActiveTab] = useState<Tab>("skills");

@@ -45,12 +45,11 @@ export default function SkillsAndCertifications(): React.JSX.Element {
     // Compute filtered skills and counts based on visible certifications
     const { filteredSkills, filteredSkillCounts } = useMemo(() => {
         const visibleCerts = selectedIssuer ? filteredCertifications : certifications;
-        
-        // Extract all skills from visible certifications
+
+        // Extract all skills from visible certifications (no artificial limit, no Comptia filter)
         const allSkills = visibleCerts.reduce((acc: { name: string }[], cert: Root) => {
-            const certSkills = cert.badge_template.skills.slice(0, 5);
-            return acc.concat(certSkills);
-        }, []).filter((skill: { name: string }) => !skill.name.toLowerCase().includes('comptia'));
+            return acc.concat(cert.badge_template.skills);
+        }, []);
 
         // Create unique skills list and count occurrences
         const uniqueSkills: { name: string }[] = [];
@@ -79,7 +78,25 @@ export default function SkillsAndCertifications(): React.JSX.Element {
 
     return (
         <SectionContainer maxWidth="7xl" variant="transparent">
-            <SectionHeader 
+            {/* Summary Stats */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-sky-600 dark:text-sky-400">{certifications.length}</div>
+                    <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Certifications</div>
+                </div>
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-sky-600 dark:text-sky-400">{issuers.length}</div>
+                    <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Issuers</div>
+                </div>
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-center">
+                    <div className="text-2xl sm:text-3xl font-bold text-sky-600 dark:text-sky-400">
+                        {[...new Set(certifications.flatMap(c => c.badge_template.skills.map(s => s.name)))].length}
+                    </div>
+                    <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Unique Skills</div>
+                </div>
+            </div>
+
+            <SectionHeader
                 title="Skills & Certifications"
                 description="A comprehensive overview of my technical expertise and professional qualifications."
             />

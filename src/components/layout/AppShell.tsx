@@ -7,7 +7,7 @@ import Social from "@components/shared/Socials";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faGraduationCap, faNewspaper } from "@fortawesome/free-solid-svg-icons";
 
-type Tab = "skills" | "certifications" | "learning" | "blog";
+type Tab = "skills" | "learning" | "blog";
 
 interface AppShellProps {
     children: React.ReactNode;
