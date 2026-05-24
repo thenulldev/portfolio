@@ -95,7 +95,7 @@ export default function RootLayout({
     url: "https://thenull.dev",
     sameAs: [
       "https://www.linkedin.com/in/thatnulldev/",
-      "https://github.com/thenulldev",
+      "https://github.com/Snipey",
       "https://twitter.com/StephenFreerkn",
     ],
     description: "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
