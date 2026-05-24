@@ -94,7 +94,7 @@ export default function RootLayout({
     jobTitle: "Cloud & Cybersecurity Engineer",
     url: "https://thenull.dev",
     sameAs: [
-      "https://linkedin.com/in/stephenfreerking",
+      "https://www.linkedin.com/in/thatnulldev/",
       "https://github.com/thenulldev",
       "https://twitter.com/StephenFreerkn",
     ],
