@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getApiData } from "@/lib/api";
-import { TryHackMeApiResponse, TryHackMeProfile } from "@/types";
+import { TryHackMeApiResponse } from "@/types";
 
 export async function GET(): Promise<NextResponse> {
   try {

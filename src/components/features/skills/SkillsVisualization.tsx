@@ -12,14 +12,11 @@ import {
 } from "recharts";
 import {
   SkillRadarData,
-  SkillCategory,
-  SkillProficiency,
   SKILL_CATEGORIES,
   calculateCategoryScores,
   getSkillsByCategory,
   getSkillCategory,
   getSkillWeight,
-  getSkillLevelColor,
 } from "@/types/skills-visualization";
 import { Card, CardContent, Badge } from "@/components/ui";
 
@@ -92,11 +89,12 @@ export default function SkillsVisualization({
   }, [skills, skillCounts]);
 
   // Create a unique key for the chart to force re-render when data changes
+  // Using a more efficient approach: count-based key instead of string hashing
   const chartKey = useMemo(() => {
-    // Create a hash from the skills data to detect changes
-    const skillsHash = skills.map(s => s.name).sort().join('|');
-    return `chart-${skillsHash}-${selectedIssuer || 'all'}`;
-  }, [skills, selectedIssuer]);
+    const issuerKey = selectedIssuer || 'all';
+    const skillsCount = skills.length;
+    return `chart-${skillsCount}-${issuerKey}`;
+  }, [skills.length, selectedIssuer]);
 
   // Get detailed skills for selected category
   const categorySkills = useMemo(() => {

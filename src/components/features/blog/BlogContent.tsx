@@ -4,7 +4,7 @@ import React from "react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { Badge, Card, CardContent } from "@/components/ui";
-import { SectionDivider, SectionHeader } from "@/components/ui";
+import { SectionHeader } from "@/components/ui";
 
 interface BlogPost {
   id: string;

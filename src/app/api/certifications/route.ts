@@ -1,19 +1,52 @@
 import { NextResponse } from 'next/server';
-import { getApiData } from "@/lib/api";
+import { getApiData, ApiResponse } from "@/lib/api";
+
+// Minimal certification type for internal use - only fields actually used by the portfolio
+interface CertData {
+  id: string;
+  badge_template: {
+    name: string;
+    description: string;
+    skills: { name: string }[];
+  };
+  issued_at_date: string;
+  expires_at_date?: string;
+  issuer: {
+    entities: {
+      entity: { name: string };
+    }[];
+  };
+  image: {
+    url: string;
+  };
+  verification_url?: string;
+}
+
+interface OffSecCredential {
+  id: string;
+  name: string;
+  description: string;
+  outcomes?: string[];
+  issuedOn: string;
+  expiredOn?: string;
+  issuer?: string;
+  imageUrl: string;
+  url: string;
+}
+
+interface OffSecData {
+  credentials?: OffSecCredential[];
+}
+
+type CredlyResponse = ApiResponse<CertData[] | { data: CertData[] }>;
+type OffSecResponse = ApiResponse<OffSecData>;
 
 export async function GET() {
   try {
-    // Fetch Credly data
-    const credlyPromise = getApiData(
-      "https://credly.thenull.dev/stephen-freerking"
-    );
+    const credlyPromise = getApiData<CertData[] | { data: CertData[] }>("https://credly.thenull.dev/stephen-freerking");
+    const offsecPromise = getApiData<OffSecData>("https://offsec.thenull.dev/wallet/stephen-freerking");
 
-    // Fetch OffSec data
-    const offsecPromise = getApiData(
-      "https://offsec.thenull.dev/wallet/stephen-freerking"
-    );
-
-    const [credlyResponse, offsecResponse]: [any, any] = await Promise.all([credlyPromise, offsecPromise]);
+    const [credlyResponse, offsecResponse]: [CredlyResponse, OffSecResponse] = await Promise.all([credlyPromise, offsecPromise]);
 
     if (credlyResponse.error && (!offsecResponse.data || offsecResponse.error)) {
       console.error('Error fetching certifications:', credlyResponse.error);
@@ -23,18 +56,19 @@ export async function GET() {
       );
     }
 
-    let allCerts: any[] = [];
+    const allCerts: CertData[] = [];
 
-    // Add Credly certs
-    if (credlyResponse.data && Array.isArray(credlyResponse.data)) {
-      allCerts = [...credlyResponse.data];
-    } else if (credlyResponse.data && credlyResponse.data.data && Array.isArray(credlyResponse.data.data)) {
-      allCerts = [...credlyResponse.data.data];
+    if (credlyResponse.data) {
+      const credlyArray = Array.isArray(credlyResponse.data)
+        ? credlyResponse.data
+        : (credlyResponse.data as unknown as { data: CertData[] }).data;
+      if (Array.isArray(credlyArray)) {
+        allCerts.push(...credlyArray);
+      }
     }
 
-    // Add OffSec certs
-    if (offsecResponse.data && Array.isArray(offsecResponse.data.credentials)) {
-      const mappedOffsecCerts = offsecResponse.data.credentials.map((cert: any) => ({
+    if (offsecResponse.data?.credentials) {
+      const mappedOffsecCerts: CertData[] = offsecResponse.data.credentials.map((cert: OffSecCredential) => ({
         id: cert.id,
         badge_template: {
           name: cert.name,
@@ -54,7 +88,7 @@ export async function GET() {
         verification_url: cert.url
       }));
 
-      allCerts = [...allCerts, ...mappedOffsecCerts];
+      allCerts.push(...mappedOffsecCerts);
     }
 
     return NextResponse.json({ data: allCerts });

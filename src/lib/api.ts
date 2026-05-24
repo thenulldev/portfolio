@@ -13,6 +13,8 @@ interface ApiResponse<T> {
   status: number;
 }
 
+export type { ApiResponse };
+
 interface ApiRouteHandlerOptions {
   endpoint: string;
   errorMessage: string;
@@ -79,18 +81,6 @@ export async function getApiData<T>(endpoint: string, timeout?: number): Promise
 /**
  * Creates a standardized Next.js API route handler for proxying external APIs.
  * Eliminates duplicate boilerplate code across API routes.
- * 
- * @param options - Configuration options for the API route
- * @returns A Next.js route handler function
- * 
- * @example
- * // In your route.ts file:
- * import { createApiRouteHandler } from '@/lib/api';
- * 
- * export const GET = createApiRouteHandler({
- *   endpoint: 'https://api.example.com/data',
- *   errorMessage: 'Failed to fetch data from example API'
- * });
  */
 export function createApiRouteHandler<T>(options: ApiRouteHandlerOptions) {
   const { endpoint, errorMessage, timeout = 15000 } = options;

@@ -7,7 +7,6 @@ import { useCertifications } from "@/hooks/useCertifications";
 import { Root } from "@/types";
 import {
     Card,
-    CardContent,
     Badge,
     SectionContainer,
     SectionDivider,
@@ -23,7 +22,7 @@ import {
 } from "@/components/ui";
 
 export default function SkillsAndCertifications(): React.JSX.Element {
-    const { skills, skillCounts, certifications, loading, error } = useCertifications();
+    const { certifications, loading, error } = useCertifications();
     const [selectedCert, setSelectedCert] = useState<Root | null>(null);
     const [selectedIssuer, setSelectedIssuer] = useState<string | null>(null);
 

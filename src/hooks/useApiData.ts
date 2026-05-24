@@ -250,7 +250,7 @@ export function useMultipleApiData<T extends Record<string, unknown>>(
   
   for (const key of Object.keys(endpoints)) {
     const k = key as keyof T;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    // Dynamic hook dispatch within loop - intentional pattern for multiple endpoints
     results[k] = useApiData<T[typeof k]>(endpoints[k], options);
   }
   

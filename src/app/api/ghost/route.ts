@@ -17,6 +17,28 @@ interface GhostPost {
   imageUrl: string | null;
 }
 
+// Ghost API response types
+interface GhostTag {
+  name: string;
+}
+
+interface GhostAuthor {
+  name?: string;
+}
+
+interface GhostPostApi {
+  title?: string;
+  html?: string;
+  excerpt?: string;
+  published_at?: string;
+  created_at?: string;
+  slug?: string;
+  tags?: GhostTag[];
+  feature_image?: string | null;
+  authors?: GhostAuthor[];
+  author?: GhostAuthor;
+}
+
 // Calculate read time based on content length
 function calculateReadTime(content: string): string {
   const wordsPerMinute = 200;
@@ -67,14 +89,14 @@ export async function GET() {
     const ghostPosts = data.posts || [];
     
     // Transform Ghost posts to our format
-    const posts: GhostPost[] = ghostPosts.map((post: any) => {
+    const posts: GhostPost[] = ghostPosts.map((post: GhostPostApi) => {
       const title = post.title || 'Untitled';
       const content = post.html || post.excerpt || '';
       const pubDate = post.published_at || post.created_at || new Date().toISOString();
       const slug = post.slug || generateSlug(title);
       
       // Extract tags
-      const tags = post.tags?.map((tag: any) => tag.name) || ['Blog'];
+      const tags = post.tags?.map((tag: GhostTag) => tag.name) || ['Blog'];
       
       // Get featured image
       const imageUrl = post.feature_image || null;
