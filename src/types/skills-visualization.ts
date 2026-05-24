@@ -237,8 +237,8 @@ export function calculateCategoryScores(
   // Convert to radar data format using weighted average
   return SKILL_CATEGORIES.map((cat) => {
     const score = categoryScores[cat.id];
-    const average = score.count > 0 
-      ? Math.round(score.weightedSum / score.count / 5 * 100 / 20) // Normalize to 0-100
+    const average = score.count > 0
+      ? Math.round((score.total / score.count) * 100 / 100) // simple average of proficiency values, scaled to 0-100
       : 0;
     return {
       subject: cat.name,
