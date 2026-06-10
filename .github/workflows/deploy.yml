@@ -28,9 +28,6 @@ jobs:
         with:
           version: latest
 
-      - name: Configure pnpm build dependencies
-        run: pnpm config set onlyBuiltDependencies true --location project
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
