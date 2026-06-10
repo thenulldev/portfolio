@@ -29,7 +29,9 @@ jobs:
           version: latest
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          pnpm approve-builds esbuild sharp workerd unrs-resolver || true
+          pnpm install --frozen-lockfile
 
       - name: Build with OpenNext
         run: npx opennextjs-cloudflare build
