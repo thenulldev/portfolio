@@ -7,7 +7,7 @@ import {
 } from "recharts";
 import {
   SkillRadarData, SKILL_CATEGORIES, calculateCategoryScores,
-  getSkillsByCategory, getSkillWeight, getStrengthsAndWeaknesses,
+  getSkillsByCategory, getStrengthsAndWeaknesses,
   computeDynamicWeight, getSkillCategory,
 } from "@/types/skills-visualization";
 import { Card, CardContent, Badge } from "@/components/ui";
