@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import SkillsVisualization from "./SkillsVisualization";
+import CertificationTimeline from "./CertificationTimeline";
 import { useCertifications } from "@/hooks/useCertifications";
 import { Root } from "@/types";
 import {
@@ -255,6 +256,15 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                         </Dialog>
                     </>
                 )}
+            </div>
+
+            {/* Certification Timeline */}
+            <div className="mb-12">
+                <SectionDivider title="Certification Timeline" subtitle="Career progression over time" />
+                <CertificationTimeline 
+                    certifications={certifications} 
+                    onSelectCert={setSelectedCert} 
+                />
             </div>
 
             {/* Interactive Skills Visualization */}
