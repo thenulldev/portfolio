@@ -3,8 +3,16 @@ name: Deploy to Cloudflare Workers
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+      - '.github/dependabot.yml'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+      - '.github/dependabot.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,6 +22,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Build & Deploy
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,8 +69,15 @@ jobs:
             ${{ runner.os }}-opennext-
 
       - name: Build with OpenNext
-        if: steps.opennext-cache.outputs.cache-hit != 'true'
         run: npx opennextjs-cloudflare build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: opennext-build
+          path: .open-next/
+          retention-days: 7
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
@@ -93,3 +109,14 @@ jobs:
               environment_url: 'https://portfolio.thenulldev.workers.dev',
               log_url: `https://dash.cloudflare.com/?to=/:account/workers-and-pages/overview`
             });
+            
+            // Post deployment URL as PR/commit comment
+            const deployUrl = 'https://portfolio.thenulldev.workers.dev';
+            if (context.payload.pull_request) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: `🚀 Deployed to ${deployUrl}`
+              });
+            }
