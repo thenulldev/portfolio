@@ -36,7 +36,7 @@ const Socials: React.FC = () => {
   ];
 
   return (
-    <div className="flex justify-center md:justify-start gap-6 w-full">
+    <div className="flex justify-center gap-6 w-full">
       {socials.map((social, index) => (
         <Link 
           key={index} 
