@@ -55,9 +55,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .open-next
-          key: ${{ runner.os }}-opennext-${{ hashFiles('pnpm-lock.yaml', 'next.config.*', 'wrangler.json') }}-${{ github.sha }}
+          key: ${{ runner.os }}-opennext-${{ hashFiles('pnpm-lock.yaml', 'next.config.*', 'wrangler.json') }}
           restore-keys: |
-            ${{ runner.os }}-opennext-${{ hashFiles('pnpm-lock.yaml', 'next.config.*', 'wrangler.json') }}-
+            ${{ runner.os }}-opennext-
 
       - name: Build with OpenNext
         if: steps.opennext-cache.outputs.cache-hit != 'true'
