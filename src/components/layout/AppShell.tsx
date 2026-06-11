@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Social from "@components/shared/Socials";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faGraduationCap, faNewspaper } from "@fortawesome/free-solid-svg-icons";
+import PreviewBanner from "./PreviewBanner";
 
 type Tab = "skills" | "learning" | "blog";
 
@@ -98,6 +99,7 @@ export default function AppShell({ children, activeTab, onTabChange }: AppShellP
 
             {/* Main Content */}
             <main className="flex-1 h-full overflow-y-auto scroll-smooth bg-slate-50 dark:bg-slate-900 pb-20 lg:pb-0">
+                <PreviewBanner />
                 <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-10 min-h-full">
                     
                     {/* Mobile Profile Header */}
