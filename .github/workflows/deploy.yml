@@ -68,6 +68,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-opennext-
 
+      - name: Set preview environment variables
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "NEXT_PUBLIC_PREVIEW=true" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_BRANCH_NAME=${{ github.head_ref }}" >> "$GITHUB_ENV"
+
       - name: Build with OpenNext
         run: npx opennextjs-cloudflare build
 
