@@ -68,6 +68,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-opennext-
 
+      - name: Set preview environment variables
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "NEXT_PUBLIC_PREVIEW=true" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_BRANCH_NAME=${{ github.head_ref }}" >> "$GITHUB_ENV"
+
       - name: Build with OpenNext
         run: npx opennextjs-cloudflare build
 
@@ -108,7 +114,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --name portfolio-preview-${{ steps.deploy-target.outputs.safe_branch }}
+          command: deploy --name portfolio-preview --var PREVIEW_BRANCH:${{ github.head_ref }}
 
       - name: Create GitHub Deployment (Preview)
         if: github.event_name == 'pull_request'
@@ -118,7 +124,7 @@ jobs:
           script: |
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
+            const fallbackUrl = 'https://portfolio-preview.thenulldev.workers.dev';
             const url = deployUrl || fallbackUrl;
             
             const { data: deployment } = await github.rest.repos.createDeployment({
@@ -174,7 +180,7 @@ jobs:
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const branch = '${{ steps.deploy-target.outputs.branch }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
+            const fallbackUrl = 'https://portfolio-preview.thenulldev.workers.dev';
             const url = deployUrl || fallbackUrl;
             
             const body = `🚀 **Preview Deployment Ready**
