@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
-import SkillsVisualization from "./SkillsVisualization";
 import CertificationTimeline from "./CertificationTimeline";
 import { useCertifications } from "@/hooks/useCertifications";
 import { Root } from "@/types";
@@ -41,32 +40,6 @@ export default function SkillsAndCertifications(): React.JSX.Element {
         if (!selectedIssuer) return certifications;
         return certifications.filter(cert => cert.issuer.entities[0]?.entity.name === selectedIssuer);
     }, [certifications, selectedIssuer]);
-
-    // Compute filtered skills and counts based on visible certifications
-    const { filteredSkills, filteredSkillCounts } = useMemo(() => {
-        const visibleCerts = selectedIssuer ? filteredCertifications : certifications;
-
-        // Extract all skills from visible certifications
-        const allSkills = visibleCerts.reduce((acc: { name: string }[], cert: Root) => {
-            return acc.concat(cert.badge_template.skills);
-        }, []);
-
-        // Create unique skills list and count occurrences
-        const uniqueSkills: { name: string }[] = [];
-        const counts: { [name: string]: number } = {};
-
-        allSkills.forEach((skill: { name: string }) => {
-            if (!uniqueSkills.find(s => s.name === skill.name)) {
-                uniqueSkills.push(skill);
-            }
-            counts[skill.name] = (counts[skill.name] || 0) + 1;
-        });
-
-        return {
-            filteredSkills: uniqueSkills,
-            filteredSkillCounts: counts
-        };
-    }, [certifications, filteredCertifications, selectedIssuer]);
 
     if (loading) {
         return <LoadingState title="Skills & Certifications" message="Loading your professional profile..." />;
@@ -224,22 +197,6 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                     )}
                 </DialogContent>
             </Dialog>
-
-            {/* Interactive Skills Visualization */}
-            <div>
-                <SectionDivider
-                    title="Skills Proficiency Map"
-                    subtitle={selectedIssuer ? `Filtered by ${selectedIssuer}` : undefined}
-                />
-
-                <SkillsVisualization
-                    skills={filteredSkills}
-                    skillCounts={filteredSkillCounts}
-                    selectedIssuer={selectedIssuer}
-                    onClearFilter={() => setSelectedIssuer(null)}
-                    certCount={filteredCertifications.length}
-                />
-            </div>
         </SectionContainer>
     );
 }
