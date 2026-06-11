@@ -1,24 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getApiData } from "@/lib/api";
-import { TryHackMeApiResponse } from "@/types";
 
 export async function GET(): Promise<NextResponse> {
   try {
-    const response = await getApiData<TryHackMeApiResponse>(
-      "https://thm-scraper-v2.thenull.dev/ThatNullDev",
-      15000
-    );
+    const response = await fetch('https://thm-scraper-v2.thenull.dev/ThatNullDev', {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      },
+      next: { revalidate: 300 },
+    });
 
-    if (response.error) {
-      console.error('Error fetching TryHackMe profile:', response.error);
+    if (!response.ok) {
       return NextResponse.json(
-        { error: 'Failed to fetch TryHackMe profile' },
-        { status: response.status || 500 }
+        { error: `TryHackMe worker error: ${response.status}` },
+        { status: response.status }
       );
     }
 
-    // Unwrap the data from the API response
-    const apiResponse = response.data;
+    const apiResponse = await response.json();
     if (!apiResponse.success || !apiResponse.data) {
       return NextResponse.json(
         { error: 'Invalid response from TryHackMe API' },
@@ -26,8 +25,11 @@ export async function GET(): Promise<NextResponse> {
       );
     }
 
-    // Return just the profile data (not the wrapper)
-    return NextResponse.json(apiResponse.data);
+    return NextResponse.json(apiResponse.data, {
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error('Unexpected error in TryHackMe API:', error);
     return NextResponse.json(

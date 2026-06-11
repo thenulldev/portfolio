@@ -2,8 +2,7 @@
 
 import React from "react";
 import { useParallelApiData } from "@/hooks/useApiData";
-import { MsLearnProfile, TryHackMeProfile } from "@/types";
-import { HTBProfile } from "@/types/htb";
+import { MsLearnProfile, TryHackMeProfile, HTBProfile } from "@/types";
 import MicrosoftLearnCard from "./MicrosoftLearnCard";
 import TryHackMeCard from "./TryHackMeCard";
 import HTBCard from "./HTBCard";
