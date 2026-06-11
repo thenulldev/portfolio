@@ -267,20 +267,34 @@ export function useParallelApiData<T extends Record<string, unknown>>(
   error: string | null;
   refetch: () => void;
 } {
-  const entries = Object.entries(endpoints);
+  const endpointsRef = useRef(endpoints);
+  endpointsRef.current = endpoints;
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
+
   const [data, setData] = useState<{ [K in keyof T]: T[K] | null }>({} as { [K in keyof T]: T[K] | null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const mountedRef = useRef(true);
+  const fetchedRef = useRef(false);
 
-  const fetchAll = useCallback(async () => {
+  const fetchAll = useCallback(async (force = false) => {
+    if (!mountedRef.current) return;
+    if (!force && fetchedRef.current) return;
+
     setLoading(true);
     setError(null);
+    fetchedRef.current = true;
+
+    const currentEndpoints = endpointsRef.current;
+    const entries = Object.entries(currentEndpoints);
+    const refreshInterval = optionsRef.current.refreshInterval || 300000;
 
     try {
       const promises = entries.map(async ([key, endpoint]) => {
         const cached = cache.get(endpoint as string);
-        
-        if (cached && Date.now() - cached.timestamp < (options.refreshInterval || 300000)) {
+
+        if (cached && Date.now() - cached.timestamp < refreshInterval) {
           return { key, data: cached.data };
         }
 
@@ -293,7 +307,7 @@ export function useParallelApiData<T extends Record<string, unknown>>(
         }
 
         const jsonData = await response.json();
-        
+
         cache.set(endpoint as string, {
           data: jsonData,
           timestamp: Date.now(),
@@ -303,28 +317,39 @@ export function useParallelApiData<T extends Record<string, unknown>>(
       });
 
       const results = await Promise.all(promises);
-      
+
       const newData = {} as { [K in keyof T]: T[K] };
       results.forEach(({ key, data: d }) => {
         newData[key as keyof T] = d as T[keyof T];
       });
-      
-      setData(newData);
+
+      if (mountedRef.current) {
+        setData(newData);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      if (mountedRef.current) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      }
     } finally {
-      setLoading(false);
+      if (mountedRef.current) {
+        setLoading(false);
+      }
     }
-  }, [entries, options.refreshInterval]);
+  }, []);
 
   useEffect(() => {
+    mountedRef.current = true;
     fetchAll();
+
+    return () => {
+      mountedRef.current = false;
+    };
   }, [fetchAll]);
 
   return {
     data,
     loading,
     error,
-    refetch: fetchAll,
+    refetch: () => fetchAll(true),
   };
 }
