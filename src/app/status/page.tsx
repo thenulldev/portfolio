@@ -83,7 +83,7 @@ export default function StatusPage() {
   const fetchStatus = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/status", { cache: "no-store" });
+      const res = await fetch("https://status-api.nulldev.workers.dev", { cache: "no-store" });
       const json = await res.json();
       setData(json);
       setLastRefresh(new Date());
