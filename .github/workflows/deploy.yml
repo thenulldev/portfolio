@@ -100,7 +100,7 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Workers (Production)
-        if: steps.deploy-target.outputs.target == 'production'
+        if: steps.deploy-target.outputs.target == 'production' && github.ref == 'refs/heads/main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -190,9 +190,9 @@ jobs:
             | **Branch** | \`${branch}\` |
             | **Preview URL** | [${url}](${url}) |
             | **Status** | ✅ Live |
-            | **Expires** | On PR close/merge |
+            | **Type** | Shared preview worker (overwritten per-PR) |
             
-            _This preview deployment will be automatically cleaned up when the PR is closed._`;
+            _Preview of branch \`${branch}\` is now live. The previous preview is overwritten._`;
             
             // Find existing comment to update
             const { data: comments } = await github.rest.issues.listComments({
