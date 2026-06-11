@@ -100,7 +100,7 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Workers (Production)
-        if: steps.deploy-target.outputs.target == 'production' && github.ref == 'refs/heads/main'
+        if: steps.deploy-target.outputs.target == 'production'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -114,7 +114,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --name portfolio-preview --var PREVIEW_BRANCH:${{ github.head_ref }}
+          command: deploy --name portfolio-preview-${{ steps.deploy-target.outputs.safe_branch }}
 
       - name: Create GitHub Deployment (Preview)
         if: github.event_name == 'pull_request'
@@ -124,7 +124,7 @@ jobs:
           script: |
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = 'https://portfolio-preview.thenulldev.workers.dev';
+            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
             const url = deployUrl || fallbackUrl;
             
             const { data: deployment } = await github.rest.repos.createDeployment({
@@ -180,7 +180,7 @@ jobs:
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const branch = '${{ steps.deploy-target.outputs.branch }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = 'https://portfolio-preview.thenulldev.workers.dev';
+            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
             const url = deployUrl || fallbackUrl;
             
             const body = `🚀 **Preview Deployment Ready**
@@ -190,9 +190,9 @@ jobs:
             | **Branch** | \`${branch}\` |
             | **Preview URL** | [${url}](${url}) |
             | **Status** | ✅ Live |
-            | **Type** | Shared preview worker (overwritten per-PR) |
+            | **Expires** | On PR close/merge |
             
-            _Preview of branch \`${branch}\` is now live. The previous preview is overwritten._`;
+            _This preview deployment will be automatically cleaned up when the PR is closed._`;
             
             // Find existing comment to update
             const { data: comments } = await github.rest.issues.listComments({

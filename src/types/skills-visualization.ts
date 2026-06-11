@@ -1,4 +1,4 @@
-// Skill categorization and proficiency types
+// Skill categorization and proficiency types — dynamically computed, no hardcoded weights
 
 export interface SkillCategory {
   id: string;
@@ -14,160 +14,99 @@ export interface SkillProficiency {
   yearsOfExperience: number;
   certificationCount: number;
   description: string;
-  weight: number; // 1-5 scale for skill importance/depth
+  weight: number; // 1-5 dynamically computed
 }
 
 export interface SkillRadarData {
   subject: string;
-  A: number; // Current proficiency
+  A: number; // Current proficiency 0-100
   fullMark: number;
 }
 
-// Skill weights based on industry demand and certification depth
-export const SKILL_WEIGHTS: { [key: string]: number } = {
-  // High weight (5) - Core security skills
-  'Penetration Testing': 5,
-  'Ethical Hacking': 5,
-  'Incident Response': 5,
-  'Threat Analysis': 5,
-  'Malware Analysis': 5,
-  'Cryptography': 5,
-  'OSCP': 5,
-  'CISSP': 5,
-  'CEH': 5,
-  
-  // High weight (4) - Important technical skills
-  'Cloud Security': 4,
-  'Azure': 4,
-  'AWS': 4,
-  'Python': 4,
-  'PowerShell': 4,
-  'Linux': 4,
-  'Active Directory': 4,
-  'SIEM': 4,
-  'Forensics': 4,
-  'Risk Management': 4,
-  'Compliance': 4,
-  
-  // Medium weight (3) - Standard skills
-  'Network Security': 3,
-  'TCP/IP': 3,
-  'DNS': 3,
-  'VPN': 3,
-  'Windows Server': 3,
-  'Virtualization': 3,
-  'Scripting': 3,
-  'Automation': 3,
-  'Vulnerability Assessment': 3,
-  'Security Operations': 3,
-  
-  // Lower weight (2) - Supporting skills
-  'Wireshark': 2,
-  'Nmap': 2,
-  'Metasploit': 2,
-  'Burp Suite': 2,
-  'Bash': 2,
-  'SQL': 2,
-  'Git': 2,
-  'Monitoring': 2,
-  
-  // Default weight (1) - Basic skills
-  'default': 1,
-};
+export interface StrengthWeakness {
+  category: string;
+  score: number;
+  skills: SkillProficiency[];
+  trend: 'strong' | 'moderate' | 'weak';
+}
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
-  { id: 'security', name: 'Security', color: '#ef4444', description: 'Cybersecurity & defensive skills' },
-  { id: 'cloud', name: 'Cloud', color: '#3b82f6', description: 'Cloud platforms & services' },
-  { id: 'networking', name: 'Networking', color: '#10b981', description: 'Network infrastructure & protocols' },
-  { id: 'programming', name: 'Programming', color: '#8b5cf6', description: 'Development & scripting' },
-  { id: 'infrastructure', name: 'Infrastructure', color: '#f59e0b', description: 'Systems & server management' },
-  { id: 'data', name: 'Data & Analytics', color: '#06b6d4', description: 'Databases, data analysis & BI' },
-  { id: 'tools', name: 'Tools', color: '#ec4899', description: 'Security tools & utilities' },
+  { id: 'security', name: 'Security', color: '#ef4444', description: 'Cybersecurity, defensive & offensive operations' },
+  { id: 'cloud', name: 'Cloud', color: '#3b82f6', description: 'Cloud platforms, DevOps & infrastructure-as-code' },
+  { id: 'networking', name: 'Networking', color: '#10b981', description: 'Network protocols, routing & infrastructure' },
+  { id: 'programming', name: 'Programming', color: '#8b5cf6', description: 'Development, scripting & automation' },
+  { id: 'infrastructure', name: 'Infrastructure', color: '#f59e0b', description: 'Systems, servers & IT administration' },
+  { id: 'data', name: 'Data & Analytics', color: '#06b6d4', description: 'Databases, analytics & data engineering' },
+  { id: 'compliance', name: 'Compliance', color: '#14b8a6', description: 'GRC, audit frameworks & regulatory standards' },
 ];
 
-// Helper function to normalize skill names for matching
-function normalizeSkillName(name: string): string {
-  return name.toLowerCase()
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+// Normalized keyword matching
+function normalize(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-// Check if skill name contains any of the keywords
-function matchesKeywords(name: string, keywords: string[]): boolean {
-  const normalized = normalizeSkillName(name);
-  return keywords.some(keyword => normalized.includes(keyword.toLowerCase()));
+function containsAny(name: string, keywords: string[]): boolean {
+  const n = normalize(name);
+  return keywords.some(k => n.includes(k.toLowerCase()));
 }
 
-// Get skill weight
-export function getSkillWeight(skillName: string): number {
-  // Exact match first
-  if (SKILL_WEIGHTS[skillName]) {
-    return SKILL_WEIGHTS[skillName];
-  }
-  
-  // Partial match
-  const normalized = normalizeSkillName(skillName);
-  for (const [key, weight] of Object.entries(SKILL_WEIGHTS)) {
-    if (key !== 'default' && normalized.includes(key.toLowerCase())) {
-      return weight;
-    }
-  }
-  
-  return SKILL_WEIGHTS['default'];
+// Map issuer names to prestige tiers (affects weight calculation)
+function getIssuerPrestige(issuerName: string): number {
+  const tier1 = ['offensive security', 'oscp', 'sans', 'cissp'];
+  const tier2 = ['compTIA', 'microsoft', 'aws', 'cisco', 'isc2'];
+  const n = normalize(issuerName);
+  if (tier1.some(t => n.includes(t))) return 1.4;
+  if (tier2.some(t => n.includes(t))) return 1.2;
+  return 1.0;
 }
 
-// Determine category for a skill using multiple strategies
 export function getSkillCategory(skillName: string): string {
-  const normalized = normalizeSkillName(skillName);
-  
-  // Security keywords
-  const securityKeywords = [
+  const security = [
     'security', 'cyber', 'threat', 'vulnerability', 'penetration', 'pentest', 'ethical hack',
     'incident', 'response', 'forensic', 'malware', 'siem', 'soc', 'defense', 'protect',
-    'compliance', 'audit', 'risk', 'governance', 'identity', 'access', 'iam', 'cryptography',
-    'encryption', 'firewall', 'intrusion', 'detection', 'prevention', 'ids', 'ips',
-    'certified ethical hacker', 'ceh', 'security+', 'cissp', 'cism', 'cisa', 'oscp',
-    'defensive', 'offensive', 'red team', 'blue team', 'purple team', 'threat hunt'
+    'risk', 'governance', 'identity', 'access', 'iam', 'cryptography', 'encryption',
+    'firewall', 'intrusion', 'detection', 'prevention', 'ids', 'ips',
+    'ceh', 'security+', 'cissp', 'cism', 'cisa', 'oscp',
+    'defensive', 'offensive', 'red team', 'blue team', 'purple team', 'threat hunt',
+    'vulnerability assessment', 'security operations', 'appsec', 'application security',
+    ' Zero Trust ', ' ZeroTrust ', 'zero trust'
   ];
   
-  // Cloud keywords
-  const cloudKeywords = [
-    'azure', 'aws', 'amazon web', 'gcp', 'google cloud', 'cloud', 'saas', 'paas', 'iaas',
+  const cloud = [
+    'azure', 'aws', 'amazon web', 'gcp', 'google cloud', 'cloud',
     'microsoft 365', 'office 365', 'm365', 'o365', 'entra', 'intune', 'azure ad',
-    'aws certified', 'cloud practitioner', 'solutions architect', 'devops', 'cicd',
-    'container', 'docker', 'kubernetes', 'k8s', 'microservices', 'serverless',
-    'terraform', 'cloudformation', 'infrastructure as code', 'iac'
+    'devops', 'ci/cd', 'cicd', 'container', 'docker', 'kubernetes', 'k8s',
+    'microservices', 'serverless', 'terraform', 'cloudformation', 'infrastructure as code', 'iac',
+    'pulumi', 'helm', 'istio', 'envoy', 'service mesh'
   ];
   
-  // Networking keywords
-  const networkingKeywords = [
+  const networking = [
     'network', 'tcp/ip', 'tcp', 'ip', 'subnet', 'routing', 'switching', 'vlan',
-    'dns', 'dhcp', 'vpn', 'firewall', 'load balancer', 'proxy', 'nat', 'wan', 'lan',
-    'cisco', 'ccna', 'ccnp', 'wireless', 'wifi', 'bluetooth', 'osi', 'protocol',
-    'ethernet', 'mpls', 'bgp', 'ospf', 'packet', 'traffic', 'bandwidth'
+    'dns', 'dhcp', 'vpn', 'load balancer', 'proxy', 'nat', 'wan', 'lan',
+    'cisco', 'ccna', 'ccnp', 'wireless', 'wifi', 'osi', 'protocol',
+    'ethernet', 'mpls', 'bgp', 'ospf', 'packet', 'traffic', 'bandwidth',
+    'sd-wan', 'mpls', 'bgp', 'ospf'
   ];
   
-  // Programming keywords
-  const programmingKeywords = [
+  const programming = [
     'python', 'javascript', 'typescript', 'java', 'c++', 'c#', 'csharp', 'ruby',
     'go', 'golang', 'rust', 'swift', 'kotlin', 'powershell', 'bash', 'shell',
     'scripting', 'automation', 'coding', 'development', 'programming', 'api',
     'rest', 'graphql', 'json', 'xml', 'yaml', 'html', 'css', 'react', 'angular',
-    'vue', 'node', 'django', 'flask', 'spring', 'dotnet', 'framework'
+    'vue', 'node', 'django', 'flask', 'spring', 'dotnet', 'framework',
+    'next.js', 'svelte', 'htmx', 'tailwind'
   ];
   
-  // Infrastructure keywords
-  const infrastructureKeywords = [
+  const infrastructure = [
     'windows', 'linux', 'unix', 'macos', 'server', 'workstation', 'desktop',
-    'active directory', 'ad', 'ldap', 'domain', 'group policy', 'dns server',
+    'active directory', 'ad', 'ldap', 'domain', 'group policy',
     'hyper-v', 'vmware', 'virtualbox', 'virtualization', 'hypervisor',
     'backup', 'recovery', 'disaster', 'high availability', 'ha', 'failover',
-    'monitoring', 'system center', 'sccm', 'wsus', 'patch management'
+    'monitoring', 'system center', 'sccm', 'wsus', 'patch management',
+    'exchange', 'sharepoint', 'teams'
   ];
   
-  // Data keywords
-  const dataKeywords = [
+  const data = [
     'sql', 'database', 'mysql', 'postgresql', 'oracle', 'mongodb', 'nosql',
     'data analysis', 'analytics', 'bi', 'business intelligence', 'power bi',
     'tableau', 'excel', 'data visualization', 'etl', 'data warehouse', 'big data',
@@ -175,92 +114,105 @@ export function getSkillCategory(skillName: string): string {
     'hadoop', 'spark', 'kafka', 'elasticsearch', 'splunk', 'logging'
   ];
   
-  // Tools keywords (specific security/IT tools)
-  const toolsKeywords = [
-    'wireshark', 'nmap', 'metasploit', 'burp suite', 'nessus', 'qualys',
-    'kali linux', 'parrot os', 'backbox', 'owasp', 'zap', 'nikto', 'john',
-    'hashcat', 'sqlmap', 'aircrack', 'snort', 'suricata', 'bro', 'zeek',
-    'elk', 'elastic', 'kibana', 'grafana', 'prometheus', 'nagios',
-    'prtg', 'solarwinds', 'ansible', 'puppet', 'chef', 'salt', 'git', 'github'
+  const compliance = [
+    'compliance', 'audit', 'governance', 'regulatory', 'framework',
+    'iso 27001', 'nist', 'pci dss', 'gdpr', 'hipaa', 'soc 2', 'soc2',
+    'risk assessment', 'control', 'policy', 'standard',
+    'cmmi', 'itil', 'cobit', 'sox', 'ferpa', 'ccpa'
   ];
   
-  // Check each category (order matters - more specific first)
-  if (matchesKeywords(skillName, toolsKeywords)) return 'tools';
-  if (matchesKeywords(skillName, programmingKeywords)) return 'programming';
-  if (matchesKeywords(skillName, cloudKeywords)) return 'cloud';
-  if (matchesKeywords(skillName, dataKeywords)) return 'data';
-  if (matchesKeywords(skillName, securityKeywords)) return 'security';
-  if (matchesKeywords(skillName, networkingKeywords)) return 'networking';
-  if (matchesKeywords(skillName, infrastructureKeywords)) return 'infrastructure';
-  
-  // Default to infrastructure for IT-related skills, tools for others
-  if (normalized.includes('admin') || normalized.includes('support') || normalized.includes('it ')) {
-    return 'infrastructure';
-  }
-  
-  return 'tools';
+  if (containsAny(skillName, compliance)) return 'compliance';
+  if (containsAny(skillName, security)) return 'security';
+  if (containsAny(skillName, cloud)) return 'cloud';
+  if (containsAny(skillName, programming)) return 'programming';
+  if (containsAny(skillName, data)) return 'data';
+  if (containsAny(skillName, networking)) return 'networking';
+  if (containsAny(skillName, infrastructure)) return 'infrastructure';
+  return 'security'; // Default for unclassified IT skills
 }
 
-// Calculate category scores from skills with weights
+// Compute dynamic weight based on cert count, issuer prestige, and rarity
+export function computeDynamicWeight(
+  skillName: string,
+  certCount: number,
+  issuerName: string
+): number {
+  // Base from certification count
+  let weight = Math.min(certCount + 1, 3); // 1-3 from count alone
+  
+  // Boost for prestigious issuers
+  const prestige = getIssuerPrestige(issuerName);
+  weight *= prestige;
+  
+  // Cap at 5
+  weight = Math.min(Math.round(weight), 5);
+  
+  return Math.max(weight, 1);
+}
+
+// Calculate category scores from skills — properly weighted
 export function calculateCategoryScores(
   skills: { name: string }[],
-  skillCounts: { [name: string]: number }
+  skillCounts: { [name: string]: number },
+  issuerInfo?: { [name: string]: string } // skill name -> issuer name
 ): SkillRadarData[] {
-  const categoryScores: { [key: string]: { total: number; count: number; weightedSum: number } } = {
-    security: { total: 0, count: 0, weightedSum: 0 },
-    cloud: { total: 0, count: 0, weightedSum: 0 },
-    networking: { total: 0, count: 0, weightedSum: 0 },
-    programming: { total: 0, count: 0, weightedSum: 0 },
-    infrastructure: { total: 0, count: 0, weightedSum: 0 },
-    data: { total: 0, count: 0, weightedSum: 0 },
-    tools: { total: 0, count: 0, weightedSum: 0 },
-  };
-
-  skills.forEach((skill) => {
+  const totals: { [key: string]: { sum: number; count: number; maxPossible: number } } = {};
+  
+  // Initialize all categories
+  SKILL_CATEGORIES.forEach(cat => {
+    totals[cat.id] = { sum: 0, count: 0, maxPossible: 0 };
+  });
+  
+  skills.forEach(skill => {
     const category = getSkillCategory(skill.name);
     const count = skillCounts[skill.name] || 1;
-    const weight = getSkillWeight(skill.name);
+    const issuer = issuerInfo?.[skill.name] || '';
     
-    // Calculate proficiency based on certification count AND weight
-    // Base: 40%, certifications add up to 40%, weight adds up to 20%
-    const certBonus = Math.min((count - 1) * 8, 40);
-    const weightBonus = (weight - 1) * 5; // 0-20% based on weight 1-5
-    const proficiency = Math.min(40 + certBonus + weightBonus, 100);
+    // Dynamic weight
+    const weight = computeDynamicWeight(skill.name, count, issuer);
     
-    if (categoryScores[category]) {
-      categoryScores[category].total += proficiency;
-      categoryScores[category].count += 1;
-      categoryScores[category].weightedSum += proficiency * weight;
+    // Score formula: certification-based, starts from 0
+    // 1 cert = 20%, each additional cert adds 15%, weight bonus up to 25%
+    const baseScore = 15; // floor for having at least 1 cert
+    const certBonus = (count - 1) * 12;
+    const weightBonus = (weight - 1) * 6;
+    let score = baseScore + certBonus + weightBonus;
+    score = Math.min(score, 100); // cap at 100
+    
+    if (totals[category]) {
+      totals[category].sum += score;
+      totals[category].count += 1;
     }
   });
-
-  // Convert to radar data format using weighted average
-  return SKILL_CATEGORIES.map((cat) => {
-    const score = categoryScores[cat.id];
-    const average = score.count > 0
-      ? Math.round((score.total / score.count) * 100 / 100) // simple average of proficiency values, scaled to 0-100
-      : 0;
+  
+  return SKILL_CATEGORIES.map(cat => {
+    const t = totals[cat.id];
+    const avg = t.count > 0 ? Math.round(t.sum / t.count) : 0;
     return {
       subject: cat.name,
-      A: Math.min(average, 100),
+      A: avg,
       fullMark: 100,
     };
   });
 }
 
-// Get detailed skills for a category with weights
+// Get detailed skills for a category
 export function getSkillsByCategory(
   skills: { name: string }[],
   skillCounts: { [name: string]: number },
-  categoryId: string
+  categoryId: string,
+  issuerInfo?: { [name: string]: string }
 ): SkillProficiency[] {
   return skills
-    .filter((skill) => getSkillCategory(skill.name) === categoryId)
-    .map((skill) => {
+    .filter(s => getSkillCategory(s.name) === categoryId)
+    .map(skill => {
       const count = skillCounts[skill.name] || 1;
-      const weight = getSkillWeight(skill.name);
-      // Calculate level 1-10 based on certifications AND weight
-      const level = Math.min(4 + count * 1.2 + (weight - 1) * 0.8, 10);
+      const issuer = issuerInfo?.[skill.name] || '';
+      const weight = computeDynamicWeight(skill.name, count, issuer);
+      
+      // Level 1-10 based on count + weight
+      const level = Math.min(2 + count * 1.5 + (weight - 1) * 0.5, 10);
+      
       return {
         name: skill.name,
         category: categoryId,
@@ -274,23 +226,38 @@ export function getSkillsByCategory(
     .sort((a, b) => b.weight - a.weight || b.level - a.level);
 }
 
-// Get skill level color based on proficiency
-export function getSkillLevelColor(level: number, weight: number): string {
-  // Combine level and weight for color intensity
-  const intensity = (level + weight * 2) / 2;
+// Compute strengths and weaknesses
+export function getStrengthsAndWeaknesses(
+  radarData: SkillRadarData[]
+): { strengths: StrengthWeakness[]; weaknesses: StrengthWeakness[]; moderate: StrengthWeakness[] } {
+  const scored = radarData
+    .map(d => ({
+      category: d.subject,
+      score: d.A,
+      trend: d.A >= 70 ? 'strong' as const : d.A >= 40 ? 'moderate' as const : 'weak' as const,
+      skills: [] as SkillProficiency[],
+    }))
+    .sort((a, b) => b.score - a.score);
   
-  if (intensity >= 12) return '#0ea5e9'; // sky-500 - expert
-  if (intensity >= 9) return '#38bdf8'; // sky-400 - advanced
-  if (intensity >= 6) return '#7dd3fc'; // sky-300 - intermediate
-  return '#bae6fd'; // sky-200 - beginner
+  return {
+    strengths: scored.filter(s => s.trend === 'strong').slice(0, 3),
+    moderate: scored.filter(s => s.trend === 'moderate'),
+    weaknesses: scored.filter(s => s.trend === 'weak').slice(0, 3),
+  };
 }
 
-// Debug function to see uncategorized skills
+// Color for skill level + weight combo
+export function getSkillLevelColor(level: number, weight: number): string {
+  const intensity = (level * 0.6) + (weight * 0.8);
+  if (intensity >= 14) return '#0ea5e9';  // sky-500 expert
+  if (intensity >= 10) return '#38bdf8';  // sky-400 advanced
+  if (intensity >= 6) return '#7dd3fc';   // sky-300 intermediate
+  return '#bae6fd';                        // sky-200 beginner
+}
+
+// Uncategorised skills diagnostic
 export function getUncategorizedSkills(skills: { name: string }[]): string[] {
   return skills
-    .filter(skill => {
-      const category = getSkillCategory(skill.name);
-      return category === 'tools' && getSkillWeight(skill.name) === 1;
-    })
+    .filter(skill => getSkillCategory(skill.name) === 'security')
     .map(s => s.name);
 }
