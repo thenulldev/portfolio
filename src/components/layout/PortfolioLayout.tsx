@@ -2,11 +2,10 @@
 
 import React, { useState } from "react";
 import AppShell from "./AppShell";
-import BlogSection from "@components/features/blog/BlogSection";
 import SkillsAndCertifications from "@components/features/skills/SkillsAndCertifications";
 import LearningDashboard from "@components/features/learning/LearningDashboard";
 
-type Tab = "skills" | "learning" | "blog";
+type Tab = "skills" | "learning";
 
 export default function PortfolioLayout() {
   const [activeTab, setActiveTab] = useState<Tab>("skills");
@@ -17,8 +16,6 @@ export default function PortfolioLayout() {
         return <SkillsAndCertifications />;
       case "learning":
         return <LearningDashboard />;
-      case "blog":
-        return <BlogSection />;
       default:
         return <SkillsAndCertifications />;
     }

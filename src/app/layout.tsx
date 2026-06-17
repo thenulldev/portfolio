@@ -31,18 +31,13 @@ export const metadata: Metadata = {
     "cloud architecture",
     "IT certifications",
     "portfolio",
-    "blog",
     "thenull.dev",
   ],
   authors: [{ name: "Stephen Freerking", url: "https://thenull.dev" }],
   creator: "Stephen Freerking",
   publisher: "thenull.dev",
   metadataBase: new URL("https://thenull.dev"),
-  alternates: {
-    types: {
-      "application/rss+xml": "/api/rss",
-    },
-  },
+  alternates: {},
   openGraph: {
     type: "website",
     locale: "en_US",
