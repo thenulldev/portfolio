@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import AppShell from "./AppShell";
 import SkillsAndCertifications from "@components/features/skills/SkillsAndCertifications";
 import LearningDashboard from "@components/features/learning/LearningDashboard";
+import StatsOverview from "@components/features/stats/StatsOverview";
 
 type Tab = "skills" | "learning";
 
@@ -13,11 +14,21 @@ export default function PortfolioLayout() {
   const renderContent = () => {
     switch (activeTab) {
       case "skills":
-        return <SkillsAndCertifications />;
+        return (
+          <>
+            <StatsOverview />
+            <SkillsAndCertifications />
+          </>
+        );
       case "learning":
         return <LearningDashboard />;
       default:
-        return <SkillsAndCertifications />;
+        return (
+          <>
+            <StatsOverview />
+            <SkillsAndCertifications />
+          </>
+        );
     }
   };
 
