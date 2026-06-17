@@ -12,3 +12,6 @@ export * from './htb';
 
 // Skills visualization types
 export * from './skills-visualization';
+
+// Career / work experience types
+export * from './experience';
