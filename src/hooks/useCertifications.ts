@@ -7,7 +7,8 @@ export interface ProcessedCerts {
   skillCounts: { [name: string]: number };
 }
 
-function processCertifications(dataArray: Root[]): ProcessedCerts {
+function processCertifications(response: { data: Root[] }): ProcessedCerts {
+  const dataArray = response.data;
   const validData = dataArray
     .filter(
       (item) =>
@@ -56,7 +57,7 @@ export interface UseCertificationsReturn {
 
 export function useCertifications(): UseCertificationsReturn {
   const { data, loading, error, lastUpdated, isStale, refetch } =
-    useData<Root[], ProcessedCerts>("/api/certifications", {
+    useData<{ data: Root[] }, ProcessedCerts>("/api/certifications", {
       transform: processCertifications,
       ttlMs: 24 * 60 * 60 * 1000,
     });
