@@ -110,14 +110,16 @@ export default function CertificationTimeline({ certifications, onSelectCert }: 
                         <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200 leading-snug group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors line-clamp-2">
                           {cert.badge_template.name}
                         </h4>
-                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
-                          <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-                            <span className={`inline-block w-1.5 h-1.5 rounded-full ${colorClass}`} />
-                            <span className="truncate max-w-[140px]">{issuerName}</span>
-                          </span>
-                          <span className="text-slate-400 dark:text-slate-500">{dateStr}</span>
+                        <div className="mt-1 flex items-center justify-between gap-2 text-xs">
+                          <div className="flex items-center gap-x-2 gap-y-0.5 flex-wrap">
+                            <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                              <span className={`inline-block w-1.5 h-1.5 rounded-full ${colorClass}`} />
+                              <span className="truncate max-w-[140px]">{issuerName}</span>
+                            </span>
+                            <span className="text-slate-400 dark:text-slate-500">{dateStr}</span>
+                          </div>
                           {cert.expires_at_date && (
-                            <span className="text-amber-600 dark:text-amber-400 font-medium whitespace-nowrap">
+                            <span className="text-amber-600 dark:text-amber-400 font-medium whitespace-nowrap shrink-0">
                               Exp {new Date(cert.expires_at_date).getFullYear()}
                             </span>
                           )}
@@ -142,14 +144,16 @@ export default function CertificationTimeline({ certifications, onSelectCert }: 
                         <h4 className="text-base font-semibold text-slate-800 dark:text-slate-200 leading-snug group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
                           {cert.badge_template.name}
                         </h4>
-                        <div className="mt-1.5 flex items-center gap-x-3 text-xs">
-                          <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                            <span className={`inline-block w-2 h-2 rounded-full ${colorClass}`} />
-                            {issuerName}
-                          </span>
-                          <span className="text-slate-400 dark:text-slate-500">{dateStr}</span>
+                        <div className="mt-1.5 flex items-center justify-between gap-2 text-xs">
+                          <div className="flex items-center gap-x-3">
+                            <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                              <span className={`inline-block w-2 h-2 rounded-full ${colorClass}`} />
+                              {issuerName}
+                            </span>
+                            <span className="text-slate-400 dark:text-slate-500">{dateStr}</span>
+                          </div>
                           {cert.expires_at_date && (
-                            <span className="text-amber-600 dark:text-amber-400 font-medium">
+                            <span className="text-amber-600 dark:text-amber-400 font-medium whitespace-nowrap shrink-0">
                               Exp {new Date(cert.expires_at_date).getFullYear()}
                             </span>
                           )}
