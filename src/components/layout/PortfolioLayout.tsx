@@ -16,8 +16,8 @@ export default function PortfolioLayout() {
       case "skills":
         return (
           <>
-            <StatsOverview />
             <SkillsAndCertifications />
+            <StatsOverview />
           </>
         );
       case "learning":
@@ -25,8 +25,8 @@ export default function PortfolioLayout() {
       default:
         return (
           <>
-            <StatsOverview />
             <SkillsAndCertifications />
+            <StatsOverview />
           </>
         );
     }
