@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useParallelApiData } from "@/hooks/useApiData";
+import { useParallelData } from "@/hooks/useData";
 import { MsLearnProfile, TryHackMeProfile, HTBProfile } from "@/types";
 import MicrosoftLearnCard from "./MicrosoftLearnCard";
 import TryHackMeCard from "./TryHackMeCard";
@@ -18,11 +18,10 @@ type LearningData = {
   msLearn: MsLearnProfile;
   thm: TryHackMeProfile;
   htb: HTBProfile;
-  [key: string]: unknown;
 };
 
 export default function LearningDashboard(): React.JSX.Element {
-    const { data, loading, error, refetch } = useParallelApiData<LearningData>({
+    const { data, loading, error, refetch } = useParallelData<LearningData>({
         msLearn: "/api/ms-learn",
         thm: "/api/tryhackme",
         htb: "/api/htb",
