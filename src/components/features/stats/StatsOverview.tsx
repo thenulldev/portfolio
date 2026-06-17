@@ -2,19 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import { useParallelData } from "@/hooks/useData";
+import { useData } from "@/hooks/useData";
 import { TryHackMeProfile, HTBProfile } from "@/types";
 import {
     SectionContainer,
     SectionHeader,
-    LoadingState,
-    ErrorState
 } from "@/components/ui";
-
-type StatsData = {
-  thm: TryHackMeProfile;
-  htb: HTBProfile;
-};
 
 function THMBadge({ profile }: { profile: TryHackMeProfile }) {
   const tierColor = React.useMemo(() => {
@@ -97,31 +90,99 @@ function HTBBadge({ profile }: { profile: HTBProfile }) {
   );
 }
 
-export default function StatsOverview(): React.JSX.Element {
-  const { data, loading, error, refetch } = useParallelData<StatsData>({
-    thm: "/api/tryhackme",
-    htb: "/api/htb",
-  });
-
-  if (loading) {
-    return (
-      <SectionContainer maxWidth="7xl" variant="transparent" className="py-4">
-        <div className="animate-pulse grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="h-28 bg-slate-200 dark:bg-slate-800 rounded-xl" />
-          <div className="h-28 bg-slate-200 dark:bg-slate-800 rounded-xl" />
+function StatSkeleton() {
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 animate-pulse">
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="w-6 h-6 bg-slate-200 dark:bg-slate-700 rounded-full" />
+        <div className="space-y-1">
+          <div className="w-24 h-4 bg-slate-200 dark:bg-slate-700 rounded" />
+          <div className="w-16 h-3 bg-slate-200 dark:bg-slate-700 rounded" />
         </div>
-      </SectionContainer>
-    );
-  }
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        <div className="text-center space-y-1">
+          <div className="w-12 h-6 bg-slate-200 dark:bg-slate-700 rounded mx-auto" />
+          <div className="w-8 h-3 bg-slate-200 dark:bg-slate-700 rounded mx-auto" />
+        </div>
+        <div className="text-center space-y-1">
+          <div className="w-12 h-6 bg-slate-200 dark:bg-slate-700 rounded mx-auto" />
+          <div className="w-8 h-3 bg-slate-200 dark:bg-slate-700 rounded mx-auto" />
+        </div>
+        <div className="text-center space-y-1">
+          <div className="w-12 h-6 bg-slate-200 dark:bg-slate-700 rounded mx-auto" />
+          <div className="w-8 h-3 bg-slate-200 dark:bg-slate-700 rounded mx-auto" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
-  if (error || !data.thm || !data.htb) {
+function StatError({ name, error, onRetry }: { name: string; error: string | null; onRetry: () => void }) {
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4">
+      <div className="flex items-center gap-2.5 mb-2">
+        <span className="text-xl opacity-50">{name === "TryHackMe" ? "🛡️" : "🎯"}</span>
+        <h3 className="text-sm sm:text-base font-semibold text-slate-400 dark:text-slate-500">{name}</h3>
+      </div>
+      <p className="text-xs text-red-500 dark:text-red-400 mb-2">{error || "Failed to load"}</p>
+      <button
+        onClick={onRetry}
+        className="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
+function StatUnavailable({ name, reason }: { name: string; reason?: string }) {
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 opacity-75">
+      <div className="flex items-center gap-2.5 mb-2">
+        <span className="text-xl opacity-50 grayscale">{name === "TryHackMe" ? "🛡️" : "🎯"}</span>
+        <div>
+          <h3 className="text-sm sm:text-base font-semibold text-slate-400 dark:text-slate-500">{name}</h3>
+          <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500">Temporarily unavailable</p>
+        </div>
+      </div>
+      {reason && (
+        <p className="text-[10px] text-slate-400 dark:text-slate-500">{reason}</p>
+      )}
+    </div>
+  );
+}
+
+export default function StatsOverview(): React.JSX.Element {
+  const {
+    data: thmData,
+    loading: thmLoading,
+    error: thmError,
+    refetch: thmRefetch,
+  } = useData<unknown, TryHackMeProfile>("/api/tryhackme");
+
+  const {
+    data: htbData,
+    loading: htbLoading,
+    error: htbError,
+    refetch: htbRefetch,
+  } = useData<unknown, HTBProfile>("/api/htb");
+
+  const allLoading = thmLoading && htbLoading;
+  const anyReady = thmData || htbData;
+
+  // Don't render anything if both are loading and nothing cached
+  if (allLoading && !anyReady) {
     return (
       <SectionContainer maxWidth="7xl" variant="transparent" className="py-4">
-        <ErrorState
+        <SectionHeader
           title="Platform Stats"
-          error={error || "Failed to load stats"}
-          onRetry={refetch}
+          description="Live progress across cybersecurity training platforms."
         />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <StatSkeleton />
+          <StatSkeleton />
+        </div>
       </SectionContainer>
     );
   }
@@ -133,8 +194,23 @@ export default function StatsOverview(): React.JSX.Element {
         description="Live progress across cybersecurity training platforms."
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-        <THMBadge profile={data.thm} />
-        <HTBBadge profile={data.htb} />
+        {thmData ? (
+          <THMBadge profile={thmData} />
+        ) : thmError && thmError.includes("not found") ? (
+          <StatUnavailable name="TryHackMe" reason="Profile data unavailable" />
+        ) : thmError ? (
+          <StatError name="TryHackMe" error={thmError} onRetry={thmRefetch} />
+        ) : (
+          <StatSkeleton />
+        )}
+
+        {htbData ? (
+          <HTBBadge profile={htbData} />
+        ) : htbError ? (
+          <StatError name="Hack The Box" error={htbError} onRetry={htbRefetch} />
+        ) : (
+          <StatSkeleton />
+        )}
       </div>
     </SectionContainer>
   );
