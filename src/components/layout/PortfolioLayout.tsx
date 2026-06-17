@@ -7,7 +7,7 @@ import LearningDashboard from "@components/features/learning/LearningDashboard";
 import CareerDashboard from "@components/features/career/CareerDashboard";
 import StatsOverview from "@components/features/stats/StatsOverview";
 
-type Tab = "skills" | "learning" | "career";
+type Tab = "skills" | "learning";
 
 export default function PortfolioLayout() {
   const [activeTab, setActiveTab] = useState<Tab>("skills");
@@ -17,17 +17,17 @@ export default function PortfolioLayout() {
       case "skills":
         return (
           <>
+            <CareerDashboard />
             <SkillsAndCertifications />
             <StatsOverview />
           </>
         );
       case "learning":
         return <LearningDashboard />;
-      case "career":
-        return <CareerDashboard />;
       default:
         return (
           <>
+            <CareerDashboard />
             <SkillsAndCertifications />
             <StatsOverview />
           </>
