@@ -17,8 +17,8 @@ export default function PortfolioLayout() {
       case "skills":
         return (
           <>
-            <CareerDashboard />
             <SkillsAndCertifications />
+            <CareerDashboard />
             <StatsOverview />
           </>
         );
@@ -27,8 +27,8 @@ export default function PortfolioLayout() {
       default:
         return (
           <>
-            <CareerDashboard />
             <SkillsAndCertifications />
+            <CareerDashboard />
             <StatsOverview />
           </>
         );
