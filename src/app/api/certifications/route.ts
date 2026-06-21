@@ -91,7 +91,11 @@ export async function GET() {
       allCerts.push(...mappedOffsecCerts);
     }
 
-    return NextResponse.json({ data: allCerts });
+    return NextResponse.json({ data: allCerts }, {
+      headers: {
+        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=7200',
+      },
+    });
   } catch (error) {
     console.error('Unexpected error in certifications API:', error);
     return NextResponse.json(

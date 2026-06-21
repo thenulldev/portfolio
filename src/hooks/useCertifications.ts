@@ -59,7 +59,7 @@ export function useCertifications(): UseCertificationsReturn {
   const { data, loading, error, lastUpdated, isStale, refetch } =
     useData<{ data: Root[] }, ProcessedCerts>("/api/certifications", {
       transform: processCertifications,
-      ttlMs: 24 * 60 * 60 * 1000,
+      ttlMs: 60 * 60 * 1000, // 1 hour — certs change frequently
     });
 
   return {
