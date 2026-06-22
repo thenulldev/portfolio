@@ -97,7 +97,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .open-next --project-name=portfolio --branch=main
+          command: pages deploy .open-next --project-name=portfolio --branch=main --commit-hash=${{ github.sha }} --commit-message="${{ github.event.head_commit.message }}"
 
       - name: Deploy to Cloudflare Pages (Preview)
         if: steps.deploy-target.outputs.target == 'preview'
@@ -106,7 +106,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .open-next --project-name=portfolio --branch=${{ steps.deploy-target.outputs.safe_branch }}
+          command: pages deploy .open-next --project-name=portfolio --branch=${{ steps.deploy-target.outputs.safe_branch }} --commit-hash=${{ github.event.pull_request.head.sha }} --commit-message="${{ github.event.pull_request.title }}"
 
       - name: Create GitHub Deployment (Preview)
         if: github.event_name == 'pull_request'
@@ -117,7 +117,7 @@ jobs:
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const branch = '${{ steps.deploy-target.outputs.branch }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://${safeBranch}.portfolio.thenulldev.pages.dev`;
+            const fallbackUrl = `https://${safeBranch}.portfolio-3xp.pages.dev`;
             const url = deployUrl || fallbackUrl;
             
             const { data: deployment } = await github.rest.repos.createDeployment({
@@ -173,7 +173,7 @@ jobs:
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const branch = '${{ steps.deploy-target.outputs.branch }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://${safeBranch}.portfolio.thenulldev.pages.dev`;
+            const fallbackUrl = `https://${safeBranch}.portfolio-3xp.pages.dev`;
             const url = deployUrl || fallbackUrl;
             
             const body = `🚀 **Preview Deployment Ready**
