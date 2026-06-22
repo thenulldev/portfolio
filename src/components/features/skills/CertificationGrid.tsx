@@ -4,6 +4,8 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import { Root } from "@/types";
 import { Badge } from "@/components/ui";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface CertificationGridProps {
   certifications: Root[];
@@ -103,7 +105,7 @@ export default function CertificationGrid({ certifications, onSelectCert }: Cert
                   onClick={() => onSelectCert(cert)}
                   className="group relative bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-sky-200 dark:hover:border-sky-700"
                 >
-                  {/* Top row: badge + status */}
+                  {/* Top row: badge + status + verify link */}
                   <div className="flex items-start justify-between mb-2 sm:mb-3">
                     <div className="relative">
                       <div
@@ -114,17 +116,31 @@ export default function CertificationGrid({ certifications, onSelectCert }: Cert
                         alt={cert.badge_template.name}
                         width={56}
                         height={56}
-                        className="relative w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-lg bg-white dark:bg-slate-900"
+                        className="relative w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-lg bg-white dark:bg-white p-1 shadow-sm border border-slate-100 dark:border-slate-300"
                         unoptimized
                       />
                     </div>
-                    {expiry && (
-                      <span
-                        className={`text-[10px] sm:text-xs font-medium px-1.5 py-0.5 rounded-md shrink-0 ${expiry.color}`}
-                      >
-                        {expiry.label}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-1">
+                      {cert.verification_url && (
+                        <a
+                          href={cert.verification_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                          onClick={(e) => e.stopPropagation()}
+                          title="Verify credential"
+                        >
+                          <FontAwesomeIcon icon={faExternalLinkAlt} className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+                        </a>
+                      )}
+                      {expiry && (
+                        <span
+                          className={`text-[10px] sm:text-xs font-medium px-1.5 py-0.5 rounded-md shrink-0 ${expiry.color}`}
+                        >
+                          {expiry.label}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Title */}

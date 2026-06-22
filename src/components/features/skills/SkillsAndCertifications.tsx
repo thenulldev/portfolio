@@ -133,7 +133,7 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                             alt={selectedCert.badge_template.name}
                                             width={100}
                                             height={100}
-                                            className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl shadow-md bg-white dark:bg-slate-900 p-2"
+                                            className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl shadow-md bg-white dark:bg-white p-2 border border-slate-100 dark:border-slate-300"
                                             unoptimized
                                         />
                                     </div>
@@ -152,6 +152,18 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                                 <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                                                     Expires: {new Date(selectedCert.expires_at_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                                                 </span>
+                                            )}
+                                            {selectedCert.verification_url && (
+                                                <a
+                                                    href={selectedCert.verification_url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-1 text-xs sm:text-sm text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    <FontAwesomeIcon icon={faExternalLinkAlt} className="w-3 h-3" />
+                                                    Verify on Credly
+                                                </a>
                                             )}
                                         </div>
                                     </div>
