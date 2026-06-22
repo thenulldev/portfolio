@@ -17,8 +17,12 @@ try {
   console.log('☁️ Step 2: Building with OpenNext...');
   execSync('npx opennextjs-cloudflare build', { stdio: 'inherit' });
 
-  // Step 3: Deploy to Cloudflare Pages
-  console.log('🚀 Step 3: Deploying to Cloudflare Pages...');
+  // Step 3: Copy worker.js to _worker.js for Pages Functions
+  console.log('🔧 Step 3: Preparing Pages entry point...');
+  fs.copyFileSync('.open-next/worker.js', '.open-next/_worker.js');
+
+  // Step 4: Deploy to Cloudflare Pages
+  console.log('🚀 Step 4: Deploying to Cloudflare Pages...');
   execSync('npx wrangler pages deploy .open-next --project-name=portfolio --branch=main', { stdio: 'inherit' });
 
   console.log('✅ Deployment completed successfully!');

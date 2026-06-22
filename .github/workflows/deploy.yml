@@ -68,6 +68,12 @@ jobs:
       - name: Build with OpenNext
         run: npx opennextjs-cloudflare build
 
+      - name: Prepare Pages entry point
+        run: |
+          # Pages Functions needs _worker.js at the root of the deploy directory
+          cp .open-next/worker.js .open-next/_worker.js
+          ls -la .open-next/_worker.js
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         if: failure()
