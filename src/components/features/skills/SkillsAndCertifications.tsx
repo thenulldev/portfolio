@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
-import CertificationTimeline from "./CertificationTimeline";
+import CertificationGrid from "./CertificationGrid";
 import { useCertifications } from "@/hooks/useCertifications";
 import { Root } from "@/types";
 import {
@@ -110,7 +110,7 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                 ) : filteredCertifications.length === 0 ? (
                     <EmptyState title="No certifications found for this issuer" />
                 ) : (
-                    <CertificationTimeline
+                    <CertificationGrid
                         certifications={filteredCertifications}
                         onSelectCert={setSelectedCert}
                     />
