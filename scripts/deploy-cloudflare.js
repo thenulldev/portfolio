@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('🚀 Starting Cloudflare deployment process...');
+console.log('🚀 Starting Cloudflare Pages deployment process...');
 
 try {
   // Step 1: Clean previous builds
@@ -18,9 +18,9 @@ try {
   console.log('☁️ Step 2: Building with OpenNext...');
   execSync('npx opennextjs-cloudflare build', { stdio: 'inherit' });
 
-  // Step 3: Deploy to Cloudflare
-  console.log('🚀 Step 3: Deploying to Cloudflare...');
-  execSync('npx wrangler deploy', { stdio: 'inherit' });
+  // Step 3: Deploy to Cloudflare Pages
+  console.log('🚀 Step 3: Deploying to Cloudflare Pages...');
+  execSync('npx wrangler pages deploy .open-next --project-name=portfolio --branch=main', { stdio: 'inherit' });
 
   console.log('✅ Deployment completed successfully!');
 

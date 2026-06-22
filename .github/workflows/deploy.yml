@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Workers
+name: Deploy to Cloudflare Pages
 
 on:
   push:
@@ -59,15 +59,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache OpenNext build
-        id: opennext-cache
-        uses: actions/cache@v4
-        with:
-          path: .open-next
-          key: ${{ runner.os }}-opennext-${{ hashFiles('pnpm-lock.yaml', 'next.config.*', 'wrangler.json') }}
-          restore-keys: |
-            ${{ runner.os }}-opennext-
-
       - name: Set preview environment variables
         if: github.event_name == 'pull_request'
         run: |
@@ -99,22 +90,23 @@ jobs:
             echo "safe_branch=main" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Deploy to Cloudflare Workers (Production)
+      - name: Deploy to Cloudflare Pages (Production)
         if: steps.deploy-target.outputs.target == 'production'
+        id: production-deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy
+          command: pages deploy .open-next --project-name=portfolio --branch=main
 
-      - name: Deploy to Cloudflare Workers (Preview)
+      - name: Deploy to Cloudflare Pages (Preview)
         if: steps.deploy-target.outputs.target == 'preview'
         id: preview-deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --name portfolio-preview-${{ steps.deploy-target.outputs.safe_branch }}
+          command: pages deploy .open-next --project-name=portfolio --branch=${{ steps.deploy-target.outputs.safe_branch }}
 
       - name: Create GitHub Deployment (Preview)
         if: github.event_name == 'pull_request'
@@ -123,8 +115,9 @@ jobs:
         with:
           script: |
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
+            const branch = '${{ steps.deploy-target.outputs.branch }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
+            const fallbackUrl = `https://${safeBranch}.portfolio.thenulldev.pages.dev`;
             const url = deployUrl || fallbackUrl;
             
             const { data: deployment } = await github.rest.repos.createDeployment({
@@ -134,7 +127,7 @@ jobs:
               environment: `preview-${safeBranch}`,
               auto_merge: false,
               required_contexts: [],
-              description: `Preview deployment for branch ${safeBranch}`,
+              description: `Preview deployment for branch ${branch}`,
               transient_environment: true,
               production_environment: false,
             });
@@ -145,10 +138,10 @@ jobs:
               state: 'success',
               environment: `preview-${safeBranch}`,
               environment_url: url,
-              log_url: `https://dash.cloudflare.com/?to=/:account/workers-and-pages/overview`,
+              log_url: `https://dash.cloudflare.com/?to=/:account/pages/view/portfolio`,
             });
 
-      - name: Create GitHub Deployment
+      - name: Create GitHub Deployment (Production)
         if: github.ref == 'refs/heads/main'
         uses: actions/github-script@v7
         with:
@@ -160,7 +153,7 @@ jobs:
               environment: 'production',
               auto_merge: false,
               required_contexts: [],
-              description: 'Cloudflare Workers deployment'
+              description: 'Cloudflare Pages production deployment'
             });
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
@@ -168,8 +161,8 @@ jobs:
               deployment_id: deployment.id,
               state: 'success',
               environment: 'production',
-              environment_url: 'https://portfolio.thenulldev.workers.dev',
-              log_url: `https://dash.cloudflare.com/?to=/:account/workers-and-pages/overview`
+              environment_url: '${{ steps.production-deploy.outputs.deployment-url }}' || 'https://portfolio.thenulldev.pages.dev',
+              log_url: `https://dash.cloudflare.com/?to=/:account/pages/view/portfolio`
             });
 
       - name: Comment PR with Preview URL
@@ -180,7 +173,7 @@ jobs:
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const branch = '${{ steps.deploy-target.outputs.branch }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
+            const fallbackUrl = `https://${safeBranch}.portfolio.thenulldev.pages.dev`;
             const url = deployUrl || fallbackUrl;
             
             const body = `🚀 **Preview Deployment Ready**
@@ -235,7 +228,7 @@ jobs:
               const pr = pulls[0];
               const body = `✅ **Merged to Production**
             
-            Changes from this PR are now live at [https://portfolio.thenulldev.workers.dev](https://portfolio.thenulldev.workers.dev)`;
+            Changes from this PR are now live at [${{ steps.production-deploy.outputs.deployment-url }}](${{ steps.production-deploy.outputs.deployment-url }})`;
               
               await github.rest.issues.createComment({
                 owner: context.repo.owner,

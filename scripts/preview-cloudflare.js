@@ -1,8 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
-const path = require('path');
 
-console.log('🔍 Starting Cloudflare preview process...');
+console.log('🔍 Starting Cloudflare Pages preview process...');
 
 try {
   // Step 1: Clean previous builds
@@ -14,13 +13,13 @@ try {
     execSync('rm -rf .open-next', { stdio: 'inherit' });
   }
 
-  // Step 2: Run OpenNext build (it handles the Next.js build internally)
+  // Step 2: Run OpenNext build
   console.log('☁️ Step 2: Building with OpenNext...');
   execSync('npx opennextjs-cloudflare build', { stdio: 'inherit' });
 
-  // Step 3: Start Wrangler dev server
-  console.log('🚀 Step 3: Starting Wrangler dev server...');
-  execSync('npx wrangler dev', { stdio: 'inherit' });
+  // Step 3: Start Wrangler Pages dev server
+  console.log('🚀 Step 3: Starting Wrangler Pages dev server...');
+  execSync('npx wrangler pages dev .open-next --compatibility-date=2024-12-30', { stdio: 'inherit' });
 
 } catch (error) {
   console.error('❌ Preview failed:', error.message);
