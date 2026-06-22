@@ -178,13 +178,16 @@ export function useParallelData<T extends Record<string, unknown>>(
   const [error, setError] = useState<string | null>(null);
   const mountedRef = useRef(true);
 
+  const endpointKey = JSON.stringify(endpoints);
+
   const fetchAll = useCallback(
     async (force = false) => {
       if (!mountedRef.current) return;
       setLoading(true);
       setError(null);
 
-      const entries = Object.entries(endpoints) as [keyof T, string][];
+      const currentEndpoints = JSON.parse(endpointKey) as { [K in keyof T]: string };
+      const entries = Object.entries(currentEndpoints) as [keyof T, string][];
 
       try {
         const results = await Promise.all(
@@ -230,7 +233,7 @@ export function useParallelData<T extends Record<string, unknown>>(
         if (mountedRef.current) setLoading(false);
       }
     },
-    [endpoints, ttlMs, timeoutMs]
+    [endpointKey, ttlMs, timeoutMs]
   );
 
   useEffect(() => {
