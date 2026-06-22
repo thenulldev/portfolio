@@ -122,10 +122,10 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: context.payload.pull_request.head.sha,
-              environment: `preview-${safeBranch}`,
+              environment: 'preview',
               auto_merge: false,
               required_contexts: [],
-              description: `Preview deployment for branch ${safeBranch}`,
+              description: `Preview: ${safeBranch}`,
               transient_environment: true,
               production_environment: false,
             });
@@ -134,7 +134,7 @@ jobs:
               repo: context.repo.repo,
               deployment_id: deployment.id,
               state: 'success',
-              environment: `preview-${safeBranch}`,
+              environment: 'preview',
               environment_url: url,
               log_url: `https://dash.cloudflare.com/?to=/:account/workers-and-pages/overview`,
             });
