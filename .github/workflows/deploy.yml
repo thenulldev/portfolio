@@ -96,17 +96,6 @@ jobs:
             echo "safe_branch=main" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Set commit metadata
-        id: commit-meta
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "hash=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
-            echo "msg=${{ github.event.pull_request.title }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "hash=${{ github.sha }}" >> "$GITHUB_OUTPUT"
-            echo "msg=${{ github.event.head_commit.message }}" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Deploy to Cloudflare Pages (Production)
         if: steps.deploy-target.outputs.target == 'production'
         id: production-deploy
@@ -114,7 +103,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .open-next --project-name=portfolio --branch=main --commit-hash=${{ steps.commit-meta.outputs.hash }} --commit-message="${{ steps.commit-meta.outputs.msg }}"
+          command: pages deploy .open-next --project-name=portfolio --branch=main
 
       - name: Deploy to Cloudflare Pages (Preview)
         if: steps.deploy-target.outputs.target == 'preview'
@@ -123,7 +112,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .open-next --project-name=portfolio --branch=${{ steps.deploy-target.outputs.safe_branch }} --commit-hash=${{ steps.commit-meta.outputs.hash }} --commit-message="${{ steps.commit-meta.outputs.msg }}"
+          command: pages deploy .open-next --project-name=portfolio --branch=${{ steps.deploy-target.outputs.safe_branch }}
 
       - name: Create GitHub Deployment (Preview)
         if: github.event_name == 'pull_request'
