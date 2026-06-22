@@ -3,7 +3,7 @@ import {
   faGithub,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
-import { faCertificate, faShieldHalved } from "@fortawesome/free-solid-svg-icons";
+import { faCertificate, faShieldHalved, faTerminal } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
@@ -32,6 +32,12 @@ const Socials: React.FC = () => {
       icon: faShieldHalved,
       name: "TryHackMe",
       color: "hover:text-red-600 dark:hover:text-red-400",
+    },
+    {
+      link: "https://app.hackthebox.com/profile/1480022",
+      icon: faTerminal,
+      name: "Hack The Box",
+      color: "hover:text-green-600 dark:hover:text-green-400",
     },
   ];
 
