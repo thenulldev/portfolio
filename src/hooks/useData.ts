@@ -49,10 +49,14 @@ export function useData<T, R = T>(
   );
 
   const abortRef = useRef<AbortController | null>(null);
+  const fetchingRef = useRef(false);
 
   const fetchData = useCallback(
     async (force = false) => {
       if (!cacheKey) return;
+      // Guard: prevent concurrent fetches
+      if (fetchingRef.current && !force) return;
+      fetchingRef.current = true;
 
       const currentCached = getCacheEntry<R>(cacheKey);
       const currentFresh = isCacheFresh(cacheKey, ttlMs);
@@ -62,6 +66,7 @@ export function useData<T, R = T>(
         setLoading(false);
         setLastUpdated(new Date(currentCached.timestamp));
         setIsStale(false);
+        fetchingRef.current = false;
         return;
       }
 
@@ -129,6 +134,7 @@ export function useData<T, R = T>(
       } finally {
         setLoading(false);
         abortRef.current = null;
+        fetchingRef.current = false;
       }
     },
     [cacheKey, endpoint, transform, ttlMs, timeoutMs, staleWhileRevalidate]
@@ -177,12 +183,17 @@ export function useParallelData<T extends Record<string, unknown>>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const mountedRef = useRef(true);
+  const fetchingRef = useRef(false);
 
   const endpointKey = JSON.stringify(endpoints);
 
   const fetchAll = useCallback(
     async (force = false) => {
       if (!mountedRef.current) return;
+      // Guard: prevent concurrent fetches (React 18+ concurrent mode can fire
+      // useEffect multiple times during mount before the first fetch completes)
+      if (fetchingRef.current && !force) return;
+      fetchingRef.current = true;
       setLoading(true);
       setError(null);
 
@@ -230,6 +241,7 @@ export function useParallelData<T extends Record<string, unknown>>(
           setError(err instanceof Error ? err.message : "Request failed");
         }
       } finally {
+        fetchingRef.current = false;
         if (mountedRef.current) setLoading(false);
       }
     },
