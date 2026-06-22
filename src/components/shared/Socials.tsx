@@ -34,7 +34,7 @@ const Socials: React.FC = () => {
       color: "hover:text-red-600 dark:hover:text-red-400",
     },
     {
-      link: "https://app.hackthebox.com/profile/1480022",
+      link: "https://profile.hackthebox.com/profile/019c5ac7-7d6d-73ea-9476-7a01f4f679fb",
       icon: faTerminal,
       name: "Hack The Box",
       color: "hover:text-green-600 dark:hover:text-green-400",
@@ -42,7 +42,7 @@ const Socials: React.FC = () => {
   ];
 
   return (
-    <div className="flex justify-center gap-6 w-full">
+    <div className="flex justify-center flex-wrap gap-3 w-full">
       {socials.map((social, index) => (
         <Link 
           key={index} 
@@ -53,7 +53,7 @@ const Socials: React.FC = () => {
           aria-label={`Visit ${social.name}`}
         >
           <div className={`
-            p-3 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 
+            p-2.5 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 
             dark:from-slate-700 dark:to-slate-800 
             border border-slate-300 dark:border-slate-600
             text-slate-600 dark:text-slate-400
@@ -63,8 +63,7 @@ const Socials: React.FC = () => {
           `}>
             <FontAwesomeIcon 
               icon={social.icon} 
-              size="lg" 
-              className="transition-colors duration-300"
+              className="w-5 h-5 transition-colors duration-300"
             />
           </div>
         </Link>
