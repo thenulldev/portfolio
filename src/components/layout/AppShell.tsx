@@ -5,10 +5,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Social from "@components/shared/Socials";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCode, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { faCode, faGraduationCap, faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import PreviewBanner from "./PreviewBanner";
 
-type Tab = "skills" | "learning";
+type Tab = "skills" | "career" | "learning";
 
 interface AppShellProps {
     children: React.ReactNode;
@@ -29,6 +29,7 @@ export default function AppShell({ children, activeTab, onTabChange }: AppShellP
 
     const navItems = [
         { id: "skills" as Tab, label: "Skills & Certifications", icon: faCode, shortLabel: "Skills" },
+        { id: "career" as Tab, label: "Career Experience", icon: faBriefcase, shortLabel: "Career" },
         { id: "learning" as Tab, label: "Learning Journey", icon: faGraduationCap, shortLabel: "Learning" },
     ];
 
