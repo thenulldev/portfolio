@@ -38,17 +38,17 @@ export const metadata: Metadata = {
     "CompTIA",
     "Microsoft",
   ],
-  authors: [{ name: "Stephen Freerking", url: "https://portfolio.nulldev.workers.dev" }],
+  authors: [{ name: "Stephen Freerking", url: "https://thenull.dev" }],
   creator: "Stephen Freerking",
-  publisher: "thenulldev",
-  metadataBase: new URL("https://portfolio.nulldev.workers.dev"),
+  publisher: "thenull.dev",
+  metadataBase: new URL("https://thenull.dev"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://portfolio.nulldev.workers.dev",
+    url: "https://thenull.dev",
     siteName: "Stephen Freerking",
     title: "Stephen Freerking — Cloud & Cybersecurity Engineer",
     description:
@@ -106,7 +106,7 @@ export default function RootLayout({
     "@type": "Person",
     name: "Stephen Freerking",
     jobTitle: "Cloud & Cybersecurity Engineer",
-    url: "https://portfolio.nulldev.workers.dev",
+    url: "https://thenull.dev",
     sameAs: [
       "https://www.linkedin.com/in/thatnulldev/",
       "https://github.com/Snipey",
@@ -126,7 +126,7 @@ export default function RootLayout({
       "Infrastructure as Code",
       "Penetration Testing",
     ],
-    image: "https://portfolio.nulldev.workers.dev/og-image.png",
+    image: "https://thenull.dev/og-image.png",
   };
 
   return (

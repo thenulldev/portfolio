@@ -159,7 +159,7 @@ jobs:
               deployment_id: deployment.id,
               state: 'success',
               environment: 'production',
-              environment_url: 'https://portfolio.nulldev.workers.dev',
+              environment_url: 'https://thenull.dev',
               log_url: `https://dash.cloudflare.com/?to=/:account/workers-and-pages/overview`
             });
 
@@ -226,7 +226,7 @@ jobs:
               const pr = pulls[0];
               const body = `✅ **Merged to Production**
             
-            Changes from this PR are now live at [https://portfolio.nulldev.workers.dev](https://portfolio.nulldev.workers.dev)`;
+            Changes from this PR are now live at [https://thenull.dev](https://thenull.dev)`;
               
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
