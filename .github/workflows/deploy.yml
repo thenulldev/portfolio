@@ -115,8 +115,7 @@ jobs:
           script: |
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
-            const url = deployUrl || fallbackUrl;
+            const url = deployUrl || `https://portfolio-preview-${safeBranch}.nuldev.workers.dev`;
             
             const { data: deployment } = await github.rest.repos.createDeployment({
               owner: context.repo.owner,
@@ -159,7 +158,7 @@ jobs:
               deployment_id: deployment.id,
               state: 'success',
               environment: 'production',
-              environment_url: 'https://portfolio.thenulldev.workers.dev',
+              environment_url: 'https://portfolio.nuldev.workers.dev',
               log_url: `https://dash.cloudflare.com/?to=/:account/workers-and-pages/overview`
             });
 
@@ -171,8 +170,7 @@ jobs:
             const deployUrl = '${{ steps.preview-deploy.outputs.deployment-url }}';
             const branch = '${{ steps.deploy-target.outputs.branch }}';
             const safeBranch = '${{ steps.deploy-target.outputs.safe_branch }}';
-            const fallbackUrl = `https://portfolio-preview-${safeBranch}.thenulldev.workers.dev`;
-            const url = deployUrl || fallbackUrl;
+            const url = deployUrl || `https://portfolio-preview-${safeBranch}.nuldev.workers.dev`;
             
             const body = `🚀 **Preview Deployment Ready**
             
@@ -226,7 +224,7 @@ jobs:
               const pr = pulls[0];
               const body = `✅ **Merged to Production**
             
-            Changes from this PR are now live at [https://portfolio.thenulldev.workers.dev](https://portfolio.thenulldev.workers.dev)`;
+            Changes from this PR are now live at [https://portfolio.nuldev.workers.dev](https://portfolio.nuldev.workers.dev)`;
               
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
