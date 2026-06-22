@@ -20,7 +20,8 @@ export const metadata: Metadata = {
     default: "Stephen Freerking — Cloud & Cybersecurity Engineer",
     template: "%s | Stephen Freerking",
   },
-  description: "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure. View certifications, skills, and technical blog.",
+  description:
+    "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure. View certifications, skills, and learning journey.",
   keywords: [
     "Stephen Freerking",
     "Cloud Engineer",
@@ -31,20 +32,27 @@ export const metadata: Metadata = {
     "cloud architecture",
     "IT certifications",
     "portfolio",
-    "thenull.dev",
+    "thenulldev",
+    "Hack The Box",
+    "TryHackMe",
+    "CompTIA",
+    "Microsoft",
   ],
-  authors: [{ name: "Stephen Freerking", url: "https://thenull.dev" }],
+  authors: [{ name: "Stephen Freerking", url: "https://portfolio.nulldev.workers.dev" }],
   creator: "Stephen Freerking",
-  publisher: "thenull.dev",
-  metadataBase: new URL("https://thenull.dev"),
-  alternates: {},
+  publisher: "thenulldev",
+  metadataBase: new URL("https://portfolio.nulldev.workers.dev"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://thenull.dev",
-    siteName: "thenull.dev",
+    url: "https://portfolio.nulldev.workers.dev",
+    siteName: "Stephen Freerking",
     title: "Stephen Freerking — Cloud & Cybersecurity Engineer",
-    description: "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
+    description:
+      "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
     images: [
       {
         url: "/og-image.png",
@@ -57,13 +65,15 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Stephen Freerking — Cloud & Cybersecurity Engineer",
-    description: "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
+    description:
+      "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
     images: ["/og-image.png"],
     creator: "@StephenFreerkn",
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -72,9 +82,18 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "google-site-verification-code", // Replace with actual code when available
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    other: [
+      { rel: "icon", url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { rel: "icon", url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -87,14 +106,27 @@ export default function RootLayout({
     "@type": "Person",
     name: "Stephen Freerking",
     jobTitle: "Cloud & Cybersecurity Engineer",
-    url: "https://thenull.dev",
+    url: "https://portfolio.nulldev.workers.dev",
     sameAs: [
       "https://www.linkedin.com/in/thatnulldev/",
       "https://github.com/Snipey",
       "https://twitter.com/StephenFreerkn",
+      "https://www.credly.com/users/stephen-freerking",
+      "https://tryhackme.com/p/ThatNullDev",
+      "https://profile.hackthebox.com/profile/019c5ac7-7d6d-73ea-9476-7a01f4f679fb",
     ],
-    description: "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
-    knowsAbout: ["Cloud Architecture", "Cybersecurity", "DevSecOps", "AWS", "Azure"],
+    description:
+      "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
+    knowsAbout: [
+      "Cloud Architecture",
+      "Cybersecurity",
+      "DevSecOps",
+      "AWS",
+      "Azure",
+      "Infrastructure as Code",
+      "Penetration Testing",
+    ],
+    image: "https://portfolio.nulldev.workers.dev/og-image.png",
   };
 
   return (
