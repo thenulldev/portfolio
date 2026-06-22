@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, Badge } from "@/components/ui";
 import { HTBProfile } from "@/types/htb";
+import { formatCompact } from "@/lib/format";
 import Image from "next/image";
 
 interface HTBCardProps {
@@ -47,13 +48,13 @@ export default function HTBCard({ profile }: HTBCardProps): React.JSX.Element {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
             <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-              {profile.totalExperiencePoints.toLocaleString()}
+              {formatCompact(profile.totalExperiencePoints)}
             </div>
             <div className="text-xs text-slate-500 dark:text-slate-400">Total XP</div>
           </div>
           <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
             <div className="text-2xl font-bold text-sky-600 dark:text-sky-400">
-              {profile.level}
+              {formatCompact(profile.level)}
             </div>
             <div className="text-xs text-slate-500 dark:text-slate-400">Level</div>
           </div>
@@ -81,7 +82,7 @@ export default function HTBCard({ profile }: HTBCardProps): React.JSX.Element {
               {streak.counter} Day Streak
             </div>
             <div className="text-xs text-amber-600/70 dark:text-amber-400/70">
-              {streak.isCompleted ? "Completed today" : `${streak.remainingExperiencePoints} XP remaining`}
+              {streak.isCompleted ? "Completed today" : `${formatCompact(streak.remainingExperiencePoints)} XP remaining`}
               {streak.inDanger ? " · In danger!" : ""}
               {streak.streakSavers > 0 ? ` · ${streak.streakSavers} streak saver(s)` : ""}
             </div>

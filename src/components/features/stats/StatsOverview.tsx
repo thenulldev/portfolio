@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useData } from "@/hooks/useData";
 import { TryHackMeProfile, HTBProfile } from "@/types";
+import { formatCompact } from "@/lib/format";
 import {
     SectionContainer,
     SectionHeader,
@@ -34,15 +35,15 @@ function THMBadge({ profile }: { profile: TryHackMeProfile }) {
       </div>
       <div className="grid grid-cols-3 gap-2">
         <div className="text-center">
-          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">#{profile.rank.toLocaleString()}</div>
+          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">#{formatCompact(profile.rank)}</div>
           <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Rank</div>
         </div>
         <div className="text-center">
-          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{profile.points.toLocaleString()}</div>
+          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.points)}</div>
           <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Points</div>
         </div>
         <div className="text-center">
-          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{profile.completedRoomsNumber}</div>
+          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.completedRoomsNumber)}</div>
           <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Rooms</div>
         </div>
       </div>
@@ -74,15 +75,15 @@ function HTBBadge({ profile }: { profile: HTBProfile }) {
       </div>
       <div className="grid grid-cols-3 gap-2">
         <div className="text-center">
-          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{profile.level}</div>
+          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.level)}</div>
           <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Level</div>
         </div>
         <div className="text-center">
-          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{profile.totalExperiencePoints.toLocaleString()}</div>
+          <div className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.totalExperiencePoints)}</div>
           <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Total XP</div>
         </div>
         <div className="text-center">
-          <div className="text-lg sm:text-xl font-bold text-amber-600 dark:text-amber-400">{profile.streak.counter}</div>
+          <div className="text-lg sm:text-xl font-bold text-amber-600 dark:text-amber-400">{formatCompact(profile.streak.counter)}</div>
           <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">Streak</div>
         </div>
       </div>

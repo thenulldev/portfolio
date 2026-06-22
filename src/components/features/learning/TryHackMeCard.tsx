@@ -2,6 +2,7 @@
 
 import React from "react";
 import { TryHackMeProfile } from "@/types";
+import { formatCompact } from "@/lib/format";
 import {
     Card,
     CardContent,
@@ -52,19 +53,19 @@ export default function TryHackMeCard({ profile }: TryHackMeCardProps): React.JS
                 <div className="grid grid-cols-4 gap-3">
                     <div className="p-3 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl text-center border border-red-100 dark:border-red-800">
                         <div className="text-sm text-red-600 dark:text-red-400 font-medium mb-1">Rank</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">#{profile.rank.toLocaleString()}</div>
+                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">#{formatCompact(profile.rank)}</div>
                     </div>
                     <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
                         <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Points</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{profile.points.toLocaleString()}</div>
+                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.points)}</div>
                     </div>
                     <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
                         <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Badges</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{profile.badgesNumber}</div>
+                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.badgesNumber)}</div>
                     </div>
                     <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
                         <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Rooms</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{profile.completedRoomsNumber}</div>
+                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.completedRoomsNumber)}</div>
                     </div>
                 </div>
 
