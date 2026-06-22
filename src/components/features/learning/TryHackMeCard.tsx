@@ -15,62 +15,54 @@ interface TryHackMeCardProps {
     profile: TryHackMeProfile;
 }
 
+function formatBadgeName(name: string): string {
+    return name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+function getTierColor(tier: string): string {
+    switch (tier.toLowerCase()) {
+        case 'bronze': return 'text-amber-600 dark:text-amber-400';
+        case 'silver': return 'text-slate-500 dark:text-slate-400';
+        case 'gold': return 'text-yellow-600 dark:text-yellow-400';
+        case 'platinum': return 'text-cyan-600 dark:text-cyan-400';
+        case 'diamond': return 'text-purple-600 dark:text-purple-400';
+        default: return 'text-slate-600 dark:text-slate-400';
+    }
+}
+
 export default function TryHackMeCard({ profile }: TryHackMeCardProps): React.JSX.Element {
-    // Format THM Badge Name
-    const formatBadgeName = (name: string) => {
-        return name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    };
-
-    // Get capability score color based on value
-    const getScoreColor = (score: number) => {
-        if (score >= 70) return 'text-emerald-600 dark:text-emerald-400';
-        if (score >= 50) return 'text-sky-600 dark:text-sky-400';
-        if (score >= 30) return 'text-amber-600 dark:text-amber-400';
-        return 'text-slate-600 dark:text-slate-400';
-    };
-
-    // Get tier color
-    const getTierColor = (tier: string) => {
-        switch (tier.toLowerCase()) {
-            case 'bronze': return 'text-amber-700 dark:text-amber-500';
-            case 'silver': return 'text-slate-500 dark:text-slate-400';
-            case 'gold': return 'text-yellow-600 dark:text-yellow-400';
-            case 'platinum': return 'text-cyan-600 dark:text-cyan-400';
-            case 'diamond': return 'text-purple-600 dark:text-purple-400';
-            default: return 'text-slate-600 dark:text-slate-400';
-        }
-    };
+    const tierLabel = profile.leagueTier.charAt(0).toUpperCase() + profile.leagueTier.slice(1);
 
     return (
-        <Card className="h-full">
-            <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-3 text-xl">
-                    <span className="text-2xl">🛡️</span> TryHackMe
+        <Card className="h-full border-red-100 dark:border-red-800/50">
+            <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                    <span className="text-xl">🛡️</span> TryHackMe
                 </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-                {/* Key Metrics Row */}
-                <div className="grid grid-cols-4 gap-3">
-                    <div className="p-3 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl text-center border border-red-100 dark:border-red-800">
-                        <div className="text-sm text-red-600 dark:text-red-400 font-medium mb-1">Rank</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">#{formatCompact(profile.rank)}</div>
+            <CardContent className="space-y-5">
+                {/* Primary Stats */}
+                <div className="grid grid-cols-4 gap-2">
+                    <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-xl text-center border border-red-100 dark:border-red-800">
+                        <div className="text-xl font-bold text-slate-800 dark:text-slate-200">#{formatCompact(profile.rank)}</div>
+                        <div className="text-[10px] text-red-600 dark:text-red-400 font-medium uppercase tracking-wide">Rank</div>
                     </div>
-                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
-                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Points</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.points)}</div>
+                    <div className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
+                        <div className="text-xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.points)}</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide">Points</div>
                     </div>
-                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
-                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Badges</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.badgesNumber)}</div>
+                    <div className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
+                        <div className="text-xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.badgesNumber)}</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide">Badges</div>
                     </div>
-                    <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
-                        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-1">Rooms</div>
-                        <div className="text-2xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.completedRoomsNumber)}</div>
+                    <div className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-center">
+                        <div className="text-xl font-bold text-slate-800 dark:text-slate-200">{formatCompact(profile.completedRoomsNumber)}</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide">Rooms</div>
                     </div>
                 </div>
 
-                {/* Secondary Stats Row */}
-                <div className="grid grid-cols-4 gap-2">
+                {/* Secondary Row */}
+                <div className="grid grid-cols-3 gap-2">
                     <div className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-center">
                         <div className="text-lg font-bold text-slate-800 dark:text-slate-200">{profile.level}</div>
                         <div className="text-[10px] text-slate-500 dark:text-slate-400">Level</div>
@@ -80,60 +72,58 @@ export default function TryHackMeCard({ profile }: TryHackMeCardProps): React.JS
                         <div className="text-[10px] text-slate-500 dark:text-slate-400">Streak</div>
                     </div>
                     <div className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-center">
-                        <div className={`text-lg font-bold ${getScoreColor(profile.capabilityScore.value)}`}>
-                            {Math.round(profile.capabilityScore.value)}
-                        </div>
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400">Score</div>
-                    </div>
-                    <div className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-center">
                         <div className={`text-lg font-bold capitalize ${getTierColor(profile.leagueTier)}`}>
-                            {profile.leagueTier.charAt(0).toUpperCase()}
+                            {tierLabel}
                         </div>
                         <div className="text-[10px] text-slate-500 dark:text-slate-400">Tier</div>
                     </div>
                 </div>
 
-                {/* Capability Score Components */}
-                <div>
-                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Capability Score Breakdown</h4>
-                    <div className="grid grid-cols-3 gap-2">
-                        {Object.entries(profile.capabilityScore.components).map(([component, value]) => (
-                            <div key={component} className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-center">
-                                <div className="text-lg font-bold text-slate-800 dark:text-slate-200">{value.toFixed(1)}</div>
-                                <div className="text-[10px] text-slate-500 dark:text-slate-400 capitalize">{component}</div>
-                            </div>
-                        ))}
+                {/* Capability Score */}
+                <div className="space-y-2">
+                    <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Capability Score</h4>
+                    <div className="flex items-center gap-3">
+                        <div className="text-3xl font-bold text-slate-800 dark:text-slate-200">{Math.round(profile.capabilityScore.value)}</div>
+                        <div className="flex-1 space-y-1">
+                            {Object.entries(profile.capabilityScore.components).map(([component, value]) => (
+                                <div key={component} className="flex items-center gap-2">
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 w-16 capitalize">{component}</span>
+                                    <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-red-500 rounded-full"
+                                            style={{ width: `${Math.min(100, value)}%` }}
+                                        />
+                                    </div>
+                                    <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 w-8 text-right">{value.toFixed(0)}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
                 {/* Recent Badges */}
-                <div>
-                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Recent Badges</h4>
-                    <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-2">
+                    <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Recent Badges</h4>
+                    <div className="flex flex-wrap gap-2">
                         {profile.badges
                             .filter(b => b.earnedAt)
                             .sort((a, b) => new Date(b.earnedAt!).getTime() - new Date(a.earnedAt!).getTime())
-                            .slice(0, 3)
+                            .slice(0, 4)
                             .map((badge) => (
-                                <div key={badge.id} className="flex flex-col items-center p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-center">
-                                    <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mb-2 text-xs">
-                                        🏆
-                                    </div>
-                                    <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300 line-clamp-2 leading-tight">
-                                        {formatBadgeName(badge.name)}
-                                    </span>
-                                </div>
+                                <Badge key={badge.id} variant="outline" className="text-[10px] border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-2 py-1">
+                                    {formatBadgeName(badge.name)}
+                                </Badge>
                             ))}
                     </div>
                 </div>
 
                 {/* Certificates */}
                 {profile.certificates.length > 0 && (
-                    <div>
-                        <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Certificates</h4>
+                    <div className="space-y-2">
+                        <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Certificates</h4>
                         <div className="flex flex-wrap gap-2">
                             {profile.certificates.map((cert) => (
-                                <Badge key={cert} variant="outline" className="border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400">
+                                <Badge key={cert} variant="outline" className="text-[10px] border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400">
                                     {cert}
                                 </Badge>
                             ))}

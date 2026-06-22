@@ -9,16 +9,30 @@ import HTBCard from "./HTBCard";
 import {
     SectionContainer,
     SectionHeader,
-    SectionDivider,
     LoadingState,
     ErrorState
 } from "@/components/ui";
+import { formatCompact } from "@/lib/format";
 
 type LearningData = {
   msLearn: MsLearnProfile;
   thm: TryHackMeProfile;
   htb: HTBProfile;
 };
+
+function StatPill({ label, value, accent }: { label: string; value: string; accent: string }) {
+    const accentMap: Record<string, string> = {
+        sky: "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 border-sky-100 dark:border-sky-800",
+        red: "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-red-100 dark:border-red-800",
+        emerald: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800",
+    };
+    return (
+        <div className={`flex flex-col items-center px-4 py-2 rounded-xl border ${accentMap[accent] || accentMap.sky}`}>
+            <span className="text-lg font-bold">{value}</span>
+            <span className="text-[10px] uppercase tracking-wide opacity-70">{label}</span>
+        </div>
+    );
+}
 
 export default function LearningDashboard(): React.JSX.Element {
     const { data, loading, error, refetch } = useParallelData<LearningData>({
@@ -41,47 +55,30 @@ export default function LearningDashboard(): React.JSX.Element {
         );
     }
 
+    const msTotalAchievements = Object.values(data.msLearn.achievementCategories).reduce((a, b) => a + b, 0);
+
     return (
         <SectionContainer maxWidth="7xl" variant="transparent">
             <SectionHeader 
                 title="Learning Dashboard"
-                description="Hands-on learning progress across cloud platforms and cybersecurity domains."
+                description="Hands-on progress across Microsoft Learn, TryHackMe, and Hack The Box."
             />
 
-            {/* Microsoft Learn Section */}
-            <div className="mb-12">
-                <SectionDivider 
-                    title="Microsoft Learn" 
-                    subtitle="Cloud & Microsoft Technologies"
-                />
-
-                <div className="max-w-3xl mx-auto">
-                    <MicrosoftLearnCard profile={data.msLearn} />
-                </div>
+            {/* Unified Overview Pills */}
+            <div className="flex flex-wrap justify-center gap-3 mb-10">
+                <StatPill label="MS Learn Level" value={`${data.msLearn.currentLevel}`} accent="sky" />
+                <StatPill label="MS XP" value={formatCompact(data.msLearn.totalXp)} accent="sky" />
+                <StatPill label="THM Rank" value={`#${formatCompact(data.thm.rank)}`} accent="red" />
+                <StatPill label="THM Rooms" value={`${formatCompact(data.thm.completedRoomsNumber)}`} accent="red" />
+                <StatPill label="HTB Level" value={`${data.htb.level}`} accent="emerald" />
+                <StatPill label="HTB XP" value={formatCompact(data.htb.totalExperiencePoints)} accent="emerald" />
             </div>
 
-            {/* TryHackMe Section */}
-            <div className="mb-12">
-                <SectionDivider 
-                    title="TryHackMe" 
-                    subtitle="Cybersecurity & Penetration Testing"
-                />
-
-                <div className="max-w-3xl mx-auto">
-                    <TryHackMeCard profile={data.thm} />
-                </div>
-            </div>
-
-            {/* Hack The Box Section */}
-            <div>
-                <SectionDivider 
-                    title="Hack The Box" 
-                    subtitle="Pro Labs & CTF Challenges"
-                />
-
-                <div className="max-w-3xl mx-auto">
-                    <HTBCard profile={data.htb} />
-                </div>
+            {/* Three-column card grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <MicrosoftLearnCard profile={data.msLearn} />
+                <TryHackMeCard profile={data.thm} />
+                <HTBCard profile={data.htb} />
             </div>
         </SectionContainer>
     );
