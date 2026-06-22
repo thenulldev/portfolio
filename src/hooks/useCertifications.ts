@@ -57,7 +57,7 @@ export interface UseCertificationsReturn {
 
 export function useCertifications(): UseCertificationsReturn {
   const { data, loading, error, lastUpdated, isStale, refetch } =
-    useData<{ data: Root[] }, ProcessedCerts>("/api/certifications", {
+    useData<{ data: Root[] }, ProcessedCerts>("/api/certifications?v=2", {
       transform: processCertifications,
       ttlMs: 60 * 60 * 1000, // 1 hour — certs change frequently
     });
