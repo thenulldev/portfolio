@@ -58,11 +58,17 @@ export async function GET() {
 
     const allCerts: CertData[] = [];
 
-    if (credlyResponse.data) {
+      if (credlyResponse.data) {
       const credlyArray = Array.isArray(credlyResponse.data)
         ? credlyResponse.data
         : (credlyResponse.data as unknown as { data: CertData[] }).data;
       if (Array.isArray(credlyArray)) {
+        // Credly doesn't always include verification_url; construct from badge id
+        for (const cert of credlyArray) {
+          if (!cert.verification_url && cert.id) {
+            (cert as CertData).verification_url = `https://www.credly.com/badges/${cert.id}/public_url`;
+          }
+        }
         allCerts.push(...credlyArray);
       }
     }

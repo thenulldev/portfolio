@@ -3,6 +3,8 @@
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import CertificationGrid from "./CertificationGrid";
+import { faShieldHalved, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCertifications } from "@/hooks/useCertifications";
 import { Root } from "@/types";
 import {
@@ -181,16 +183,16 @@ export default function SkillsAndCertifications(): React.JSX.Element {
                                 )}
 
                                 {selectedCert.verification_url && (
-                                    <div className="flex justify-end pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-700">
-                                        <a
-                                            href={selectedCert.verification_url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center justify-center rounded-md text-xs sm:text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-8 sm:h-10 px-3 sm:px-4 py-2 bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100"
-                                        >
-                                            View Credential
-                                        </a>
-                                    </div>
+                                    <a
+                                        href={selectedCert.verification_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg bg-sky-600 text-white dark:bg-sky-500 dark:text-white hover:bg-sky-700 dark:hover:bg-sky-600 transition-colors font-medium text-sm sm:text-base"
+                                    >
+                                        <FontAwesomeIcon icon={faShieldHalved} className="w-4 h-4" />
+                                        Verify on Credly
+                                        <FontAwesomeIcon icon={faExternalLinkAlt} className="w-3 h-3 opacity-70" />
+                                    </a>
                                 )}
                             </div>
                         </>
