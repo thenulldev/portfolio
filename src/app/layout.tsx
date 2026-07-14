@@ -59,6 +59,10 @@ export const metadata: Metadata = {
     title: "Stephen Freerking — Cloud & Cybersecurity Engineer",
     description:
       "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
+    // site = the account that owns the site's brand (here: same person
+    // since the site is a personal portfolio). creator = the @handle
+    // shown on the composed tweet.
+    site: "@StephenFreerkn",
     creator: "@StephenFreerkn",
   },
   robots: {
