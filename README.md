@@ -1,11 +1,11 @@
 # 🚀 Stephen Freerking - Portfolio
 
-A modern cybersecurity portfolio built with Next.js 16, featuring live certification data, a skills radar chart, a career timeline, and learning progress tracking. Deployed on Cloudflare Workers.
+A modern cybersecurity portfolio built with Next.js 16, featuring live certification data, skill aggregation, a career timeline, and learning progress tracking. Deployed on Cloudflare Workers.
 
 ## ✨ Features
 
 - **🏆 Live Certifications**: Real-time data from Credly + OffSec via `*.thenull.dev` proxy workers, with issuer filtering and a click-to-view detail dialog
-- **📊 Skills Radar**: Weighted skill visualization with category-based scoring (Security, Cloud, Networking, Programming, Infrastructure, Data & Analytics, Tools)
+- **🧠 Skill Aggregation**: Categories (Security, Cloud, Networking, Programming, Infrastructure, Data & Analytics, Tools) with weighted counts built from cert skills — see "Skills Visualization" below
 - **💼 Career Timeline**: Interactive experience timeline sourced from local static data
 - **📚 Learning Dashboard**: Microsoft Learn, TryHackMe, and Hack The Box progress cards in a unified overview
 - **🎨 Modern UI**: Sky-themed design with dark mode, responsive layout, and smooth animations
@@ -16,7 +16,6 @@ A modern cybersecurity portfolio built with Next.js 16, featuring live certifica
 - **⚛️ Framework**: Next.js 16 with App Router
 - **🎨 Styling**: Tailwind CSS 4 with custom sky color theme
 - **🧩 UI Components**: Radix UI (primitive) + custom styled components, FontAwesome icons
-- **📊 Charts**: Recharts (radar chart for skills)
 - **☁️ Deployment**: Cloudflare Workers via OpenNext
 - **📦 Package Manager**: pnpm
 
@@ -75,7 +74,7 @@ src/
 │   ├── features/
 │   │   ├── career/            # Career dashboard (CareerDashboard, CareerTimeline)
 │   │   ├── learning/          # Learning dashboard (LearningDashboard, HTBCard, MicrosoftLearnCard, TryHackMeCard)
-│   │   ├── skills/            # Skills + certs (SkillsAndCertifications, CertificationGrid/Timeline, SkillsVisualization, SkillList)
+│   │   ├── skills/            # Skills + certs (SkillsAndCertifications, CertificationGrid, CertificationTimeline)
 │   │   └── stats/             # StatsOverview
 │   ├── layout/                # AppShell, PortfolioLayout
 │   ├── shared/                # Socials
@@ -89,7 +88,7 @@ src/
 
 The single-page layout is driven by `PortfolioLayout.tsx` and switches between three tabs in `AppShell`:
 
-1. **Skills & Certifications** — live cert cards with issuer filter, click-to-view detail dialog, skills radar chart
+1. **Skills & Certifications** — live cert cards with issuer filter, click-to-view detail dialog
 2. **Career Experience** — career timeline from local static data
 3. **Learning Journey** — Microsoft Learn + TryHackMe + Hack The Box progress cards
 
@@ -101,6 +100,16 @@ Data sources tabulated:
 | Career Experience | `src/lib/static-data.ts` (local) |
 | Learning Journey | `/api/ms-learn`, `/api/tryhackme`, `/api/htb` |
 
+### No blog (deliberate)
+
+The site has no blog. There used to be one — a Markdown scaffolding referenced in earlier READMEs and a Ghost CMS integration (`/api/ghost`, `/api/newsletter`) — but neither ever shipped. Both were removed in the same cleanup commit (`cc0c437`, "remove blog, status page, and dead API routes") that cleaned up the rest of the unused scaffolding. The portfolio's content surface is now:
+
+- **Certifications** (live, from external APIs)
+- **Career Experience** (local static data in `src/lib/static-data.ts`)
+- **Learning Journey** (live, from external APIs)
+
+If you want to add a blog later, `gray-matter` + `next-mdx-remote` for local MDX is the lowest-overhead path — content ships in the repo, no env vars, no CMS account. See the "Extending the site" section below.
+
 ## 🎨 Skills Visualization
 
 The skills system uses a weighted scoring model:
@@ -110,7 +119,9 @@ The skills system uses a weighted scoring model:
 - **Proficiency Formula**: `40 + min((certCount-1)*8, 40) + (weight-1)*5` capped at 100
 - **Categories**: Security, Cloud, Networking, Programming, Infrastructure, Data & Analytics, Tools
 
-The data shape (`{skills, skillCounts}`) is produced inside `useCertifications`'s `processCertifications` from the `/api/certifications` payload and consumed by `SkillsVisualization` and `SkillList`.
+The data shape (`{skills, skillCounts}`) is produced by `processCertifications` in `src/lib/skills.ts` from the `/api/certifications` payload. The current consumers are `SkillsAndCertifications` (summary stats, issuer filter, dialog); the cert grid and timeline render directly from the cert list.
+
+Skill categories and weights are defined in `src/types/skills-visualization.ts` (`SKILL_CATEGORIES`, `getSkillWeight`). Adding a new visualisation that consumes `{skills, skillCounts}` is now a single-component addition — see the unit tests in `src/lib/skills.test.ts` for the contract.
 
 ## 🔧 Configuration
 
@@ -124,6 +135,15 @@ If you fork the project, swap the `thenull.dev` URLs in `src/app/api/certificati
 ## 🌍 Deployment
 
 Deployed to Cloudflare Workers via the OpenNext adapter. Pushes to `main` branch auto-deploy via GitHub Actions, or run `pnpm deploy` for a manual push.
+
+## 🛠 Extending the site
+
+Some features have been discussed but deliberately deferred. They're captured here so a future contributor doesn't reopen the same conversations from scratch:
+
+- **Local MDX blog** — add `gray-matter` + `next-mdx-remote`, content in `src/content/posts/*.mdx`, build-time generation. Roughly 1–2 hr of work; ships content as part of the deployable artifact.
+- **Skills radar chart** — was originally part of the Skills tab, removed in `cc0c437` along with the blog. The dead radar code was cleared in this branch. Re-adding it as a `SkillsRadar.tsx` widget (~150 lines, single-purpose) was proposed and rejected in favour of the simpler text-only design.
+- **Per-cert OG image generation** — Next 16 supports dynamic `opengraph-image.tsx` routes at `app/opengraph-image.tsx`. Easy follow-up if you want richer link previews when posting certs on LinkedIn / X.
+- **Pre-commit hook** — Husky + lint-staged to run `tsc --noEmit` + `eslint` before each commit. Avoids landing commits that violate the (now-clean) lint baseline.
 
 ---
 
