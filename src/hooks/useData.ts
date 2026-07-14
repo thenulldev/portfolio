@@ -83,8 +83,8 @@ export function useData<T, R = T>(
       setError(null);
 
       try {
-        if ((currentCached as any)?.promise) {
-          const result = await (currentCached as any).promise;
+        if (currentCached?.promise) {
+          const result = await currentCached.promise;
           setData(result);
           setLastUpdated(new Date());
           setIsStale(false);

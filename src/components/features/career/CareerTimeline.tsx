@@ -66,7 +66,7 @@ export default function CareerTimeline({ entries }: CareerTimelineProps) {
       <div className="absolute left-[15px] sm:left-[23px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-sky-300 via-slate-200 to-slate-100 dark:from-sky-800 dark:via-slate-700 dark:to-slate-800" />
 
       <div className="space-y-8 sm:space-y-10">
-        {sorted.map((entry, idx) => {
+        {sorted.map((entry) => {
           const isPresent = !entry.endDate;
           const colorClass = getEmploymentTypeColor(entry.employmentType);
           const borderClass = getEmploymentTypeBorder(entry.employmentType);

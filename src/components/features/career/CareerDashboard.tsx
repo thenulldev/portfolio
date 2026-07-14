@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { careerSummary, careerEntries } from "@/lib/experience-data";
 import { Badge, SectionContainer, SectionHeader, SectionDivider } from "@/components/ui";
 import CareerTimeline from "./CareerTimeline";

@@ -55,8 +55,6 @@ export default function LearningDashboard(): React.JSX.Element {
         );
     }
 
-    const msTotalAchievements = Object.values(data.msLearn.achievementCategories).reduce((a, b) => a + b, 0);
-
     return (
         <SectionContainer maxWidth="7xl" variant="transparent">
             <SectionHeader 

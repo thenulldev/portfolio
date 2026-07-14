@@ -26,20 +26,6 @@ function getIssuerColor(issuerName: string): string {
   return colors[issuerName] || "bg-sky-500";
 }
 
-function getIssuerBg(issuerName: string): string {
-  const colors: Record<string, string> = {
-    Microsoft: "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300",
-    CompTIA: "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300",
-    AWS: "bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300",
-    Google: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300",
-    ISC2: "bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300",
-    "Offensive Security": "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300",
-    LPI: "bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300",
-    TryHackMe: "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300",
-  };
-  return colors[issuerName] || "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300";
-}
-
 function getExpiryStatus(expiresAt?: string): { label: string; color: string } | null {
   if (!expiresAt) return null;
   const exp = new Date(expiresAt);
@@ -90,7 +76,6 @@ export default function CertificationGrid({ certifications, onSelectCert }: Cert
             {certs.map((cert) => {
               const issuerName = cert.issuer.entities[0]?.entity.name || "Certified";
               const issuerDot = getIssuerColor(issuerName);
-              const issuerBadge = getIssuerBg(issuerName);
               const issued = new Date(cert.issued_at_date);
               const dateStr = issued.toLocaleDateString("en-US", {
                 month: "short",

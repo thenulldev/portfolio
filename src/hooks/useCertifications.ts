@@ -1,4 +1,4 @@
-import { useData, UseDataResult } from "./useData";
+import { useData } from "./useData";
 import type { Root } from "@/types";
 
 export interface ProcessedCerts {
