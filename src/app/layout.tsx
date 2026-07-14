@@ -53,21 +53,12 @@ export const metadata: Metadata = {
     title: "Stephen Freerking — Cloud & Cybersecurity Engineer",
     description:
       "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Stephen Freerking - Cloud & Cybersecurity Engineer",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Stephen Freerking — Cloud & Cybersecurity Engineer",
     description:
       "Cloud & Cybersecurity Engineer specializing in cloud architecture, DevSecOps, and secure infrastructure.",
-    images: ["/og-image.png"],
     creator: "@StephenFreerkn",
   },
   robots: {
@@ -126,7 +117,10 @@ export default function RootLayout({
       "Infrastructure as Code",
       "Penetration Testing",
     ],
-    image: "https://thenull.dev/og-image.png",
+    // Mirrors the auto-generated /opengraph-image route at build time;
+    // Next appends a cache-bust hash so the literal URL here should be
+    // the path only, not include the hash.
+    image: "https://thenull.dev/opengraph-image",
   };
 
   return (
