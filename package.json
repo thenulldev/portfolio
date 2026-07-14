@@ -10,7 +10,8 @@
     "test": "tsx --test 'src/**/*.test.ts'",
     "preview": "node scripts/preview-cloudflare.js",
     "deploy": "node scripts/deploy-cloudflare.js",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",

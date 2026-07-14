@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+#
+# Pre-commit gate. Blocks broken code from leaving the local checkout.
+#
+# Direct-to-main workflow pushes each commit straight to main, so the
+# pre-commit moment is the last chance to catch regressions cheaply
+# before they hit remote CI (and the live edge).
+#
+# Coverage:
+#   - tsc --noEmit   : type errors
+#   - eslint         : the lint baseline this branch cleaned up
+#   - test           : unit tests for the certifications pipeline
+#
+# Add .githooks/ to git config core.hooksPath so git runs this script
+# from version control rather than relying on the local .git/hooks/
+# directory (which is per-clone and doesn't survive fresh clones).
+#
+# To bypass the gate (e.g. for a WIP commit), use:  git commit --no-verify
+
+set -e
+
+# Path: wherever this script is invoked from, the repo root is one up
+# from .githooks/. That's true for both git's invoked path (resolves
+# symlinks) and direct invocation.
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+echo "▶ pre-commit: tsc --noEmit"
+node_modules/.bin/tsc --noEmit
+
+echo "▶ pre-commit: eslint src/**/*.{ts,tsx}"
+# next 16 deprecated `next lint`; use eslint directly so the hook
+# survives any future flagging.
+node_modules/.bin/eslint 'src/**/*.{ts,tsx}'
+
+echo "▶ pre-commit: unit tests"
+node_modules/.bin/tsx --test 'src/**/*.test.ts' >/dev/null 2>&1
+
+echo "✅ pre-commit passed"
