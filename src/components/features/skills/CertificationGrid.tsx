@@ -96,7 +96,7 @@ export default function CertificationGrid({ certifications, onSelectCert }: Cert
                 month: "short",
                 year: "numeric",
               });
-              const expiry = getExpiryStatus(cert.expires_at_date);
+              const expiry = getExpiryStatus(cert.expires_at_date ?? undefined);
               const skills = cert.badge_template.skills?.slice(0, 3) || [];
 
               return (

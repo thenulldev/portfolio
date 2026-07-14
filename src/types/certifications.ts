@@ -1,7 +1,8 @@
 // Certification types (Credly/OffSec)
 export interface Root {
   id: string;
-  expires_at_date: string;
+  /** ISO date when this certification expires. Absent or null for non-expiring certs. */
+  expires_at_date?: string | null;
   issued_at_date: string;
   issued_to: string;
   locale: string;
