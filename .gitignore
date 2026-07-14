@@ -33,6 +33,12 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# pnpm
+# This repo isn't a monorepo. Pnpm 7+ writes pnpm-workspace.yaml on
+# `pnpm approve-builds` even for single-package repos; we use .npmrc
+# as the canonical config, so ignore the auto-generated workspace file.
+pnpm-workspace.yaml
+
 # vercel
 .vercel
 
