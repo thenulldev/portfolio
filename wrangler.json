@@ -13,9 +13,5 @@
     "logs": {
       "enabled": true
     }
-  },
-  "vars": {
-    "GHOST_URL": "https://srv1062939.hstgr.cloud",
-    "GHOST_ADMIN_API_KEY": ""
   }
 }
