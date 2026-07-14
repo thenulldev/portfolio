@@ -20,22 +20,26 @@ function processCertifications(response: { data: Root[] }): ProcessedCerts {
         new Date(a.issued_at_date).getTime()
     );
 
-  const allSkills = validData
-    .reduce((acc: { name: string }[], item: Root) => {
-      const skills = item.badge_template.skills.slice(0, 5);
-      return acc.concat(skills);
-    }, [])
-    .filter((skill) => !skill.name.toLowerCase().includes("comptia"));
-
+  // Include every skill from every (non-expired) certification. The previous
+  // implementation silently dropped data in two ways:
+  //   - slice(0, 5) capped each cert to its first 5 skills, hiding the rest
+  //     from the radar and the count totals
+  //   - substring filtering on "comptia" dropped legitimate CompTIA skill
+  //     names (e.g. "CompTIA Security+", "CompTIA PenTest+") because they
+  //     happened to be in a cert's tag list
+  // O(n) dedup preserves first-seen order; counts tally contributions.
   const uniqueSkills: { name: string }[] = [];
   const counts: { [name: string]: number } = {};
 
-  allSkills.forEach((skill) => {
-    if (!uniqueSkills.find((s) => s.name === skill.name)) {
-      uniqueSkills.push(skill);
+  for (const cert of validData) {
+    for (const skill of cert.badge_template.skills) {
+      if (counts[skill.name] === undefined) {
+        uniqueSkills.push({ name: skill.name });
+        counts[skill.name] = 0;
+      }
+      counts[skill.name] += 1;
     }
-    counts[skill.name] = (counts[skill.name] || 0) + 1;
-  });
+  }
 
   return {
     certifications: validData,
