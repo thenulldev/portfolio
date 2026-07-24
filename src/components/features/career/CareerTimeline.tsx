@@ -37,9 +37,9 @@ function formatDate(dateStr: string | null | undefined): string {
   return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
-function formatDuration(start: string, end: string | null): string {
+export function formatDuration(start: string, end: string | null, now = new Date()): string {
   const s = new Date(start);
-  const e = end ? new Date(end) : new Date();
+  const e = end ? new Date(end) : now;
   let months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
   if (e.getDate() < s.getDate()) months -= 1;
   const years = Math.floor(months / 12);
@@ -75,7 +75,7 @@ export default function CareerTimeline({ entries }: CareerTimelineProps) {
           const isPresent = !entry.endDate;
           const colorClass = getEmploymentTypeColor(entry.employmentType);
           const borderClass = getEmploymentTypeBorder(entry.employmentType);
-          const duration = formatDuration(entry.startDate, entry.endDate ?? null);
+          const duration = formatDuration(entry.startDate, entry.endDate ?? null, new Date());
           const dateRange = formatDateRange(entry.startDate, entry.endDate);
 
           return (
