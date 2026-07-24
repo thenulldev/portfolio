@@ -51,6 +51,11 @@ function formatDuration(start: string, end: string | null): string {
   return parts.join(" ");
 }
 
+function formatDateRange(start: string, end: string | null | undefined): string {
+  const startDate = formatDate(start);
+  return end ? `${startDate} – ${formatDate(end)}` : `${startDate} – Present`;
+}
+
 export default function CareerTimeline({ entries }: CareerTimelineProps) {
   const sorted = React.useMemo(() => {
     return [...entries].sort((a, b) => {
@@ -71,7 +76,7 @@ export default function CareerTimeline({ entries }: CareerTimelineProps) {
           const colorClass = getEmploymentTypeColor(entry.employmentType);
           const borderClass = getEmploymentTypeBorder(entry.employmentType);
           const duration = formatDuration(entry.startDate, entry.endDate ?? null);
-          const dateRange = `${formatDate(entry.startDate)} – ${formatDate(entry.endDate)}`;
+          const dateRange = formatDateRange(entry.startDate, entry.endDate);
 
           return (
             <div key={entry.id} className="relative">
